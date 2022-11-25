@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'Pages/StartingPages/login.dart';
+import 'Pages/StartingPages/startPage.dart';
 import 'Pages/flutter_flow/flutter_flow_theme.dart';
 
 void main() {
