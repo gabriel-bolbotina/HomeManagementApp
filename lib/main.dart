@@ -1,10 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'Pages/LoginPage/Login.dart';
 import 'Pages/StartingPages/startPage.dart';
 import 'Pages/flutter_flow/flutter_flow_theme.dart';
+import 'Services/authentification.dart';
 
-void main() {
-  runApp( MyApp());
+void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    runApp (MyApp ()) ;
+
 }
 
 
@@ -22,11 +28,13 @@ class MyApp extends StatelessWidget {
     textTheme:  Theme.of(context).textTheme.apply(bodyColor: FlutterFlowTheme.of(context).gray600),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     ),
-    initialRoute: 'login_screen',
-    routes: {
-    'login_screen': (context) => HomePageWidget(),
+    home: Authentication().handleAuthState(),
+      routes: {
+        'homescreen': (context) => HomePageWidget(),
+        'login_screen': (context) => LoginPageWidget(),
 
-  },
+      },
+
   );
   }
   }
