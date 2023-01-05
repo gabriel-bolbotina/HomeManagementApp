@@ -1,4 +1,6 @@
 import 'package:homeapp/Pages/LoginPage/Login.dart';
+import 'package:homeapp/Pages/Register/Register.dart';
+import 'package:homeapp/Services/authentification.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -15,6 +17,7 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -113,10 +116,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   alignment: const AlignmentDirectional(0, -0.95),
                   child: FFButtonWidget(
                     onPressed: () {
-                      MaterialPageRoute(
-                          builder: (context) => LoginPageWidget()
-                      );
-                    },
+                    Navigator.pushReplacementNamed(
+                    context, 'register_screen');},
                     text: 'Register',
                     options: FFButtonOptions(
                       width: 120,
