@@ -1,3 +1,5 @@
+import 'package:homeapp/Pages/LoginPage/Login.dart';
+
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -77,9 +79,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
                   child: FFButtonWidget(
                     onPressed: () {
-                      print('Button pressed ...');
-                    },
-                    text: 'Login',
+                      Navigator.pushReplacementNamed(
+                          context, 'login_screen');},
+                      text: 'Login',
                     options: FFButtonOptions(
                       width: 200,
                       height: 45,
@@ -111,7 +113,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   alignment: const AlignmentDirectional(0, -0.95),
                   child: FFButtonWidget(
                     onPressed: () {
-                      print('Button pressed ...');
+                      MaterialPageRoute(
+                          builder: (context) => LoginPageWidget()
+                      );
                     },
                     text: 'Register',
                     options: FFButtonOptions(
@@ -147,76 +151,4 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
 }
 
-/*
-class GoogleSignIn extends StatefulWidget {
-  GoogleSignIn({Key? key}) : super(key: key);
 
-  @override
-  _GoogleSignInState createState() => _GoogleSignInState();
-  }
-
-  class _GoogleSignInState extends State<GoogleSignIn> {
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
-  Size size = MediaQuery.of(context).size;
-  return  !isLoading? SizedBox(
-  height: 40,
-  width: size.width,
-  child: OutlinedButton.icon(
-  icon: Icon(
-  Icons.account_box,
-  color: kPrimaryColor,
-  ),
-  onPressed: () async {
-  setState(() {
-  isLoading = true;
-  });
-  FirebaseService service = new FirebaseService();
-  try {
-  await service.signInwithGoogle();
-  Navigator.pushNamedAndRemoveUntil(context, 'homescreen', (route) => false);
-  } catch(e){
-  if(e is FirebaseAuthException){
-  showMessage(e.message!);
-  }
-  }
-  setState(() {
-  isLoading = false;
-  });
-  },
-  label: Text(
-  "Sign In With Google",
-  style: TextStyle(
-  color: Colors.white, fontWeight: FontWeight.bold),
-  ),
-  style: ButtonStyle(
-  backgroundColor:
-  MaterialStateProperty.all<Color>(kPrimaryColor),
-  side: MaterialStateProperty.all<BorderSide>(BorderSide.none)),
-  ),
-  ) : CircularProgressIndicator();
-  }
-
-  void showMessage(String message) {
-  showDialog(
-  context: context,
-  builder: (BuildContext context) {
-  return AlertDialog(
-  title: Text("Error"),
-  content: Text(message),
-  actions: [
-  TextButton(
-  child: Text("Ok"),
-  onPressed: () {
-  Navigator.of(context).pop();
-  },
-  )
-  ],
-  );
-  });
-  }
-
-  }
-*/

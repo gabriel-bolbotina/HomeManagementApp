@@ -1,4 +1,4 @@
-// TODO Implement this library.
+
 import 'package:flutter/material.dart';
 
 class FlutterFlowIconButton extends StatelessWidget {
@@ -10,7 +10,9 @@ class FlutterFlowIconButton extends StatelessWidget {
         this.buttonSize,
         this.fillColor,
         required this.icon,
-        this.onPressed})
+
+        this.onPressed, this.ontap})
+
       : super(key: key);
 
   final double? borderRadius;
@@ -20,6 +22,7 @@ class FlutterFlowIconButton extends StatelessWidget {
   final double? borderWidth;
   final Widget icon;
   final void Function()? onPressed;
+  final dynamic ontap;
 
   @override
   Widget build(BuildContext context) => Material(
@@ -42,7 +45,9 @@ class FlutterFlowIconButton extends StatelessWidget {
       ),
       child: IconButton(
         icon: icon,
-        onPressed: onPressed,
+        onPressed:
+        ontap,
+
         splashRadius: buttonSize,
       ),
     ),
