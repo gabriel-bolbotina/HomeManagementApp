@@ -4,16 +4,22 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeownerHomePageWidget extends StatefulWidget {
-  const HomeownerHomePageWidget({Key? key}) : super(key: key);
+class TenantHomePageWidget extends StatefulWidget {
+  const TenantHomePageWidget({Key? key}) : super(key: key);
 
   @override
-  _HomeownerHomePageWidgetState createState() =>
-      _HomeownerHomePageWidgetState();
+  _TenantHomePageWidgetState createState() => _TenantHomePageWidgetState();
 }
 
-class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
+class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void dispose() {
+    _unfocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +59,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
         ),
       ),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,

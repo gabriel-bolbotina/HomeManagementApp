@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'Pages/FunctionalityPages/functionality.dart';
 
 import 'Pages/LoginPage/Login.dart';
 import 'Pages/StartingPages/startPage.dart';

@@ -5,16 +5,15 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeownerProfilePageWidget extends StatefulWidget {
-  const HomeownerProfilePageWidget({Key? key}) : super(key: key);
+class LandlordProfilePageWidget extends StatefulWidget {
+  const LandlordProfilePageWidget({Key? key}) : super(key: key);
 
   @override
-  _HomeownerProfilePageWidgetState createState() =>
-      _HomeownerProfilePageWidgetState();
+  _LandlordProfilePageWidgetState createState() =>
+      _LandlordProfilePageWidgetState();
 }
 
-class _HomeownerProfilePageWidgetState
-    extends State<HomeownerProfilePageWidget> {
+class _LandlordProfilePageWidgetState extends State<LandlordProfilePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -27,33 +26,33 @@ class _HomeownerProfilePageWidgetState
         child: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
           automaticallyImplyLeading: false,
-          leading: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: Icon(
-                  Icons.arrow_back_rounded,
-                  color: FlutterFlowTheme.of(context).gray600,
-                  size: 30,
-                ),
-                onPressed: () {
-                  print('IconButton pressed ...');
-                },
-              ),
-              SelectionArea(
-                  child: Text(
-                    'Back',
-                    style: FlutterFlowTheme.of(context).title1.override(
-                      fontFamily: 'Poppins',
-                      color: FlutterFlowTheme.of(context).gray600,
-                      fontSize: 18,
+          leading: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 0, 0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Align(
+                    alignment: const AlignmentDirectional(-0.4, 0),
+                    child: FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 30,
+                      borderWidth: 1,
+                      buttonSize: 60,
+                      icon: Icon(
+                        Icons.arrow_back_rounded,
+                        color: FlutterFlowTheme.of(context).gray600,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        print('IconButton pressed ...');
+                      },
                     ),
-                  )),
-            ],
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
             Padding(
@@ -186,60 +185,6 @@ class _HomeownerProfilePageWidgetState
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Material(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        width: 0,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Add or Change Adress',
-                            style: FlutterFlowTheme.of(context).subtitle2,
-                          ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            buttonSize: 46,
-                            icon: Icon(
-                              Icons.chevron_right_rounded,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           Align(
             alignment: const AlignmentDirectional(0, -0.15),
             child: Padding(
@@ -252,7 +197,7 @@ class _HomeownerProfilePageWidgetState
                 options: FFButtonOptions(
                   width: 110,
                   height: 50,
-                  color: FlutterFlowTheme.of(context).tertiary400,
+                  color: const Color(0x39D2C0),
                   textStyle: FlutterFlowTheme.of(context).subtitle1.override(
                     fontFamily: 'Poppins',
                     color: FlutterFlowTheme.of(context).primaryBtnText,
