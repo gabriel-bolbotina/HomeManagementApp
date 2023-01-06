@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'Pages/FunctionalityPages/functionality.dart';
 
+import 'Pages/HomePages/homeowner.dart';
+import 'Pages/HomePages/landlord.dart';
+import 'Pages/HomePages/tenant.dart';
+import 'Pages/NotificationPages/homeowner_notification.dart';
+import 'Pages/NotificationPages/tenant_notification.dart';
+import 'Pages/ProfilePages/homeowner_profile.dart';
+import 'Pages/ProfilePages/landlord_profile.dart';
+import 'Pages/ProfilePages/tenant_profile.dart';
 import 'Pages/StartingPages/startPage.dart';
 import 'Pages/flutter_flow/flutter_flow_theme.dart';
 
@@ -24,7 +33,7 @@ class MyApp extends StatelessWidget {
     ),
     initialRoute: 'login_screen',
     routes: {
-    'login_screen': (context) => HomePageWidget(),
+    'login_screen': (context) => LandlordProfilePageWidget(),
 
   },
   );

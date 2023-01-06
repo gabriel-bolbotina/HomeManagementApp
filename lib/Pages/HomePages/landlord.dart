@@ -4,16 +4,22 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeownerHomePageWidget extends StatefulWidget {
-  const HomeownerHomePageWidget({Key? key}) : super(key: key);
+class LandlordHomePageWidget extends StatefulWidget {
+  const LandlordHomePageWidget({Key? key}) : super(key: key);
 
   @override
-  _HomeownerHomePageWidgetState createState() =>
-      _HomeownerHomePageWidgetState();
+  _LandlordHomePageWidgetState createState() => _LandlordHomePageWidgetState();
 }
 
-class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
+class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
+  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void dispose() {
+    _unfocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +59,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
         ),
       ),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -68,7 +74,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
                       child: Text(
-                        'Devices',
+                        'Homes',
                         style: FlutterFlowTheme.of(context).subtitle1,
                       ),
                     ),
@@ -121,7 +127,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                               padding:
                               const EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
                               child: Text(
-                                'Device Name',
+                                'Home Name',
                                 style: FlutterFlowTheme.of(context).subtitle1,
                               ),
                             ),
@@ -188,7 +194,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                               padding:
                               const EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
                               child: Text(
-                                'Device Name',
+                                'Home Name',
                                 style: FlutterFlowTheme.of(context).subtitle1,
                               ),
                             ),
@@ -255,7 +261,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                               padding:
                               const EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
                               child: Text(
-                                'Device Name',
+                                'Home Name',
                                 style: FlutterFlowTheme.of(context).subtitle1,
                               ),
                             ),

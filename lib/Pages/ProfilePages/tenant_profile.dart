@@ -5,16 +5,15 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeownerProfilePageWidget extends StatefulWidget {
-  const HomeownerProfilePageWidget({Key? key}) : super(key: key);
+class TenantProfilePageWidget extends StatefulWidget {
+  const TenantProfilePageWidget({Key? key}) : super(key: key);
 
   @override
-  _HomeownerProfilePageWidgetState createState() =>
-      _HomeownerProfilePageWidgetState();
+  _TenantProfilePageWidgetState createState() =>
+      _TenantProfilePageWidgetState();
 }
 
-class _HomeownerProfilePageWidgetState
-    extends State<HomeownerProfilePageWidget> {
+class _TenantProfilePageWidgetState extends State<TenantProfilePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -28,7 +27,7 @@ class _HomeownerProfilePageWidgetState
           backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
           automaticallyImplyLeading: false,
           leading: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
               FlutterFlowIconButton(
                 borderColor: Colors.transparent,
@@ -44,15 +43,18 @@ class _HomeownerProfilePageWidgetState
                   print('IconButton pressed ...');
                 },
               ),
-              SelectionArea(
-                  child: Text(
-                    'Back',
+              Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0,0,0,0),
+                  child: SelectionArea(
+                    child: Text(
+                  'Back',
                     style: FlutterFlowTheme.of(context).title1.override(
                       fontFamily: 'Poppins',
                       color: FlutterFlowTheme.of(context).gray600,
                       fontSize: 18,
                     ),
                   )),
+              ),
             ],
           ),
           actions: [
@@ -216,7 +218,7 @@ class _HomeownerProfilePageWidgetState
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Add or Change Adress',
+                            'Send Requests',
                             style: FlutterFlowTheme.of(context).subtitle2,
                           ),
                           FlutterFlowIconButton(
