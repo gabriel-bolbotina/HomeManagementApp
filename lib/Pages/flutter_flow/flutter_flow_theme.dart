@@ -11,7 +11,7 @@ const kThemeModeKey = '__theme_mode__';
 SharedPreferences? _prefs;
 
 abstract class FlutterFlowTheme {
-  get tertiary400 => null;
+
 
   static Future initialize() async =>
       _prefs = await SharedPreferences.getInstance();
