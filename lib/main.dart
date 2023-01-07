@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     Widget build(BuildContext context) {
     return MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: 'Plant-App',
+    title: 'Home-App',
     theme: ThemeData(
     primaryColor: FlutterFlowTheme.of(context).gray600,
     textTheme:  Theme.of(context).textTheme.apply(bodyColor: FlutterFlowTheme.of(context).gray600),
