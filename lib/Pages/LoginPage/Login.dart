@@ -442,7 +442,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             child:
               SignInButton(
                 Buttons.Google,
-                text: "Sign up with Google",
+                text: "Sign in with Google",
                 onPressed: () async {
                       setState(() {
                         isloading = true;

@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
 import 'dart:developer';
 
+import '../../Services/FirebaseService.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -390,13 +393,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                       ),
                     );
                     return;
-
-
-
                   }
-
-
-                      //print("am ajuns in await");
                       try {await FirebaseAuth.instance
                           .createUserWithEmailAndPassword(
                           email: email, password: password);
@@ -469,8 +466,41 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
               ),
             ),
           ),
+          /*
+          Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+              child:
+              SignInButton(
+                Buttons.Google,
+                text: "Sign up with Google",
+                onPressed: () async {
+                  setState(() {
+                    isloading = true;
+                  });
+                  FirebaseService service = new FirebaseService();
+                  try {
+                    await service.signInwithGoogle();
+                    Navigator.pushNamedAndRemoveUntil(context, 'homescreen', (route) => false);
+                  } catch(e){
+                    if(e is FirebaseAuthException){
+                      showMessage(e.message!);
+                    }
+                  }
+                  setState(() {
+                    isloading = false;
+                  });
+                },
+
+              )
+          ),*/
         ],
       ),
     );
+
+
+  }
+
+  void showMessage(String s) {
+    print(s);
   }
 }
