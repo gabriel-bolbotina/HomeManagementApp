@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+
 import '../../Services/authentification.dart';
 import '../StartingPages/startPage.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
@@ -20,8 +24,8 @@ class LoginPageWidget extends StatefulWidget {
 }
 
 class _LoginPageWidgetState extends State<LoginPageWidget> {
-  TextEditingController? emailAddressController;
-  TextEditingController? passwordLoginController;
+  TextEditingController emailAddressController = new  TextEditingController();
+  TextEditingController passwordLoginController  = new  TextEditingController();
 
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
@@ -37,8 +41,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   @override
   void initState() {
     super.initState();
-    emailAddressController = TextEditingController();
-    passwordLoginController = TextEditingController();
+    //emailAddressController
+    //passwordLoginController = TextEditingController();
     passwordLoginVisibility = false;
     emailAddressVisibility = false;
   }
@@ -58,9 +62,15 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back,
+              color: CupertinoColors.systemGrey,),
+            onPressed: () =>{ Navigator.pushReplacementNamed(
+                context, 'homescreen')},
+          ),
           backgroundColor: FlutterFlowTheme
               .of(context)
-              .primaryBtnText,
+              .primaryBackground,
           automaticallyImplyLeading: false,
           title: Align(
             alignment: AlignmentDirectional(-0.3, -0.05),
@@ -168,8 +178,15 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               ),
               child: TextFormField(
                 controller: emailAddressController,
+                onChanged: (value)
+                {
+                  email = emailAddressController.text;
+                },
+                validator: (value) => (value!.isEmpty)
+                    ? 'Please enter email'
+                    : null,
                 maxLines: 1,
-                obscureText: !emailAddressVisibility,
+                obscureText: false,
                 //obscureText: !emailAddressVisibility,
                 decoration: InputDecoration(
                   labelText: 'Your email address...',
@@ -257,6 +274,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               ),
               child: TextFormField(
                 controller: passwordLoginController,
+                onChanged: (value)
+                {
+                  password = passwordLoginController.text;
+                },
                 obscureText: !passwordLoginVisibility,
                 decoration: InputDecoration(
                   labelText: 'Password',
@@ -350,7 +371,41 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             child: FFButtonWidget(
               //implementam cu firebase
 
-              onPressed: () { print("hey");},
+              onPressed: () async { try {
+                final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: email,
+                    password: password
+                );
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (contex) => HomePageWidget(),
+                  ),
+                );
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'user-not-found') {
+                  print('No user found for that email.');
+                  return (await showDialog(
+                      context: context,
+                      builder:(context) => new AlertDialog(
+                    title: new Text('The email doesn\'t correspond to any user',
+
+
+                      selectionColor: CupertinoColors.systemGrey,
+                     ),
+                   backgroundColor: Colors.white,
+                          actions: <Widget>[
+                            TextButton(
+                          onPressed: () => Navigator.pop(context),
+                      child: new Text('OK'),
+                ),
+    ]
+                  ),
+                  )) ?? false;
+
+                } else if (e.code == 'wrong-password') {
+                  print('Wrong password provided for that user.');
+                }
+              }},
             /*async {
             if (_formKey.currentState!.validate()) {
             setState(() {
@@ -435,7 +490,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                 borderRadius: 20,
               ),
             ),
+
           ),
+
 
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),

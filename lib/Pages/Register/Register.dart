@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'dart:developer';
@@ -47,13 +50,46 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Future<bool> _onWillPop() async {
+      return (await showDialog(
+        context: context,
+        builder: (context) => new AlertDialog(
+          title: new Text('Are you sure?',
+            selectionColor: CupertinoColors.systemGrey,),
+          content: new Text('Do you want to exit an App',
+            selectionColor: CupertinoColors.systemGrey,),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => {Navigator.of(context).pop(false),
+
+      },
+              child: new Text('No'),
+            ),
+            TextButton(
+              onPressed: () =>
+      {
+        Navigator.of(context).pop(),
+        exit(0)
+      },
+              child: new Text('Yes'),
+            ),
+          ],
+        ),
+      )) ?? false;
+    }
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back,
+              color: CupertinoColors.systemGrey,),
+            onPressed: () =>{ Navigator.pushReplacementNamed(
+                context, 'homescreen')},
+          ),
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Column(
             mainAxisSize: MainAxisSize.max,
