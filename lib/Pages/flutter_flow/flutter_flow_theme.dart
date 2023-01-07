@@ -119,7 +119,7 @@ class DarkModeTheme extends FlutterFlowTheme {
   late Color primaryText = const Color(0xFFFFFFFF);
   late Color secondaryText = const Color(0xFF95A1AC);
 
-  late Color primaryBtnText = Color(0xFFFFFFFF);
+  late Color primaryBtnText = Color(0xFF766E6E);
   late Color lineColor = Color(0xFF22282F);
 }
 

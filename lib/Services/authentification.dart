@@ -41,10 +41,10 @@ class Authentication {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            return LoginPageWidget();
+            return HomePageWidget();
           }
           else {
-            return const HomePageWidget ();
+            return const LoginPageWidget ();
           }
         });
   }

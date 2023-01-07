@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'Pages/FunctionalityPages/functionality.dart';
 
 import 'Pages/LoginPage/Login.dart';
+import 'Pages/Register/Register.dart';
 import 'Pages/StartingPages/startPage.dart';
 import 'Pages/flutter_flow/flutter_flow_theme.dart';
 import 'Services/authentification.dart';
@@ -23,16 +24,17 @@ class MyApp extends StatelessWidget {
     Widget build(BuildContext context) {
     return MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: 'Plant-App',
+    title: 'Home-App',
     theme: ThemeData(
     primaryColor: FlutterFlowTheme.of(context).gray600,
     textTheme:  Theme.of(context).textTheme.apply(bodyColor: FlutterFlowTheme.of(context).gray600),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     ),
-    home: Authentication().handleAuthState(),
+    home: HomePageWidget(),
       routes: {
         'homescreen': (context) => HomePageWidget(),
         'login_screen': (context) => LoginPageWidget(),
+        'register_screen': (context) =>RegisterPageWidget(),
 
       },
 
@@ -54,12 +56,14 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+
 
   void _incrementCounter() {
     setState(() {
