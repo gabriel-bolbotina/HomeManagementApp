@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -23,7 +25,14 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back,
+              color: CupertinoColors.systemGrey,),
+            onPressed: () =>{ Navigator.pushReplacementNamed(
+                context, 'homescreen')},
+            //aici trebuie un pop up cu do you want to exit the app
+          ),
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
             'Hello, Xulescu',
@@ -32,22 +41,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
               color: FlutterFlowTheme.of(context).black600,
             ),
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-              child: Container(
-                width: 100,
-                height: 100,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.network(
-                  'https://picsum.photos/seed/339/600',
-                ),
-              ),
-            ),
-          ],
+
           centerTitle: false,
           elevation: 0,
         ),
@@ -59,6 +53,21 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.topRight,
+                  child: Image.network(
+                    'https://picsum.photos/seed/339/600',
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
                 child: Row(
@@ -134,7 +143,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                                 options: FFButtonOptions(
                                   width: 80,
                                   height: 40,
-                                  color: const Color(0xFF4B39EF),
+                                  color: const Color.fromARGB(255, 128, 173, 242),
                                   textStyle: FlutterFlowTheme.of(context)
                                       .bodyText1
                                       .override(
@@ -201,7 +210,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                                 options: FFButtonOptions(
                                   width: 80,
                                   height: 40,
-                                  color: const Color(0xFF4B39EF),
+                                  color: const Color.fromARGB(255, 128, 173, 242),
                                   textStyle: FlutterFlowTheme.of(context)
                                       .bodyText1
                                       .override(
@@ -268,7 +277,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                                 options: FFButtonOptions(
                                   width: 80,
                                   height: 40,
-                                  color: const Color(0xFF4B39EF),
+                                  color: const Color.fromARGB(255, 128, 173, 242),
                                   textStyle: FlutterFlowTheme.of(context)
                                       .bodyText1
                                       .override(
@@ -292,16 +301,16 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(260, 150, 0, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(260, 140, 0, 0),
                 child: FFButtonWidget(
                   onPressed: () {
                     print('Button pressed ...');
                   },
                   text: '+ Add',
                   options: FFButtonOptions(
-                    width: 80,
-                    height: 40,
-                    color: FlutterFlowTheme.of(context).tertiary400,
+                    width: 100,
+                    height: 50,
+                    color: const Color.fromARGB(255, 253, 238, 186),
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: 'Poppins',
                       color: Colors.white,
