@@ -20,13 +20,70 @@ class HomePageWidget extends StatefulWidget {
 class _HomePageWidgetState extends State<HomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Route _createRoute(String type) {
+    if (type == "login") {
+      return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            LoginPageWidget(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, -1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutSine;
+
+          var tween = Tween(begin: begin, end: end).chain(
+              CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      );
+    }
+    else if (type == "register") {
+      return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            RegisterPageWidget(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutSine;
+
+          var tween = Tween(begin: begin, end: end).chain(
+              CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      );
+    }
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          HomePageWidget(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(
+            CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
 
 
     bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-      (context) => new AlertDialog(
+          (context) => new AlertDialog(
         title: new Text('Are you sure?',
           selectionColor: CupertinoColors.systemGrey,),
         content: new Text('Do you want to exit an App',
@@ -121,22 +178,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             children: [
               Expanded(
                 child: Align(
-                  alignment: AlignmentDirectional(0, 1),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
-                    child: SelectionArea(
-                        child: Text(
-                          'Home',
-                          style: FlutterFlowTheme
-                              .of(context)
-                              .title1
-                              .override(
-                            fontFamily: 'Poppins',
-                            fontSize: 36,
-                          ),
-                        )),
-                  ),
-                ),
+                    alignment: AlignmentDirectional(0, 0.8),
+                    child: Image.asset("assets/iconapp.png", scale: 0.01)),
+
+
               ),
               Align(
                 alignment: AlignmentDirectional(0, -0.5),
@@ -144,15 +189,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
                   child: FFButtonWidget(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, 'login_screen');},
-                      text: 'Login',
+                      Navigator.of(context).push(_createRoute("login"));},
+                    text: 'Login',
                     options: FFButtonOptions(
                       width: 200,
                       height: 45,
-                      color: FlutterFlowTheme
-                          .of(context)
-                          .primaryColor,
+                      color: const Color.fromARGB(255, 128, 173, 242),
                       textStyle: FlutterFlowTheme
                           .of(context)
                           .subtitle1
@@ -178,23 +220,18 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   alignment: const AlignmentDirectional(0, -0.95),
                   child: FFButtonWidget(
                     onPressed: () {
-                    Navigator.pushReplacementNamed(
-                    context, 'register_screen');},
+                      Navigator.of(context).push(_createRoute("register"));},
                     text: 'Register',
                     options: FFButtonOptions(
                       width: 120,
                       height: 40,
-                      color: FlutterFlowTheme
-                          .of(context)
-                          .secondaryColor,
+                      color: const Color.fromARGB(255, 255, 242, 176),
                       textStyle: FlutterFlowTheme
                           .of(context)
                           .subtitle2
                           .override(
                         fontFamily: 'Poppins',
-                        color: FlutterFlowTheme
-                            .of(context)
-                            .primaryBtnText,
+                        color: Colors.black,
                         fontSize: 12,
                       ),
                       borderSide: const BorderSide(
