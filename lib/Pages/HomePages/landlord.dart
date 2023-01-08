@@ -29,7 +29,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
             'Hello, Xulescu',
@@ -38,22 +38,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
               color: FlutterFlowTheme.of(context).black600,
             ),
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-              child: Container(
-                width: 100,
-                height: 100,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.network(
-                  'https://picsum.photos/seed/339/600',
-                ),
-              ),
-            ),
-          ],
+
           centerTitle: false,
           elevation: 0,
         ),
@@ -65,6 +50,21 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.topRight,
+                  child: Image.network(
+                    'https://picsum.photos/seed/339/600',
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
                 child: Row(
@@ -140,7 +140,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                                 options: FFButtonOptions(
                                   width: 80,
                                   height: 40,
-                                  color: const Color(0xFF4B39EF),
+                                  color: const Color.fromARGB(255, 128, 173, 242),
                                   textStyle: FlutterFlowTheme.of(context)
                                       .bodyText1
                                       .override(
@@ -207,7 +207,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                                 options: FFButtonOptions(
                                   width: 80,
                                   height: 40,
-                                  color: const Color(0xFF4B39EF),
+                                  color: const Color.fromARGB(255, 128, 173, 242),
                                   textStyle: FlutterFlowTheme.of(context)
                                       .bodyText1
                                       .override(
@@ -274,7 +274,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                                 options: FFButtonOptions(
                                   width: 80,
                                   height: 40,
-                                  color: const Color(0xFF4B39EF),
+                                  color: const Color.fromARGB(255, 128, 173, 242),
                                   textStyle: FlutterFlowTheme.of(context)
                                       .bodyText1
                                       .override(
@@ -310,7 +310,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                     color: FlutterFlowTheme.of(context).tertiary400,
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: 'Poppins',
-                      color: Colors.white,
+                      color: const Color.fromARGB(255, 253, 238, 186),
                     ),
                     borderSide: const BorderSide(
                       color: Colors.transparent,
