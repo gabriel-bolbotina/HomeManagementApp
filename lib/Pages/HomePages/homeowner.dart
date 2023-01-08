@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -17,6 +18,13 @@ class HomeownerHomePageWidget extends StatefulWidget {
 class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Future addUserDetails (
+      String firstName, String lastName, int age) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'first name': firstName,
+      'last name': lastName,
+      'age': age,});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,6 +145,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                             Expanded(
                               child: FFButtonWidget(
                                 onPressed: () {
+                                  addUserDetails("Andrei","Anton",23);
                                   print('Button pressed ...');
                                 },
                                 text: 'Details',

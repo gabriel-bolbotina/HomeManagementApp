@@ -35,14 +35,17 @@ class _LandlordRequestReceivedWidgetState
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         automaticallyImplyLeading: false,
+        /*
         title: Text(
           'Requests',
           style: FlutterFlowTheme.of(context).title1,
-        ),
+        ),*/
         actions: [],
         centerTitle: false,
         elevation: 0,
       ),
+
+
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
         child: SingleChildScrollView(
@@ -51,7 +54,15 @@ class _LandlordRequestReceivedWidgetState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+                child: Text(
+                  'Requests',
+                  style: FlutterFlowTheme.of(context).bodyText2,
+                  textScaleFactor: 2,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                 child: Text(
                   'Your tenants requests',
                   style: FlutterFlowTheme.of(context).bodyText2,
