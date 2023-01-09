@@ -62,8 +62,29 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
 
   }
+  
+  Future errorMessage(String message)
+  async {
+    return await showDialog(
+      context: context,
+      builder: (context) =>
+      new AlertDialog(
+          title: new Text(message,
+            selectionColor: CupertinoColors.systemGrey,
+            style: TextStyle(color: Colors.grey, fontFamily: 'Lexend Deca', fontSize: 15),
+          ),
+          backgroundColor: Colors.white,
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: new Text('OK'),
+            ),
+          ]
+      ),
+    );
+  }
 
-  Future signUp() async{
+  Future signIn() async{
       try {
         final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
@@ -78,24 +99,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print('No user found for that email.');
-          return (await showDialog(
-            context: context,
-            builder: (context) =>
-            new AlertDialog(
-                title: new Text('The email doesn\'t correspond to any user',
-
-
-                  selectionColor: CupertinoColors.systemGrey,
-                ),
-                backgroundColor: Colors.white,
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: new Text('OK'),
-                  ),
-                ]
-            ),
-          )) ?? false;
+          errorMessage("Incorrect credentials!") ?? false;
         } else if (e.code == 'wrong-password') {
           print('Wrong password provided for that user.');
         }
@@ -447,7 +451,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     child: FFButtonWidget(
                       //implementam cu firebase
 
-                      onPressed: () => signUp(),
+                      onPressed: () => signIn(),
                       text: 'Login',
                       options: FFButtonOptions(
                         width: 270,
@@ -473,8 +477,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     ),
 
                   ),
-
-
                   Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                       child:
@@ -485,40 +487,42 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
                       )
                   ),
-
+                  SizedBox(height: 10),
 
 
 
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
-                    child: FFButtonWidget(
-                      onPressed: () {
-                        print('Button-Login pressed ...');
-                      },
-                      text: 'Forgot Password?',
-                      options: FFButtonOptions(
-                        width: 170,
-                        height: 50,
-                        color: Color(0xFFF1F4F8),
-                        textStyle: FlutterFlowTheme
-                            .of(context)
-                            .subtitle2
-                            .override(
-                          fontFamily: 'Outfit',
-                          color: Color(0x80adf2),
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      //implementam cu firebase
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [GestureDetector(
+                        onTap: ()
+                    {
+                      print("forgot password");
+                    },
+                        child: Text(
+                       'Forgot password?',
+                        style: TextStyle(
+                        color: CupertinoColors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
                         ),
-                        elevation: 0,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1,
+                        )
+
                         ),
-                      ),
 
 
+                    ]
                     ),
+
                   ),
+
+
+
+
+
+
                 ],
               ),
             )
