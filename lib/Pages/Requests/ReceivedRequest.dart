@@ -78,7 +78,7 @@ class _LandlordRequestReceivedWidgetState
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: Image.asset(
-                        'assets/images/pump1.jpg',
+                        'assets/pump1.jpg',
                       ).image,
                     ),
                     boxShadow: const [
@@ -204,7 +204,7 @@ class _LandlordRequestReceivedWidgetState
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: Image.asset(
-                        'assets/images/pump2.jpg',
+                        'assets/pump2.jpg',
                       ).image,
                     ),
                     boxShadow: const [

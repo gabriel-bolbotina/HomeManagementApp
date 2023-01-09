@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../Services/FirebaseService.dart';
+import '../FunctionalityPages/functionality.dart';
+import '../ProfilePages/homeowner_profile.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -33,13 +36,6 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back,
-              color: CupertinoColors.systemGrey,),
-            onPressed: () =>{ Navigator.pushReplacementNamed(
-                context, 'homescreen')},
-            //aici trebuie un pop up cu do you want to exit the app
-          ),
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
@@ -63,19 +59,22 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
             children: [
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.topRight,
-                  child: Image.network(
-                    'https://picsum.photos/seed/339/600',
+                child:InkWell(
+                  onTap: () =>Navigator.push(context,
+                      new MaterialPageRoute(builder: (context) => HomeownerProfilePageWidget())), // Image tapped
+                  splashColor: Colors.white10, // Splash color over image
+                  child: Ink.image(
+                    fit: BoxFit.cover, // Fixes border issues
+                    width: 100,
+                    height: 100,
+                    image: AssetImage(
+                      'assets/iconapp.png',
+                    ),
                   ),
                 ),
               ),
+
+
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
                 child: Row(
@@ -145,8 +144,10 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                             Expanded(
                               child: FFButtonWidget(
                                 onPressed: () {
-                                  addUserDetails("Andrei","Anton",23);
-                                  print('Button pressed ...');
+
+                                  Navigator.push(context,
+                                    new MaterialPageRoute(builder: (context) => new PopUpFunctionalityPageWidget()),);
+
                                 },
                                 text: 'Details',
                                 options: FFButtonOptions(

@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+
+import '../HomePages/homeowner.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -31,55 +34,21 @@ class _PopUpFunctionalityPageWidgetState
         child: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
           automaticallyImplyLeading: false,
-          title: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
-                      child: FlutterFlowIconButton(
-                        borderColor: Colors.transparent,
-                        borderRadius: 30,
-                        borderWidth: 1,
-                        buttonSize: 50,
-                        icon: Icon(
-                          Icons.arrow_back_rounded,
-                          color: FlutterFlowTheme.of(context).gray600,
-                          size: 30,
-                        ),
-                        onPressed: () {
-                          print('IconButton pressed ...');
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(4, 10, 0, 0),
-                      child: Text(
-                        'Back',
-                        style: FlutterFlowTheme.of(context).title1.override(
-                          fontFamily: 'Poppins',
-                          color: FlutterFlowTheme.of(context).gray600,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          leading:IconButton(
+            icon: Icon(Icons.arrow_back,
+              color: CupertinoColors.systemGrey,),
+            onPressed: () => Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => HomeownerHomePageWidget())),
+
+
+
+            //aici trebuie un pop up cu do you want to exit the app
           ),
-          actions: [],
-          centerTitle: true,
+          centerTitle: false,
           elevation: 0,
         ),
       ),
+
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.max,

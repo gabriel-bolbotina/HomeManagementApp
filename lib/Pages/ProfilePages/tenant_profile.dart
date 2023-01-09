@@ -1,3 +1,7 @@
+import 'package:flutter/cupertino.dart';
+
+import '../../Services/FirebaseService.dart';
+import '../HomePages/tenant.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -13,9 +17,40 @@ class TenantProfilePageWidget extends StatefulWidget {
       _TenantProfilePageWidgetState();
 }
 
-class _TenantProfilePageWidgetState extends State<TenantProfilePageWidget> {
+class _TenantProfilePageWidgetState
+    extends State<TenantProfilePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Future signOut() async {
+    return (await showDialog(
+        context: context,
+        builder: (context) =>
+        new AlertDialog(
+            title: new Text('Are you sure you want to exit the app?',
+              style: TextStyle(color: CupertinoColors.systemGrey,
+                fontFamily: 'Lexend Deca',
+
+              ),
+
+              selectionColor: CupertinoColors.systemGrey,
+            ),
+            backgroundColor: Colors.white,
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  FirebaseService service = new FirebaseService();
+                  await service.signOutFromGoogle();
+
+                  Navigator.pushReplacementNamed(
+                      context, 'homescreen');
+                },
+                child: new Text('OK'),
+              ),
+            ]
+        )
+    )
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,53 +61,12 @@ class _TenantProfilePageWidgetState extends State<TenantProfilePageWidget> {
         child: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
           automaticallyImplyLeading: false,
-          leading: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: Icon(
-                  Icons.arrow_back_rounded,
-                  color: FlutterFlowTheme.of(context).gray600,
-                  size: 30,
-                ),
-                onPressed: () {
-                  print('IconButton pressed ...');
-                },
-              ),
-              Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0,0,0,0),
-                  child: SelectionArea(
-                    child: Text(
-                  'Back',
-                    style: FlutterFlowTheme.of(context).title1.override(
-                      fontFamily: 'Poppins',
-                      color: FlutterFlowTheme.of(context).gray600,
-                      fontSize: 18,
-                    ),
-                  )),
-              ),
-            ],
+          leading:IconButton(
+            icon: Icon(Icons.arrow_back,
+              color: CupertinoColors.systemGrey,),
+            onPressed: () => Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => TenantHomePageWidget())),
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-              child: Container(
-                width: 100,
-                height: 100,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.network(
-                  'https://picsum.photos/seed/339/600',
-                ),
-              ),
-            ),
-          ],
           centerTitle: false,
           elevation: 0,
         ),

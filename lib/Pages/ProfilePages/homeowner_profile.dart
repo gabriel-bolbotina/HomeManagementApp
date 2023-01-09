@@ -1,3 +1,7 @@
+import 'package:flutter/cupertino.dart';
+
+import '../../Services/FirebaseService.dart';
+import '../HomePages/homeowner.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -17,60 +21,51 @@ class _HomeownerProfilePageWidgetState
     extends State<HomeownerProfilePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Future signOut() async {
+    return (await showDialog(
+        context: context,
+        builder: (context) =>
+        new AlertDialog(
+            title: new Text('Are you sure you want to exit the app?',
+              style: TextStyle(color: CupertinoColors.systemGrey,
+                fontFamily: 'Lexend Deca',
+
+              ),
+
+              selectionColor: CupertinoColors.systemGrey,
+            ),
+            backgroundColor: Colors.white,
+            actions: <Widget>[
+              TextButton(
+                onPressed: () async {
+                  FirebaseService service = new FirebaseService();
+                  await service.signOutFromGoogle();
+
+                  Navigator.pushReplacementNamed(
+                      context, 'homescreen');
+                },
+                child: new Text('OK'),
+              ),
+            ]
+        )
+    )
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
+    return Scaffold(      key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).lineColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
+          backgroundColor: FlutterFlowTheme.of(context).lineColor,
           automaticallyImplyLeading: false,
-          leading: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: Icon(
-                  Icons.arrow_back_rounded,
-                  color: FlutterFlowTheme.of(context).gray600,
-                  size: 30,
-                ),
-                onPressed: () {
-                  print('IconButton pressed ...');
-                },
-              ),
-              SelectionArea(
-                  child: Text(
-                    'Back',
-                    style: FlutterFlowTheme.of(context).title1.override(
-                      fontFamily: 'Poppins',
-                      color: FlutterFlowTheme.of(context).gray600,
-                      fontSize: 18,
-                    ),
-                  )),
-            ],
+          leading:IconButton(
+            icon: Icon(Icons.arrow_back,
+              color: CupertinoColors.systemGrey,),
+            onPressed: () => Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => HomeownerHomePageWidget())),
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-              child: Container(
-                width: 100,
-                height: 100,
-                clipBehavior: Clip.antiAlias,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.network(
-                  'https://picsum.photos/seed/339/600',
-                ),
-              ),
-            ),
-          ],
           centerTitle: false,
           elevation: 0,
         ),
@@ -78,6 +73,21 @@ class _HomeownerProfilePageWidgetState
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+            child: Container(
+              width: 100,
+              height: 100,
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.topRight,
+              child: Image.network(
+                'https://picsum.photos/seed/339/600',
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
             child: Row(
@@ -245,17 +255,16 @@ class _HomeownerProfilePageWidgetState
             child: Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 280, 0, 0),
               child: FFButtonWidget(
-                onPressed: () {
-                  print('Button pressed ...');
-                },
+                onPressed: () => signOut(),
+
                 text: 'Log Out',
                 options: FFButtonOptions(
                   width: 110,
                   height: 50,
-                  color: FlutterFlowTheme.of(context).tertiary400,
+                  color: const Color.fromARGB(255, 253, 238, 186),
                   textStyle: FlutterFlowTheme.of(context).subtitle1.override(
                     fontFamily: 'Poppins',
-                    color: FlutterFlowTheme.of(context).primaryBtnText,
+                    color: CupertinoColors.black,
                   ),
                   elevation: 3,
                   borderSide: const BorderSide(
