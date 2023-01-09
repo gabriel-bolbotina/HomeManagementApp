@@ -51,6 +51,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core:
   firebase_auth: ^4.1.4
+  cloud_firestore:  ^4.0.1
   google_sign_in: ^5.4.2
   flutter_signin_button: ^2.0.0
   back_button_interceptor:

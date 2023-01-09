@@ -25,18 +25,87 @@ class LoginPageWidget extends StatefulWidget {
 }
 
 class _LoginPageWidgetState extends State<LoginPageWidget> {
-  TextEditingController emailAddressController = new  TextEditingController();
-  TextEditingController passwordLoginController  = new  TextEditingController();
+  final emailAddressController = TextEditingController();
+  final passwordLoginController =TextEditingController();
+  final passwordConfirmedLoginController =TextEditingController() ;
 
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
-  String email = '';
-  String password = '';
   bool isloading = false;
 
   late bool passwordLoginVisibility;
   late bool emailAddressVisibility;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+
+  Future googleSignIn() async{
+    setState(() {
+      isloading = true;
+    });
+    FirebaseService service = new FirebaseService();
+    try {
+      await service.signInwithGoogle();
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (contex) => HomeownerHomePageWidget(),
+        ),
+      );
+    } catch(e){
+      if(e is FirebaseAuthException){
+        showMessage(e.message!);
+      }
+    }
+    setState(() {
+      isloading = false;
+    });
+
+
+  }
+  
+  Future errorMessage(String message)
+  async {
+    return await showDialog(
+      context: context,
+      builder: (context) =>
+      new AlertDialog(
+          title: new Text(message,
+            selectionColor: CupertinoColors.systemGrey,
+            style: TextStyle(color: Colors.grey, fontFamily: 'Lexend Deca', fontSize: 15),
+          ),
+          backgroundColor: Colors.white,
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: new Text('OK'),
+            ),
+          ]
+      ),
+    );
+  }
+
+  Future signIn() async{
+      try {
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+            email: emailAddressController.text.trim(),
+            password: passwordLoginController.text.trim()
+        );
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (contex) => HomeownerHomePageWidget(),
+          ),
+        );
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+          errorMessage("Incorrect credentials!") ?? false;
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+        }
+      }
+
+  }
 
   Route _createRoute() {
     return PageRouteBuilder(
@@ -60,16 +129,14 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   @override
   void initState() {
     super.initState();
-    //emailAddressController
-    //passwordLoginController = TextEditingController();
     passwordLoginVisibility = false;
     emailAddressVisibility = false;
   }
 
   @override
   void dispose() {
-    emailAddressController?.dispose();
-    passwordLoginController?.dispose();
+    emailAddressController.dispose();
+    passwordLoginController.dispose();
     super.dispose();
   }
 
@@ -199,10 +266,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       ),
                       child: TextFormField(
                         controller: emailAddressController,
-                        onChanged: (value)
-                        {
-                          email = emailAddressController.text;
-                        },
                         validator: (value) => (value!.isEmpty)
                             ? 'Please enter email'
                             : null,
@@ -295,10 +358,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       ),
                       child: TextFormField(
                         controller: passwordLoginController,
-                        onChanged: (value)
-                        {
-                          password = passwordLoginController.text;
-                        },
                         obscureText: !passwordLoginVisibility,
                         decoration: InputDecoration(
                           labelText: 'Password',
@@ -392,100 +451,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     child: FFButtonWidget(
                       //implementam cu firebase
 
-                      onPressed: () async { try {
-                        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: email,
-                            password: password
-                        );
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (contex) => HomeownerHomePageWidget(),
-                          ),
-                        );
-                      } on FirebaseAuthException catch (e) {
-                        if (e.code == 'user-not-found') {
-                          print('No user found for that email.');
-                          return (await showDialog(
-                            context: context,
-                            builder:(context) => new AlertDialog(
-                                title: new Text('The email doesn\'t correspond to any user',
-
-
-                                  selectionColor: CupertinoColors.systemGrey,
-                                ),
-                                backgroundColor: Colors.white,
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: new Text('OK'),
-                                  ),
-                                ]
-                            ),
-                          )) ?? false;
-
-                        } else if (e.code == 'wrong-password') {
-                          print('Wrong password provided for that user.');
-                        }
-                      }},
-                      /*async {
-            if (_formKey.currentState!.validate()) {
-            setState(() {
-            isloading = true;
-            });
-            try {
-            await _auth.signInWithEmailAndPassword(
-            email: (emailAddressController!.text), password: (passwordLoginController!.text));
-
-            await Navigator.of(context).push(
-            MaterialPageRoute(
-            builder: (contex) => HomePageWidget(),
-            ),
-            );
-            setState(() {
-            isloading = false;
-            });
-            } on FirebaseAuthException catch (e) {
-            showDialog(
-            context: context,
-            builder: (ctx) => AlertDialog(
-            title: Text("Ops! Login Failed"),
-            content: Text('${e.message}'),
-            actions: [
-            TextButton(
-            onPressed: () {
-            Navigator.of
-
-            (ctx).pop();
-            },
-            child: Text('Okay'),
-
-            )
-            ],
-            ),
-            );
-            print(e);
-
-
-            }
-            }
-            },
-              /*async {
-    GoRouter.of(context).prepareAuthEvent();
-
-    final user = await signInWithEmail(
-    context,
-    emailAddressController!.text,
-    passwordLoginController!.text,
-    );
-    if (user == null) {
-    return;
-    }
-
-    context.goNamedAuth('', mounted);
-    },
-    */
-    */
-
+                      onPressed: () => signIn(),
                       text: 'Login',
                       options: FFButtonOptions(
                         width: 270,
@@ -511,74 +477,52 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     ),
 
                   ),
-
-
                   Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                       child:
                       SignInButton(
                         Buttons.Google,
                         text: "Sign in with Google",
-                        onPressed: () async {
-                          setState(() {
-                            isloading = true;
-                          });
-                          FirebaseService service = new FirebaseService();
-                          try {
-                            await service.signInwithGoogle();
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (contex) => HomeownerHomePageWidget(),
-                              ),
-                            );
-                          } catch(e){
-                            if(e is FirebaseAuthException){
-                              showMessage(e.message!);
-                            }
-                          }
-                          setState(() {
-                            isloading = false;
-                          });
-                        },
+                        onPressed: () => googleSignIn(),
 
                       )
                   ),
-
+                  SizedBox(height: 10),
 
 
 
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
-                    child: FFButtonWidget(
-
-
-                      onPressed: () {
-                        print('Button-Login pressed ...');
-                      },
-                      text: 'Forgot Password?',
-                      options: FFButtonOptions(
-                        width: 170,
-                        height: 50,
-                        color: Color(0xFFF1F4F8),
-                        textStyle: FlutterFlowTheme
-                            .of(context)
-                            .subtitle2
-                            .override(
-                          fontFamily: 'Outfit',
-                          color: Color(0x80adf2),
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      //implementam cu firebase
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [GestureDetector(
+                        onTap: ()
+                    {
+                      print("forgot password");
+                    },
+                        child: Text(
+                       'Forgot password?',
+                        style: TextStyle(
+                        color: CupertinoColors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
                         ),
-                        elevation: 0,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1,
+                        )
+
                         ),
-                      ),
 
 
+                    ]
                     ),
+
                   ),
+
+
+
+
+
+
                 ],
               ),
             )
