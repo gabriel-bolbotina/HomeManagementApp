@@ -53,8 +53,7 @@ class _HomeownerProfilePageWidgetState
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
+    return Scaffold(      key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).lineColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
@@ -66,10 +65,6 @@ class _HomeownerProfilePageWidgetState
               color: CupertinoColors.systemGrey,),
             onPressed: () => Navigator.push(context,
                 new MaterialPageRoute(builder: (context) => HomeownerHomePageWidget())),
-
-
-
-            //aici trebuie un pop up cu do you want to exit the app
           ),
           centerTitle: false,
           elevation: 0,
