@@ -55,7 +55,7 @@ dependencies:
   google_sign_in: ^5.4.2
   flutter_signin_button: ^2.0.0
   back_button_interceptor:
-  cloud_firestore: ^4.0.1
+
 
 dev_dependencies:
   flutter_test:
