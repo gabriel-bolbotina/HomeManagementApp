@@ -1,3 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+
+import '../../Services/FirebaseService.dart';
+import '../FunctionalityPages/functionality.dart';
+import '../ProfilePages/homeowner_profile.dart';
+import '../ProfilePages/tenant_profile.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -8,19 +15,51 @@ class TenantHomePageWidget extends StatefulWidget {
   const TenantHomePageWidget({Key? key}) : super(key: key);
 
   @override
-  _TenantHomePageWidgetState createState() => _TenantHomePageWidgetState();
+  _TenantHomePageWidgetState createState() =>
+      _TenantHomePageWidgetState();
 }
 
 class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void dispose() {
-    _unfocusNode.dispose();
-    super.dispose();
+  Future signOut() async {
+    return (await showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(
+                title: const Text('Are you sure you want to exit the app?',
+                  style: TextStyle(color: CupertinoColors.systemGrey,
+                    fontFamily: 'Lexend Deca',
+
+                  ),
+
+                  selectionColor: CupertinoColors.systemGrey,
+                ),
+                backgroundColor: Colors.white,
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () async {
+                      FirebaseService service = FirebaseService();
+                      await service.signOutFromGoogle();
+
+                      Navigator.pushReplacementNamed(
+                          context, 'homescreen');
+                    },
+                    child: const Text('OK'),
+                  ),
+                ]
+            )
+    )
+    );
   }
 
+  Future addUserDetails (
+      String firstName, String lastName, int age) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'first name': firstName,
+      'last name': lastName,
+      'age': age,});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +68,12 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
+
+
+
+
+          //aici trebuie un pop up cu do you want to exit the app
+
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
@@ -38,12 +83,13 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
               color: FlutterFlowTheme.of(context).black600,
             ),
           ),
+
           centerTitle: false,
           elevation: 0,
         ),
       ),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+        onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -51,19 +97,21 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
             children: [
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.topRight,
-                  child: Image.network(
-                    'https://picsum.photos/seed/339/600',
+                child:InkWell(
+                  onTap: () =>Navigator.push(context,
+                      new MaterialPageRoute(builder: (context) => TenantProfilePageWidget())), // Image tapped
+                  splashColor: Colors.white10, // Splash color over image
+                  child: Ink.image(
+                    fit: BoxFit.cover, // Fixes border issues
+                    width: 100,
+                    height: 100,
+                    image: AssetImage(
+                      'assets/iconapp.png',
+                    ),
                   ),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
                 child: Row(
@@ -133,6 +181,7 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                             Expanded(
                               child: FFButtonWidget(
                                 onPressed: () {
+                                  addUserDetails("Andrei","Anton",23);
                                   print('Button pressed ...');
                                 },
                                 text: 'Details',
@@ -297,19 +346,19 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(260, 150, 0, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(260, 140, 0, 0),
                 child: FFButtonWidget(
                   onPressed: () {
                     print('Button pressed ...');
                   },
                   text: '+ Add',
                   options: FFButtonOptions(
-                    width: 80,
-                    height: 40,
-                    color: FlutterFlowTheme.of(context).tertiary400,
+                    width: 100,
+                    height: 50,
+                    color: const Color.fromARGB(255, 253, 238, 186),
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: 'Poppins',
-                      color: const Color.fromARGB(255, 253, 238, 186),
+                      color: Colors.white,
                     ),
                     borderSide: const BorderSide(
                       color: Colors.transparent,

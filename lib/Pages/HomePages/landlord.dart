@@ -1,3 +1,5 @@
+import 'package:homeapp/Pages/ProfilePages/landlord_profile.dart';
+
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -12,14 +14,7 @@ class LandlordHomePageWidget extends StatefulWidget {
 }
 
 class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void dispose() {
-    _unfocusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +39,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
         ),
       ),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+        onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -52,19 +47,21 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
             children: [
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.topRight,
-                  child: Image.network(
-                    'https://picsum.photos/seed/339/600',
+                child:InkWell(
+                  onTap: () =>Navigator.push(context,
+                      new MaterialPageRoute(builder: (context) => LandlordProfilePageWidget())), // Image tapped
+                  splashColor: Colors.white10, // Splash color over image
+                  child: Ink.image(
+                    fit: BoxFit.cover, // Fixes border issues
+                    width: 100,
+                    height: 100,
+                    image: AssetImage(
+                      'assets/iconapp.png',
+                    ),
                   ),
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
                 child: Row(
