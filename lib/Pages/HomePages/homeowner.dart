@@ -21,6 +21,13 @@ class HomeownerHomePageWidget extends StatefulWidget {
 class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Future addUserDetails (
+      String firstName, String lastName, int age) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'first name': firstName,
+      'last name': lastName,
+      'age': age,});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,8 +144,10 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                             Expanded(
                               child: FFButtonWidget(
                                 onPressed: () {
+
                                   Navigator.push(context,
                                     new MaterialPageRoute(builder: (context) => new PopUpFunctionalityPageWidget()),);
+
                                 },
                                 text: 'Details',
                                 options: FFButtonOptions(
