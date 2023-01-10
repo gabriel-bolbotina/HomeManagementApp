@@ -295,7 +295,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(260, 150, 0, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(260, 10, 0, 20),
                 child: FFButtonWidget(
                   onPressed: () {
                     print('Button pressed ...');
@@ -304,10 +304,10 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                   options: FFButtonOptions(
                     width: 80,
                     height: 40,
-                    color: FlutterFlowTheme.of(context).tertiary400,
+                    color: const Color.fromARGB(255, 253, 238, 186),
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: 'Poppins',
-                      color: const Color.fromARGB(255, 253, 238, 186),
+                      color: Colors.black54,
                     ),
                     borderSide: const BorderSide(
                       color: Colors.transparent,

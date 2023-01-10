@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../Services/FirebaseService.dart';
+import '../EditPages/landlord_edit.dart';
 import '../HomePages/landlord.dart';
+import '../NotificationPages/landlord_notification.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -59,7 +61,7 @@ class _LandlordProfilePageWidgetState
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
+          backgroundColor: FlutterFlowTheme.of(context).lineColor,
           automaticallyImplyLeading: false,
           leading:IconButton(
             icon: const Icon(Icons.arrow_back,
@@ -74,6 +76,21 @@ class _LandlordProfilePageWidgetState
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+            child: Container(
+              width: 100,
+              height: 100,
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.topRight,
+              child: Image.network(
+                'https://picsum.photos/seed/339/600',
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
             child: Row(
@@ -112,7 +129,7 @@ class _LandlordProfilePageWidgetState
                               color: CupertinoColors.systemGrey,
                               size:  20,),
                             onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const LandlordHomePageWidget())),
+                                MaterialPageRoute(builder: (context) => const LandlordEditPageWidget())),
                           ),
                         ],
                       ),
@@ -160,7 +177,7 @@ class _LandlordProfilePageWidgetState
                               color: CupertinoColors.systemGrey,
                               size:  20,),
                             onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const LandlordHomePageWidget())),
+                                MaterialPageRoute(builder: (context) => const LandlordNotificationSettingsWidget ())),
                           ),
                         ],
                       ),
@@ -184,10 +201,11 @@ class _LandlordProfilePageWidgetState
                   color: const Color.fromARGB(255, 253, 238, 186),
                   textStyle: FlutterFlowTheme.of(context).subtitle1.override(
                     fontFamily: 'Poppins',
-                    color: CupertinoColors.black,
+                    color: Colors.black54,
                   ),
                   elevation: 3,
                   borderSide: const BorderSide(
+                    color: Colors.transparent,
                     width: 1,
                   ),
                   borderRadius: 20,

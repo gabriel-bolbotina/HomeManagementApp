@@ -198,10 +198,11 @@ class _TenantProfilePageWidgetState
                   color: const Color.fromARGB(255, 253, 238, 186),
                   textStyle: FlutterFlowTheme.of(context).subtitle1.override(
                     fontFamily: 'Poppins',
-                    color: CupertinoColors.black,
+                    color: Colors.black54,
                   ),
                   elevation: 3,
                   borderSide: const BorderSide(
+                    color: Colors.transparent,
                     width: 1,
                   ),
                   borderRadius: 20,
