@@ -40,11 +40,10 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
-        automaticallyImplyLeading: false,
-        actions: [],
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         centerTitle: false,
-        elevation: 2,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -56,7 +55,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(50, 20, 0, 0),
+                      padding: EdgeInsetsDirectional.fromSTEB(24, 20, 0, 0),
                       child: Text(
                         'Select your role',
                         style: FlutterFlowTheme.of(context).bodyText1.override(
@@ -71,19 +70,20 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
               GestureDetector(
                 onTap:() {
                   addUserRole("homeowner");
+                  Navigator.pushNamed(context, 'homeowner_main');
                 },
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                       child: Container(
                         width: double.infinity,
-                        height: 200,
+                        height: 180,
                         decoration: BoxDecoration(
                           color:
                           FlutterFlowTheme.of(context).secondaryBackground,
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: Image.asset(
-                              'assets/images/pump1.jpg',
+                              'assets/homeowner.jpg',
                             ).image,
                           ),
                           boxShadow: [
@@ -131,128 +131,134 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                 ),
 
 
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.asset(
-                              'assets/images/pump1.jpg',
-                            ).image,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 5,
-                              color: Color(0x2B202529),
-                              offset: Offset(0, 3),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(16),
+                GestureDetector(
+                  onTap:() {
+                    addUserRole("tenant");
+                    Navigator.pushNamed(context, 'tenant_main');
+                  },
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 180,
+                      decoration: BoxDecoration(
+                        color:
+                        FlutterFlowTheme.of(context).secondaryBackground,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: Image.asset(
+                            'assets/homeowner.jpg',
+                          ).image,
                         ),
-                        child: Padding(
-                          padding:
-                          EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    250, 0, 0, 0),
-                                child: FlutterFlowIconButton(
-                                  borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  borderWidth: 1,
-                                  buttonSize: 60,
-                                  icon: Icon(
-                                    Icons.check_outlined,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                    size: 30,
-                                  ),
-                                  onPressed: () {
-                                    print('IconButton pressed ...');
-                                  },
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5,
+                            color: Color(0x2B202529),
+                            offset: Offset(0, 3),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding:
+                        EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  250, 0, 0, 0),
+                              child: FlutterFlowIconButton(
+                                borderColor: Colors.transparent,
+                                borderRadius: 30,
+                                borderWidth: 1,
+                                buttonSize: 60,
+                                icon: Icon(
+                                  Icons.check_outlined,
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBtnText,
+                                  size: 30,
                                 ),
+                                onPressed: () {
+                                  print('IconButton pressed ...');
+                                },
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.asset(
-                              'assets/images/pump1.jpg',
-                            ).image,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 5,
-                              color: Color(0x2B202529),
-                              offset: Offset(0, 3),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(16),
+
+
+                ),
+
+                GestureDetector(
+                  onTap:() {
+                    addUserRole("landlord");
+                    Navigator.pushNamed(context, 'landlord_main');
+                  },
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 180,
+                      decoration: BoxDecoration(
+                        color:
+                        FlutterFlowTheme.of(context).secondaryBackground,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: Image.asset(
+                            'assets/homeowner.jpg',
+                          ).image,
                         ),
-                        child: Padding(
-                          padding:
-                          EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    250, 0, 0, 0),
-                                child: FlutterFlowIconButton(
-                                  borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  borderWidth: 1,
-                                  buttonSize: 60,
-                                  icon: Icon(
-                                    Icons.check_outlined,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                    size: 30,
-                                  ),
-                                  onPressed: () {
-                                    print('IconButton pressed ...');
-                                  },
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5,
+                            color: Color(0x2B202529),
+                            offset: Offset(0, 3),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding:
+                        EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  250, 0, 0, 0),
+                              child: FlutterFlowIconButton(
+                                borderColor: Colors.transparent,
+                                borderRadius: 30,
+                                borderWidth: 1,
+                                buttonSize: 60,
+                                icon: Icon(
+                                  Icons.check_outlined,
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBtnText,
+                                  size: 30,
                                 ),
+                                onPressed: () {
+                                  print('IconButton pressed ...');
+                                },
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+
+
+                ),
+
+
+
             ]
             )
           ),
