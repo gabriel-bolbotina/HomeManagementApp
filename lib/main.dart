@@ -8,6 +8,7 @@ import 'Pages/FunctionalityPages/functionality.dart';
 
 import 'Pages/HomePages/homeowner.dart';
 import 'Pages/LoginPage/Login.dart';
+import 'Pages/Register/ChooseRole.dart';
 import 'Pages/Register/Register.dart';
 import 'Pages/Requests/ReceivedRequest.dart';
 import 'Pages/StartingPages/startPage.dart';

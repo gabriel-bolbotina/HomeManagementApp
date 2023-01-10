@@ -106,7 +106,7 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                     width: 100,
                     height: 100,
                     image: AssetImage(
-                      'assets/iconapp.png',
+                      'assets/images/iconapp.png',
                     ),
                   ),
                 ),
