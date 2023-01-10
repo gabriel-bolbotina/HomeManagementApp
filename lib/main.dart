@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:homeapp/Pages/Register/ChooseRole.dart';
 import 'Pages/FunctionalityPages/functionality.dart';
 
 import 'Pages/HomePages/homeowner.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         'homescreen': (context) => HomePageWidget(),
         'login_screen': (context) => LoginPageWidget(),
         'register_screen': (context) =>RegisterPageWidget(),
+        'role_screen': (context) =>ChooseRoleWidget(),
 
       },
 

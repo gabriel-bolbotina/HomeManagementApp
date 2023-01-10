@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+
 import 'dart:developer';
 
 import '../../Services/FirebaseService.dart';
@@ -14,6 +15,9 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
+
+
+
 
 class RegisterPageWidget extends StatefulWidget {
   const RegisterPageWidget({Key? key}) : super(key: key);
@@ -36,6 +40,28 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
   final _auth = FirebaseAuth.instance;
   final formkey = GlobalKey<FormState>();
   bool isloading = false;
+  late User currentUser;
+
+
+  @override
+  void initState() {
+    super.initState();
+    confirmPasswordController = TextEditingController();
+    confirmPasswordVisibility = false;
+    passwordVisibility = false;
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        currentUser = user;
+        print(currentUser.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Future errorMessage(String message)
   async {
@@ -116,13 +142,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
 
 
 
-  @override
-  void initState() {
-    super.initState();
-    confirmPasswordController = TextEditingController();
-    confirmPasswordVisibility = false;
-    passwordVisibility = false;
-  }
+
 
   @override
   void dispose() {
@@ -134,14 +154,16 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
 
 
 
-  Future addUserDetails (
+  Future addUserDetails (String uid,
       String firstName, String lastName, int age) async {
-    await FirebaseFirestore.instance.collection('users').add({
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'uid' : uid,
       'first name': firstName,
       'last name': lastName,
-      'age': age,});
+      'age': age,
+      'role': 'o',
+    });
   }
-
 
 
   bool confirmedPassword()
@@ -167,8 +189,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
         await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
             email: emailAddressController.text.trim(), password: passwordController.text.trim());
-
-        addUserDetails(firstNameController.text.trim(),
+        getCurrentUser();
+       addUserDetails(currentUser.uid.toString(),firstNameController.text.trim(),
             lastNameController.text.trim(), int.parse(ageController.text.trim()));
 
 
@@ -186,7 +208,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
           ),
         );
         Navigator.pushReplacementNamed(
-            context, 'homescreen');
+            context, 'role_screen');
 
         setState(() {
           isloading = false;
@@ -236,6 +258,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
       ),
     )) ?? false;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -906,7 +929,9 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                     child: FFButtonWidget(
-                      onPressed: () => signUp(),
+                      onPressed: () { signUp();
+                        addUserDetails(currentUser.uid, firstNameController.text, lastNameController.text, int.parse(ageController.text));
+                      },
                       text: 'Create Account',
                       options: FFButtonOptions(
                         width: 270,
@@ -937,6 +962,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
   }
 
 }
+
+
 
 void showMessage(String s) {
   print(s);

@@ -1,3 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -6,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 
 class ChooseRoleWidget extends StatefulWidget {
   const ChooseRoleWidget({Key? key}) : super(key: key);
@@ -18,6 +23,10 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
     with TickerProviderStateMixin {
   final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late final CollectionReference userRef;
+  late User currentUser;
 
   @override
   void dispose() {
@@ -40,10 +49,9 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Row(
+          child: SingleChildScrollView(
+            child: Column (
+              children: [Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Expanded(
@@ -60,6 +68,69 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                   ),
                 ],
               ),
+              GestureDetector(
+                onTap:() {
+                  addUserRole("homeowner");
+                },
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color:
+                          FlutterFlowTheme.of(context).secondaryBackground,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: Image.asset(
+                              'assets/images/pump1.jpg',
+                            ).image,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 5,
+                              color: Color(0x2B202529),
+                              offset: Offset(0, 3),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Padding(
+                          padding:
+                          EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    250, 0, 0, 0),
+                                child: FlutterFlowIconButton(
+                                  borderColor: Colors.transparent,
+                                  borderRadius: 30,
+                                  borderWidth: 1,
+                                  buttonSize: 60,
+                                  icon: Icon(
+                                    Icons.check_outlined,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryBtnText,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    print('IconButton pressed ...');
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+
+                ),
+
+
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -182,71 +253,43 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                   ),
                 ],
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          color:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.asset(
-                              'assets/images/pump1.jpg',
-                            ).image,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 5,
-                              color: Color(0x2B202529),
-                              offset: Offset(0, 3),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Padding(
-                          padding:
-                          EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    250, 0, 0, 0),
-                                child: FlutterFlowIconButton(
-                                  borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  borderWidth: 1,
-                                  buttonSize: 60,
-                                  icon: Icon(
-                                    Icons.check_outlined,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                    size: 30,
-                                  ),
-                                  onPressed: () {
-                                    print('IconButton pressed ...');
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ]
+            )
           ),
         ),
       ),
     );
+  }
+
+  /*Future addUserDetails (UserDetails userDetails) async {
+    await FirebaseFirestore.instance.collection('users').doc(userDetails.uid).set({
+      'uid' : userDetails.uid,
+      'first name': userDetails.firstName,
+      'last name': userDetails.lastName,
+      'age': userDetails.age,
+      'role' : userDetails.role});
+  }
+
+   */
+
+  void addUserRole(String s) async {
+    getCurrentUser();
+    await _firestore.collection('users').doc(currentUser.uid).update({
+      'role' : s,
+    });
+  }
+
+
+
+  void getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        currentUser = user;
+        print(currentUser.email);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }
