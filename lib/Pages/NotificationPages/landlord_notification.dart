@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../ProfilePages/tenant_profile.dart';
+import '../ProfilePages/homeowner_profile.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -8,16 +8,16 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class TenantNotificationSettingsWidget extends StatefulWidget {
-  const TenantNotificationSettingsWidget({Key? key}) : super(key: key);
+class LandlordNotificationSettingsWidget extends StatefulWidget {
+  const LandlordNotificationSettingsWidget({Key? key}) : super(key: key);
 
   @override
-  _TenantNotificationSettingsWidgetState createState() =>
-      _TenantNotificationSettingsWidgetState();
+  _LandlordNotificationSettingsWidgetState createState() =>
+      _LandlordNotificationSettingsWidgetState();
 }
 
-class _TenantNotificationSettingsWidgetState
-    extends State<TenantNotificationSettingsWidget> {
+class _LandlordNotificationSettingsWidgetState
+    extends State<LandlordNotificationSettingsWidget> {
   bool? switchListTileValue1;
   bool? switchListTileValue2;
   bool? switchListTileValue3;
@@ -35,7 +35,7 @@ class _TenantNotificationSettingsWidgetState
           icon: const Icon(Icons.arrow_back,
             color: CupertinoColors.systemGrey,),
           onPressed: () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const TenantProfilePageWidget())),
+              MaterialPageRoute(builder: (context) => const HomeownerProfilePageWidget())),
         ),
         title: Text(
           'Back',
