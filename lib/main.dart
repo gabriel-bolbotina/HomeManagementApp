@@ -5,6 +5,7 @@ import 'Pages/FunctionalityPages/functionality.dart';
 
 import 'Pages/HomePages/homeowner.dart';
 import 'Pages/LoginPage/Login.dart';
+import 'Pages/Register/ChooseRole.dart';
 import 'Pages/Register/Register.dart';
 import 'Pages/Requests/ReceivedRequest.dart';
 import 'Pages/StartingPages/startPage.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         'homescreen': (context) => HomePageWidget(),
         'login_screen': (context) => LoginPageWidget(),
         'register_screen': (context) =>RegisterPageWidget(),
+        'role': (context) =>ChooseRoleWidget(),
 
       },
 

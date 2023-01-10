@@ -56,7 +56,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                     width: 100,
                     height: 100,
                     image: AssetImage(
-                      'assets/iconapp.png',
+                      'assets/images/iconapp.png',
                     ),
                   ),
                 ),

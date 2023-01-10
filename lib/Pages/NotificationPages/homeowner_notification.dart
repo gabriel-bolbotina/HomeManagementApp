@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+
+import '../ProfilePages/homeowner_profile.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -28,19 +31,11 @@ class _HomeownerNotificationSettingsWidgetState
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
         automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: FlutterFlowTheme.of(context).gray600,
-            size: 30,
-          ),
-          onPressed: () {
-            print('IconButton pressed ...');
-          },
+        leading:IconButton(
+          icon: const Icon(Icons.arrow_back,
+            color: CupertinoColors.systemGrey,),
+          onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const HomeownerProfilePageWidget())),
         ),
         title: Text(
           'Back',
@@ -133,31 +128,6 @@ class _HomeownerNotificationSettingsWidgetState
             dense: false,
             controlAffinity: ListTileControlAffinity.trailing,
             contentPadding: const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
-            child: FFButtonWidget(
-              onPressed: () {
-                print('Button pressed ...');
-              },
-              text: 'Save Changes',
-              options: FFButtonOptions(
-                width: 140,
-                height: 40,
-                color: FlutterFlowTheme.of(context).tertiary400,
-                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-                borderSide: const BorderSide(
-                  color: Colors.transparent,
-                  width: 1,
-                ),
-                borderRadius: 20,
-              ),
-            ),
           ),
         ],
       ),

@@ -179,7 +179,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               Expanded(
                 child: Align(
                     alignment: AlignmentDirectional(0, 0.8),
-                    child: Image.asset("assets/iconapp.png", scale: 0.01)),
+                    child: Image.asset("assets/images/iconapp.png", scale: 0.01)),
 
 
               ),
