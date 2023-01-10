@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../Services/FirebaseService.dart';
+import '../EditPages/homeowner_edit.dart';
 import '../HomePages/homeowner.dart';
+import '../NotificationPages/homeowner_notification.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -25,8 +27,8 @@ class _HomeownerProfilePageWidgetState
     return (await showDialog(
         context: context,
         builder: (context) =>
-        new AlertDialog(
-            title: new Text('Are you sure you want to exit the app?',
+        AlertDialog(
+            title: const Text('Are you sure you want to exit the app?',
               style: TextStyle(color: CupertinoColors.systemGrey,
                 fontFamily: 'Lexend Deca',
 
@@ -38,13 +40,12 @@ class _HomeownerProfilePageWidgetState
             actions: <Widget>[
               TextButton(
                 onPressed: () async {
-                  FirebaseService service = new FirebaseService();
+                  FirebaseService service = FirebaseService();
                   await service.signOutFromGoogle();
 
-                  Navigator.pushReplacementNamed(
-                      context, 'homescreen');
+                  Navigator.pushReplacementNamed(context, 'homescreen');
                 },
-                child: new Text('OK'),
+                child: const Text('OK'),
               ),
             ]
         )
@@ -61,10 +62,10 @@ class _HomeownerProfilePageWidgetState
           backgroundColor: FlutterFlowTheme.of(context).lineColor,
           automaticallyImplyLeading: false,
           leading:IconButton(
-            icon: Icon(Icons.arrow_back,
+            icon: const Icon(Icons.arrow_back,
               color: CupertinoColors.systemGrey,),
             onPressed: () => Navigator.push(context,
-                new MaterialPageRoute(builder: (context) => HomeownerHomePageWidget())),
+                MaterialPageRoute(builder: (context) => const HomeownerHomePageWidget())),
           ),
           centerTitle: false,
           elevation: 0,
@@ -121,18 +122,12 @@ class _HomeownerProfilePageWidgetState
                             'Edit Profile',
                             style: FlutterFlowTheme.of(context).subtitle2,
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            buttonSize: 46,
-                            icon: Icon(
-                              Icons.chevron_right_rounded,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios,
+                              color: CupertinoColors.systemGrey,
+                              size:  20,),
+                            onPressed: () => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => const HomeownerEditPageWidget())),
                           ),
                         ],
                       ),
@@ -175,18 +170,12 @@ class _HomeownerProfilePageWidgetState
                             'Notification Settings',
                             style: FlutterFlowTheme.of(context).subtitle2,
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            buttonSize: 46,
-                            icon: Icon(
-                              Icons.chevron_right_rounded,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios,
+                              color: CupertinoColors.systemGrey,
+                              size:  20,),
+                            onPressed: () => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => const HomeownerNotificationSettingsWidget())),
                           ),
                         ],
                       ),
@@ -229,18 +218,12 @@ class _HomeownerProfilePageWidgetState
                             'Add or Change Adress',
                             style: FlutterFlowTheme.of(context).subtitle2,
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            buttonSize: 46,
-                            icon: Icon(
-                              Icons.chevron_right_rounded,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios,
+                              color: CupertinoColors.systemGrey,
+                              size:  20,),
+                            onPressed: () => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => const HomeownerHomePageWidget())),
                           ),
                         ],
                       ),

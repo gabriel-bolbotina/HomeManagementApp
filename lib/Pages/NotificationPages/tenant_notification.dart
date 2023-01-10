@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+
+import '../ProfilePages/tenant_profile.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -28,19 +31,11 @@ class _TenantNotificationSettingsWidgetState
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
         automaticallyImplyLeading: false,
-        leading: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: FlutterFlowTheme.of(context).gray600,
-            size: 30,
-          ),
-          onPressed: () {
-            print('IconButton pressed ...');
-          },
+        leading:IconButton(
+          icon: const Icon(Icons.arrow_back,
+            color: CupertinoColors.systemGrey,),
+          onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const TenantProfilePageWidget())),
         ),
         title: Text(
           'Back',
@@ -58,13 +53,13 @@ class _TenantNotificationSettingsWidgetState
         mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                     child: Text(
                       'Choose what notifcations you want to recieve below and we will update the settings.',
                       style: FlutterFlowTheme.of(context).bodyText2,
@@ -75,7 +70,7 @@ class _TenantNotificationSettingsWidgetState
             ),
           ),
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
             child: SwitchListTile.adaptive(
               value: switchListTileValue1 ??= true,
               onChanged: (newValue) async {
@@ -90,10 +85,10 @@ class _TenantNotificationSettingsWidgetState
                 style: FlutterFlowTheme.of(context).bodyText2,
               ),
               activeColor: FlutterFlowTheme.of(context).primaryColor,
-              activeTrackColor: Color(0x8A4B39EF),
+              activeTrackColor: const Color(0x8A4B39EF),
               dense: false,
               controlAffinity: ListTileControlAffinity.trailing,
-              contentPadding: EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
+              contentPadding: const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
             ),
           ),
           SwitchListTile.adaptive(
@@ -109,11 +104,11 @@ class _TenantNotificationSettingsWidgetState
               'Receive email notifications from our marketing team about new features.',
               style: FlutterFlowTheme.of(context).bodyText2,
             ),
-            activeColor: Color(0xFF4B39EF),
-            activeTrackColor: Color(0xFF3B2DB6),
+            activeColor: const Color(0xFF4B39EF),
+            activeTrackColor: const Color(0xFF3B2DB6),
             dense: false,
             controlAffinity: ListTileControlAffinity.trailing,
-            contentPadding: EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
+            contentPadding: const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
           ),
           SwitchListTile.adaptive(
             value: switchListTileValue3 ??= true,
@@ -128,36 +123,11 @@ class _TenantNotificationSettingsWidgetState
               'Allow us to track your location, this helps keep track of spending and keeps you safe.',
               style: FlutterFlowTheme.of(context).bodyText2,
             ),
-            activeColor: Color(0xFF4B39EF),
-            activeTrackColor: Color(0xFF3B2DB6),
+            activeColor: const Color(0xFF4B39EF),
+            activeTrackColor: const Color(0xFF3B2DB6),
             dense: false,
             controlAffinity: ListTileControlAffinity.trailing,
-            contentPadding: EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
-            child: FFButtonWidget(
-              onPressed: () {
-                print('Button pressed ...');
-              },
-              text: 'Save Changes',
-              options: FFButtonOptions(
-                width: 140,
-                height: 40,
-                color: FlutterFlowTheme.of(context).tertiary400,
-                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                  fontFamily: 'Poppins',
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                  width: 1,
-                ),
-                borderRadius: 20,
-              ),
-            ),
+            contentPadding: const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 12),
           ),
         ],
       ),

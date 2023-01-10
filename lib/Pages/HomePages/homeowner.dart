@@ -68,7 +68,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                     width: 100,
                     height: 100,
                     image: AssetImage(
-                      'assets/iconapp.png',
+                      'assets/images/iconapp.png',
                     ),
                   ),
                 ),

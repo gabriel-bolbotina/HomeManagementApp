@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 
 import '../../Services/FirebaseService.dart';
 import '../HomePages/tenant.dart';
+import '../NotificationPages/tenant_notification.dart';
+import '../Requests/SendRequest.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -25,8 +27,8 @@ class _TenantProfilePageWidgetState
     return (await showDialog(
         context: context,
         builder: (context) =>
-        new AlertDialog(
-            title: new Text('Are you sure you want to exit the app?',
+        AlertDialog(
+            title: const Text('Are you sure you want to exit the app?',
               style: TextStyle(color: CupertinoColors.systemGrey,
                 fontFamily: 'Lexend Deca',
 
@@ -38,13 +40,12 @@ class _TenantProfilePageWidgetState
             actions: <Widget>[
               TextButton(
                 onPressed: () async {
-                  FirebaseService service = new FirebaseService();
+                  FirebaseService service = FirebaseService();
                   await service.signOutFromGoogle();
 
-                  Navigator.pushReplacementNamed(
-                      context, 'homescreen');
+                  Navigator.pushReplacementNamed(context, 'homescreen');
                 },
-                child: new Text('OK'),
+                child: const Text('OK'),
               ),
             ]
         )
@@ -62,10 +63,10 @@ class _TenantProfilePageWidgetState
           backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
           automaticallyImplyLeading: false,
           leading:IconButton(
-            icon: Icon(Icons.arrow_back,
+            icon: const Icon(Icons.arrow_back,
               color: CupertinoColors.systemGrey,),
             onPressed: () => Navigator.push(context,
-                new MaterialPageRoute(builder: (context) => TenantHomePageWidget())),
+                MaterialPageRoute(builder: (context) => const TenantHomePageWidget())),
           ),
           centerTitle: false,
           elevation: 0,
@@ -107,18 +108,11 @@ class _TenantProfilePageWidgetState
                             'Edit Profile',
                             style: FlutterFlowTheme.of(context).subtitle2,
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            buttonSize: 46,
-                            icon: Icon(
-                              Icons.chevron_right_rounded,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios,
+                              color: CupertinoColors.systemGrey,),
+                            onPressed: () => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => const TenantHomePageWidget())),
                           ),
                         ],
                       ),
@@ -161,18 +155,11 @@ class _TenantProfilePageWidgetState
                             'Notification Settings',
                             style: FlutterFlowTheme.of(context).subtitle2,
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            buttonSize: 46,
-                            icon: Icon(
-                              Icons.chevron_right_rounded,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios,
+                              color: CupertinoColors.systemGrey,),
+                            onPressed: () => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => const TenantNotificationSettingsWidget())),
                           ),
                         ],
                       ),
@@ -215,18 +202,11 @@ class _TenantProfilePageWidgetState
                             'Send Requests',
                             style: FlutterFlowTheme.of(context).subtitle2,
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30,
-                            buttonSize: 46,
-                            icon: Icon(
-                              Icons.chevron_right_rounded,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
-                            },
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios,
+                              color: CupertinoColors.systemGrey,),
+                            onPressed: () => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => const TenantRequestsWidget())),
                           ),
                         ],
                       ),
@@ -241,17 +221,16 @@ class _TenantProfilePageWidgetState
             child: Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 280, 0, 0),
               child: FFButtonWidget(
-                onPressed: () {
-                  print('Button pressed ...');
-                },
+                onPressed: () => signOut(),
+
                 text: 'Log Out',
                 options: FFButtonOptions(
                   width: 110,
                   height: 50,
-                  color: FlutterFlowTheme.of(context).tertiary400,
+                  color: const Color.fromARGB(255, 253, 238, 186),
                   textStyle: FlutterFlowTheme.of(context).subtitle1.override(
                     fontFamily: 'Poppins',
-                    color: FlutterFlowTheme.of(context).primaryBtnText,
+                    color: CupertinoColors.black,
                   ),
                   elevation: 3,
                   borderSide: const BorderSide(
