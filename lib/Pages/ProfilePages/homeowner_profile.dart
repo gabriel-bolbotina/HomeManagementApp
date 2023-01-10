@@ -185,54 +185,6 @@ class _HomeownerProfilePageWidgetState
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Material(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        width: 0,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Add or Change Adress',
-                            style: FlutterFlowTheme.of(context).subtitle2,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios,
-                              color: CupertinoColors.systemGrey,
-                              size:  20,),
-                            onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const HomeownerHomePageWidget())),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           Align(
             alignment: const AlignmentDirectional(0, -0.15),
             child: Padding(
