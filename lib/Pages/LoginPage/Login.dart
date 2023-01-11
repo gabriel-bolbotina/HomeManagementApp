@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../Services/authentification.dart';
@@ -36,6 +37,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   late bool passwordLoginVisibility;
   late bool emailAddressVisibility;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  late User currentUser;
 
 
 
@@ -46,22 +48,95 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     FirebaseService service = new FirebaseService();
     try {
       await service.signInwithGoogle();
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (contex) => HomeownerHomePageWidget(),
-        ),
-      );
+      Navigator.pushNamed(context, "address_screen");
     } catch(e){
       if(e is FirebaseAuthException){
         showMessage(e.message!);
       }
     }
+
     setState(() {
       isloading = false;
     });
 
+    getCurrentUser();
+
+    final userRef = FirebaseFirestore.instance.collection("users").doc(currentUser.uid);
+    DocumentSnapshot doc = await userRef.get();
+    final data = doc.data() as Map<String, dynamic>;
+    if(data["first name"] != getFirstName())
+      {
+        addUserDetails(currentUser.uid, getFirstName(), getLastName());
+        Navigator.pushNamed(context, "address_screen");
+      }
+    else if(data["adress"] == '')
+      {
+        Navigator.pushNamed(context, "address_screen");
+      }
+
+    else if(data["adress"] != '' && data["role"] == '')
+      {
+        Navigator.pushNamed(context, "role_screen");
+      }
+
+    else
+      {
+        if(data["role"] == "homeowner")
+          {
+            Navigator.pushNamed(context, "homeowner_main");
+          }
+        if(data["role"] == "tenant")
+        {
+          Navigator.pushNamed(context, "tenant_main");
+        }
+        if(data["role"] == "landlord")
+        {
+          Navigator.pushNamed(context, "landlord_main");
+        }
+      }
+
+
+
+
+
+
+
+
+
 
   }
+
+  String? getFirstName()
+  {
+    String firstName;
+    getCurrentUser();
+    List<String> spiltName =currentUser.displayName!.split(" ");
+    firstName = spiltName[0];
+    return firstName;
+  }
+
+  String? getLastName()
+  {
+    String lastName;
+    getCurrentUser();
+    List<String> spiltName =currentUser.displayName!.split(" ");
+    lastName = spiltName[1];
+    return lastName;
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        currentUser = user;
+        print(currentUser.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
   
   Future errorMessage(String message)
   async {
@@ -105,6 +180,19 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
         }
       }
 
+  }
+
+  Future addUserDetails(String uid,
+      String? firstName, String? lastName) async {
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'uid' : uid,
+      'first name': firstName ?? "",
+      'last name': lastName,
+      'age': "",
+      'role': 'o',
+      'address' : '',
+      'zip code': '',
+    });
   }
 
   Route _createRoute() {
