@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:homeapp/Pages/EditPages/homeowner_edit.dart';
 import 'package:homeapp/Pages/HomePages/landlord.dart';
 import 'package:homeapp/Pages/HomePages/tenant.dart';
+import 'package:homeapp/Pages/Register/Address.dart';
 import 'package:homeapp/Pages/Register/ChooseRole.dart';
 import 'Pages/FunctionalityPages/functionality.dart';
 
@@ -46,7 +48,7 @@ class MyApp extends StatelessWidget {
               return const HomePageWidget();
             }
             if (userSnapshot.hasData) {
-              return const ChooseRoleWidget();
+              return const HomePageWidget();
             }
             return const HomePageWidget();
           }
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
         'login_screen': (context) => LoginPageWidget(),
         'register_screen': (context) =>RegisterPageWidget(),
         'role_screen': (context) =>ChooseRoleWidget(),
+        'address_screen': (context) => Address(),
         'homeowner_main': (context) => HomeownerHomePageWidget(),
         'tenant_main': (context) => TenantHomePageWidget(),
         'landlord_main': (context) => LandlordHomePageWidget(),

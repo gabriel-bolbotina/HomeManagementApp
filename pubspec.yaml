@@ -55,6 +55,12 @@ dependencies:
   google_sign_in: ^5.4.2
   flutter_signin_button: ^2.0.0
   back_button_interceptor:
+  google_maps_flutter: ^2.2.3
+  flutter_google_places_hoc081098: ^1.0.0-nullsafety.5
+  google_api_headers: ^1.1.1
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  permission: ^0.1.7
+
 
 
 dev_dependencies:

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:homeapp/Pages/model/User.dart';
 
 
 import '../flutter_flow/flutter_flow_animations.dart';
@@ -10,6 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+
+
 
 
 class ChooseRoleWidget extends StatefulWidget {
@@ -27,11 +31,21 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late final CollectionReference userRef;
   late User currentUser;
+  late String role;
+  static Users _user = Users();
+
 
   @override
   void dispose() {
     _unfocusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
   }
 
   @override
@@ -68,8 +82,9 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                 ],
               ),
               GestureDetector(
-                onTap:() {
-                  addUserRole("homeowner");
+                onTap:() async {
+                  role = "homeowner";
+                  addUserRole(role);
                   Navigator.pushNamed(context, 'homeowner_main');
                 },
                     child: Padding(
@@ -133,7 +148,8 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
 
                 GestureDetector(
                   onTap:() {
-                    addUserRole("tenant");
+                    role = "tenant";
+                    addUserRole(role);
                     Navigator.pushNamed(context, 'tenant_main');
                   },
                   child: Padding(
@@ -196,7 +212,8 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
 
                 GestureDetector(
                   onTap:() {
-                    addUserRole("landlord");
+                    role = "landlord";
+                    addUserRole(role);
                     Navigator.pushNamed(context, 'landlord_main');
                   },
                   child: Padding(
@@ -284,6 +301,27 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
       'role' : s,
     });
   }
+
+  /*
+  Future<Users?> getDataOnce_customObjects() async {
+    // [START get_data_once_custom_objects]
+    final ref = _firestore.collection("users").doc(currentUser.uid).withConverter(
+      fromFirestore: Users.fromFirestore,
+      toFirestore: (Users users, _) => users.toFirestore(),
+    );
+    final docSnap = await ref.get();
+    final user = docSnap.data(); // Convert to City object
+    if (user != null) {
+      return user;
+    } else {
+      print("No such document.");
+    }
+    return null;
+    // [END get_data_once_custom_objects]
+  }
+
+
+   */
 
 
 
