@@ -10,6 +10,8 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../model/Devices.dart';
+
 class HomeownerHomePageWidget extends StatefulWidget {
   const HomeownerHomePageWidget({Key? key}) : super(key: key);
 
@@ -20,6 +22,7 @@ class HomeownerHomePageWidget extends StatefulWidget {
 
 class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  Device _device = Device();
 
   Future addUserDetails (
       String firstName, String lastName, int age) async {
@@ -338,5 +341,10 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
         ),
       ),
     );
+  }
+
+  void _addDevice()
+  {
+    //_device.serialNumber =
   }
 }

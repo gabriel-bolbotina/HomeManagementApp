@@ -16,6 +16,8 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 
+import '../model/User.dart';
+
 
 
 
@@ -41,6 +43,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
   final formkey = GlobalKey<FormState>();
   bool isloading = false;
   late User currentUser;
+  static Users _user = Users();
 
 
   @override
@@ -154,7 +157,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
 
 
 
-  Future addUserDetails (String uid,
+  Future addUserDetails(String uid,
       String firstName, String lastName, int age) async {
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
       'uid' : uid,
@@ -162,6 +165,8 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
       'last name': lastName,
       'age': age,
       'role': 'o',
+      'address' : '',
+      'zip code': '',
     });
   }
 
@@ -208,7 +213,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
           ),
         );
         Navigator.pushReplacementNamed(
-            context, 'role_screen');
+            context, 'address_screen');
 
         setState(() {
           isloading = false;
@@ -930,6 +935,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
                     padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                     child: FFButtonWidget(
                       onPressed: () { signUp();
+                        addUser();
                         addUserDetails(currentUser.uid, firstNameController.text, lastNameController.text, int.parse(ageController.text));
                       },
                       text: 'Create Account',
@@ -959,6 +965,12 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
             )
         )
     );
+  }
+  void addUser()
+  {
+    _user.firstName = firstNameController.text.trim();
+    _user.lastName = lastNameController.text.trim();
+    _user.age = int.parse(ageController.text);
   }
 
 }
