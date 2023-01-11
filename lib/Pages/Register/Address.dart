@@ -734,7 +734,7 @@ class _Address extends State<Address> {
     final data = doc.data() as Map<String, dynamic>;
     if(data["role"] == '')
     {
-      Navigator.pushNamed(context, "role_screen");
+      Navigator.pushNamed(context, "photo_screen");
     }
     else
     {

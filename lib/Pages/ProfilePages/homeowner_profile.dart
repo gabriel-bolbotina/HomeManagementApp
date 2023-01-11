@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../Services/FirebaseService.dart';
@@ -22,6 +24,27 @@ class HomeownerProfilePageWidget extends StatefulWidget {
 class _HomeownerProfilePageWidgetState
     extends State<HomeownerProfilePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  late User currentUser;
+  late String url;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    getPhotoURL();
+
+  }
+
+  void getPhotoURL()
+  async {
+    getCurrentUser();
+
+    final userRef = FirebaseFirestore.instance.collection("users").doc(
+        currentUser.uid);
+    DocumentSnapshot doc = await userRef.get();
+    final data = doc.data() as Map<String, dynamic>;
+    url= data['uploadedImage'];
+  }
 
   Future signOut() async {
     return (await showDialog(
@@ -214,5 +237,16 @@ class _HomeownerProfilePageWidgetState
         ],
       ),
     );
+  }
+  void getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        currentUser = user;
+        print(currentUser.email);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }

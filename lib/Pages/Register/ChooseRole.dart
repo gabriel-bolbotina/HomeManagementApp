@@ -98,7 +98,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: Image.asset(
-                              'assets/homeowner.jpg',
+                              'assets/homeownerRole.jpg',
                             ).image,
                           ),
                           boxShadow: [
@@ -163,7 +163,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: Image.asset(
-                            'assets/homeowner.jpg',
+                            'assets/tenantRole.jpg',
                           ).image,
                         ),
                         boxShadow: [
@@ -227,7 +227,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: Image.asset(
-                            'assets/homeowner.jpg',
+                            'assets/landlordRole.jpg',
                           ).image,
                         ),
                         boxShadow: [

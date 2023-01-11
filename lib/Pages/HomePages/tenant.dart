@@ -34,7 +34,14 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   List<Object> _devicesList = [];
   Device _devices = Device();
-  Authentication _auth = Authentication();
+  Authentication _authentication = Authentication();
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    getUsersDeviceList();
+  }
 
 
   Future signOut() async {
@@ -106,8 +113,7 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
           elevation: 0,
         ),
       ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -123,17 +129,29 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                     fit: BoxFit.cover, // Fixes border issues
                     width: 100,
                     height: 100,
-                    image: NetworkImage(_auth.getProfileImage()),
+                    image: const AssetImage("assets/images/iconapp.jpg"),
+                  ),
 
                   ),
                 ),
-              ),
-        children: [ListView.builder(
+
+      SizedBox(
+          width: 500.0,
+          height: 500.0,
+          child:
+        GridView.builder(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 300,
+              childAspectRatio: 2 / 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 20),
               itemCount: _devicesList.length,
               itemBuilder: (context, index)
           {
             return DeviceCard(_devicesList[index] as Device);
-          }),
+          },
+      ),
+      ),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(260, 10, 0, 20),
                 child: FFButtonWidget(

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:homeapp/Services/authentification.dart';
 
 import '../../Services/FirebaseService.dart';
 import '../EditPages/tenant_edit.dart';
@@ -23,6 +24,7 @@ class TenantProfilePageWidget extends StatefulWidget {
 class _TenantProfilePageWidgetState
     extends State<TenantProfilePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  Authentication _authentication = Authentication();
 
   Future signOut() async {
     return (await showDialog(
@@ -67,7 +69,7 @@ class _TenantProfilePageWidgetState
             icon: const Icon(Icons.arrow_back,
               color: CupertinoColors.systemGrey,),
             onPressed: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const TenantHomePageWidget())),
+                MaterialPageRoute(builder: (context) => TenantHomePageWidget())),
           ),
           centerTitle: false,
           elevation: 0,
@@ -87,7 +89,7 @@ class _TenantProfilePageWidgetState
               ),
               alignment: Alignment.topRight,
               child: Image.network(
-                'https://picsum.photos/seed/339/600',
+                _authentication.getProfileImage(),
               ),
             ),
           ),

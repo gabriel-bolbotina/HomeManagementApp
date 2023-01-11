@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:homeapp/Pages/HomePages/tenant.dart';
 
 import '../../Services/authentification.dart';
 import '../HomePages/homeowner.dart';
@@ -41,6 +42,49 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
 
 
+
+  Future Navigation() async {
+    getCurrentUser();
+
+    var userRef = FirebaseFirestore.instance.collection("users").doc(
+        currentUser.uid);
+    DocumentSnapshot doc = await userRef.get();
+    final data = doc.data() as Map<String, dynamic>;
+
+
+/*
+    FireBaseFirestore.instance.collection("users).where("uid", isNotEqualTo : currentUser.uid)
+      {
+        addUserDetails(currentUser.uid, getFirstName(), getLastName());
+        Navigator.pushNamed(context, "address_screen");
+      }
+
+
+
+ */
+
+    if (data["address"] == '') {
+      Navigator.pushNamed(context, "address_screen");
+    }
+
+    else if (data["address"] != '' && data["role"] == '') {
+      Navigator.pushNamed(context, "role_screen");
+    }
+
+
+      if (data["role"] == "homeowner") {
+        Navigator.pushNamed(context, "homeowner_main");
+      }
+      if (data["role"] == "tenant") {
+        Navigator.pushNamed(context, "tenant_main");
+      }
+      if (data["role"] == "landlord") {
+        Navigator.pushNamed(context, "landlord_main");
+      }
+
+  }
+
+
   Future googleSignIn() async{
     setState(() {
       isloading = true;
@@ -48,7 +92,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     FirebaseService service = new FirebaseService();
     try {
       await service.signInwithGoogle();
-      Navigator.pushNamed(context, "address_screen");
+      Navigation();
+
     } catch(e){
       if(e is FirebaseAuthException){
         showMessage(e.message!);
@@ -59,41 +104,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       isloading = false;
     });
 
-    getCurrentUser();
 
-    final userRef = FirebaseFirestore.instance.collection("users").doc(currentUser.uid);
-    DocumentSnapshot doc = await userRef.get();
-    final data = doc.data() as Map<String, dynamic>;
-    if(data["first name"] != getFirstName())
-      {
-        addUserDetails(currentUser.uid, getFirstName(), getLastName());
-        Navigator.pushNamed(context, "address_screen");
-      }
-    else if(data["adress"] == '')
-      {
-        Navigator.pushNamed(context, "address_screen");
-      }
 
-    else if(data["adress"] != '' && data["role"] == '')
-      {
-        Navigator.pushNamed(context, "role_screen");
-      }
 
-    else
-      {
-        if(data["role"] == "homeowner")
-          {
-            Navigator.pushNamed(context, "homeowner_main");
-          }
-        if(data["role"] == "tenant")
-        {
-          Navigator.pushNamed(context, "tenant_main");
-        }
-        if(data["role"] == "landlord")
-        {
-          Navigator.pushNamed(context, "landlord_main");
-        }
-      }
+
 
 
 
@@ -106,6 +120,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
   }
 
+
+
+
+
+
   String? getFirstName()
   {
     String firstName;
@@ -113,6 +132,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     List<String> spiltName =currentUser.displayName!.split(" ");
     firstName = spiltName[0];
     return firstName;
+
   }
 
   String? getLastName()
@@ -129,7 +149,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       final user = _auth.currentUser;
       if (user != null) {
         currentUser = user;
-        print(currentUser.email);
+        print(currentUser.uid);
       }
     } catch (e) {
       print(e);
@@ -166,11 +186,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             email: emailAddressController.text.trim(),
             password: passwordLoginController.text.trim()
         );
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (contex) => HomeownerHomePageWidget(),
-          ),
-        );
+        Navigation();
+
+
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print('No user found for that email.');
@@ -179,6 +197,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
           print('Wrong password provided for that user.');
         }
       }
+
 
   }
 
@@ -192,6 +211,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       'role': 'o',
       'address' : '',
       'zip code': '',
+      'uploadedImage': '',
+
     });
   }
 
@@ -539,7 +560,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     child: FFButtonWidget(
                       //implementam cu firebase
 
-                      onPressed: () => signIn(),
+                      onPressed: () {
+                        signIn();
+
+                      },
                       text: 'Login',
                       options: FFButtonOptions(
                         width: 270,
@@ -571,7 +595,10 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       SignInButton(
                         Buttons.Google,
                         text: "Sign in with Google",
-                        onPressed: () => googleSignIn(),
+                        onPressed: () {
+                          googleSignIn();
+
+                        }
 
                       )
                   ),
