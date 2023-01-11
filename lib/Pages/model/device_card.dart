@@ -13,7 +13,10 @@ class DeviceCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container(
+    return
+      Padding(
+    padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+    child: Container(
       width: MediaQuery.of(context).size.width * 0.45,
       height: 190,
       decoration: BoxDecoration(
@@ -79,6 +82,8 @@ class DeviceCard extends StatelessWidget{
           ],
         ),
       ),
-    );
+    )
+      );
+
   }
 }

@@ -60,7 +60,7 @@ class _TenantEditPageWidgetState extends State<TenantEditPageWidget> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                      const HomeownerProfilePageWidget())),
+                      const TenantProfilePageWidget())),
             ),
             centerTitle: false,
             elevation: 0,

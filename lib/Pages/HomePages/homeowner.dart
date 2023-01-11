@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:homeapp/Services/authentification.dart';
 
 import '../../Services/FirebaseService.dart';
+import '../FunctionalityPages/add_functionality.dart';
 import '../FunctionalityPages/functionality.dart';
 import '../ProfilePages/homeowner_profile.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -12,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../model/Devices.dart';
+import '../model/device_card.dart';
 
 class HomeownerHomePageWidget extends StatefulWidget {
   const HomeownerHomePageWidget({Key? key}) : super(key: key);
@@ -24,7 +27,18 @@ class HomeownerHomePageWidget extends StatefulWidget {
 class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   Device _device = Device();
-  final Authentication _auth = Authentication();
+  final Authentication _authentication = Authentication();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  late User currentUser;
+  List<Object> _devicesList = [];
+  Device _devices = Device();
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    getUsersDeviceList();
+  }
 
   Future addUserDetails (
       String firstName, String lastName, int age) async {
@@ -36,7 +50,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
 
   String photoUrl()
   {
-    final url =_auth.getProfileImage();
+    final url =_authentication.getProfileImage();
     if(url != null)
     {
       return url;
@@ -65,296 +79,107 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
           elevation: 0,
         ),
       ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                child:InkWell(
-                  onTap: () =>Navigator.push(context,
-                      new MaterialPageRoute(builder: (context) => HomeownerProfilePageWidget())), // Image tapped
-                  splashColor: Colors.white10, // Splash color over image
-                  child: Ink.image(
-                    fit: BoxFit.cover, // Fixes border issues
-                    width: 100,
-                    height: 100,
-                    image: NetworkImage(_auth.getProfileImage()),
-                  ),
-                ),
-              ),
-
-
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
-                child: Row(
+        body: SafeArea(
+          child: SingleChildScrollView(
+              child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
-                      child: Text(
-                        'Devices',
-                        style: FlutterFlowTheme.of(context).subtitle1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 44),
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  alignment: WrapAlignment.start,
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  direction: Axis.horizontal,
-                  runAlignment: WrapAlignment.start,
-                  verticalDirection: VerticalDirection.down,
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      height: 190,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x230E151B),
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                'https://www.thelightbulb.co.uk/wp-content/uploads/2022/05/quick-guide-buying-best-light-bulbs-1.jpg',
-                                width: double.infinity,
-                                height: 115,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
-                              child: Text(
-                                'Device Name',
-                                style: FlutterFlowTheme.of(context).subtitle1,
-                              ),
-                            ),
-                            Expanded(
-                              child: FFButtonWidget(
-                                onPressed: () {
+                      padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                      child:InkWell(
+                        onTap: () =>Navigator.push(context,
+                            new MaterialPageRoute(builder: (context) => HomeownerProfilePageWidget())), // Image tapped
+                        splashColor: Colors.white10, // Splash color over image
+                        child: Ink.image(
+                          fit: BoxFit.cover, // Fixes border issues
+                          width: 100,
+                          height: 100,
+                          image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Humaaans-sitting-1.svg/1200px-Humaaans-sitting-1.svg.png"),
+                        ),
 
-                                  Navigator.push(context,
-                                    new MaterialPageRoute(builder: (context) => new PopUpFunctionalityPageWidget()),);
+                      ),
+                    ),
 
-                                },
-                                text: 'Details',
-                                options: FFButtonOptions(
-                                  width: 80,
-                                  height: 40,
-                                  color: const Color.fromARGB(255, 128, 173, 242),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                  ),
-                                  borderSide: const BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: 20,
-                                ),
-                              ),
-                            ),
-                          ],
+                    SizedBox(
+                      width: 500.0,
+                      height: 500.0,
+                      child:
+                      GridView.builder(
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 300,
+                            childAspectRatio: 2 / 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 20),
+                        itemCount: _devicesList.length,
+                        itemBuilder: (context, index)
+                        {
+                          return DeviceCard(_devicesList[index] as Device);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(260, 10, 0, 20),
+                      child: FFButtonWidget(
+                        onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddFunctionalityTPageWidget())),
+                        text: '+ Add',
+                        options: FFButtonOptions(
+                          width: 80,
+                          height: 40,
+                          color: const Color.fromARGB(255, 253, 238, 186),
+                          textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                            fontFamily: 'Poppins',
+                            color: Colors.black54,
+                          ),
+                          borderSide: const BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: 20,
                         ),
                       ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      height: 190,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x230E151B),
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                'https://i.pinimg.com/736x/b8/be/cb/b8becbabf3d406035aa1611245e8f6c2.jpg',
-                                width: double.infinity,
-                                height: 115,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
-                              child: Text(
-                                'Device Name',
-                                style: FlutterFlowTheme.of(context).subtitle1,
-                              ),
-                            ),
-                            Expanded(
-                              child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Details',
-                                options: FFButtonOptions(
-                                  width: 80,
-                                  height: 40,
-                                  color: const Color.fromARGB(255, 128, 173, 242),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                  ),
-                                  borderSide: const BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      height: 190,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x230E151B),
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                'https://images.unsplash.com/photo-1527352774566-e4916e36c645?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8b3V0c2lkZSUyMHRoZSUyMHdpbmRvd3xlbnwwfHwwfHw%3D&w=1000&q=80',
-                                width: double.infinity,
-                                height: 115,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
-                              child: Text(
-                                'Device Name',
-                                style: FlutterFlowTheme.of(context).subtitle1,
-                              ),
-                            ),
-                            Expanded(
-                              child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Details',
-                                options: FFButtonOptions(
-                                  width: 80,
-                                  height: 40,
-                                  color: const Color.fromARGB(255, 128, 173, 242),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                  ),
-                                  borderSide: const BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(260, 10, 0, 20),
-                child: FFButtonWidget(
-                  onPressed: () {
-                    print('Button pressed ...');
-                  },
-                  text: '+ Add',
-                  options: FFButtonOptions(
-                    width: 80,
-                    height: 40,
-                    color: const Color.fromARGB(255, 253, 238, 186),
-                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                      fontFamily: 'Poppins',
-                      color: Colors.black54,
-                    ),
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 1,
-                    ),
-                    borderRadius: 20,
-                  ),
-                ),
-              ),
-            ],
+                    )
+                  ]
+              )
           ),
-        ),
-      ),
+        )
     );
   }
 
   void _addDevice()
   {
     //_device.serialNumber =
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        currentUser = user;
+        print(currentUser.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future getUsersDeviceList() async{
+    getCurrentUser();
+    var uid = currentUser.uid;
+    var data = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .collection("devices")
+        .orderBy('device name', descending : true)
+        .get();
+
+    setState((){
+      _devicesList = List.from(data.docs.map((doc) => Device.fromSnapshot(doc)));
+
+    });
+
   }
 }

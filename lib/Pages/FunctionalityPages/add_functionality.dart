@@ -133,10 +133,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                 Icons.arrow_back,
                 color: CupertinoColors.systemGrey,
               ),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const TenantHomePageWidget())),
+              onPressed: () => Navigator.pop(context),
             ),
             centerTitle: false,
             elevation: 0,
@@ -535,6 +532,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                           if(deviceNameController.text != null)
                             addUserDetails(deviceNameController.text, int.parse(serialNumberController.text), typeController.text, brandController.text);
                             uploadFile();
+                            Navigator.pop(context);
 
 
 

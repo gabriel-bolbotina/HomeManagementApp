@@ -1,6 +1,6 @@
 class Device{
   String? deviceName;
-  String? serialNumber;
+  int? serialNumber;
   String? type;
   String? brand;
   String? uploadedImage;

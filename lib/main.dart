@@ -6,6 +6,7 @@ import 'package:homeapp/Pages/HomePages/landlord.dart';
 import 'package:homeapp/Pages/HomePages/tenant.dart';
 import 'package:homeapp/Pages/Register/Address.dart';
 import 'package:homeapp/Pages/Register/ChooseRole.dart';
+import 'package:homeapp/Pages/Register/Photo.dart';
 import 'Pages/FunctionalityPages/functionality.dart';
 
 import 'Pages/HomePages/homeowner.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
         'homeowner_main': (context) => HomeownerHomePageWidget(),
         'tenant_main': (context) => TenantHomePageWidget(),
         'landlord_main': (context) => LandlordHomePageWidget(),
+        'photo_screen': (context) => AddPhotoWidget(),
 
       },
 

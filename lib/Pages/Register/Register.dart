@@ -167,6 +167,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
       'role': '',
       'address' : '',
       'zip code': '',
+      'uploadedImage' : '',
     });
   }
 
