@@ -346,19 +346,19 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(260, 140, 0, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(260, 10, 0, 20),
                 child: FFButtonWidget(
                   onPressed: () {
                     print('Button pressed ...');
                   },
                   text: '+ Add',
                   options: FFButtonOptions(
-                    width: 100,
-                    height: 50,
+                    width: 80,
+                    height: 40,
                     color: const Color.fromARGB(255, 253, 238, 186),
                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: 'Poppins',
-                      color: Colors.white,
+                      color: Colors.black54,
                     ),
                     borderSide: const BorderSide(
                       color: Colors.transparent,

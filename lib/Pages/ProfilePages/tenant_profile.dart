@@ -60,7 +60,7 @@ class _TenantProfilePageWidgetState
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
+          backgroundColor: FlutterFlowTheme.of(context).lineColor,
           automaticallyImplyLeading: false,
           leading:IconButton(
             icon: const Icon(Icons.arrow_back,
@@ -75,6 +75,21 @@ class _TenantProfilePageWidgetState
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+            child: Container(
+              width: 100,
+              height: 100,
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.topRight,
+              child: Image.network(
+                'https://picsum.photos/seed/339/600',
+              ),
+            ),
+          ),
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 40, 0, 0),
             child: Row(
@@ -183,10 +198,11 @@ class _TenantProfilePageWidgetState
                   color: const Color.fromARGB(255, 253, 238, 186),
                   textStyle: FlutterFlowTheme.of(context).subtitle1.override(
                     fontFamily: 'Poppins',
-                    color: CupertinoColors.black,
+                    color: Colors.black54,
                   ),
                   elevation: 3,
                   borderSide: const BorderSide(
+                    color: Colors.transparent,
                     width: 1,
                   ),
                   borderRadius: 20,
