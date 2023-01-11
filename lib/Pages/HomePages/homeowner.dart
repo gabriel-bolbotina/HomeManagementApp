@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:homeapp/Services/authentification.dart';
 
 import '../../Services/FirebaseService.dart';
 import '../FunctionalityPages/functionality.dart';
@@ -23,6 +24,7 @@ class HomeownerHomePageWidget extends StatefulWidget {
 class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   Device _device = Device();
+  final Authentication _auth = Authentication();
 
   Future addUserDetails (
       String firstName, String lastName, int age) async {
@@ -30,6 +32,16 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
       'first name': firstName,
       'last name': lastName,
       'age': age,});
+  }
+
+  String photoUrl()
+  {
+    final url =_auth.getProfileImage();
+    if(url != null)
+    {
+      return url;
+    }
+    return "null";
   }
   @override
   Widget build(BuildContext context) {
@@ -70,9 +82,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                     fit: BoxFit.cover, // Fixes border issues
                     width: 100,
                     height: 100,
-                    image: AssetImage(
-                      'assets/images/iconapp.png',
-                    ),
+                    image: NetworkImage(_auth.getProfileImage()),
                   ),
                 ),
               ),

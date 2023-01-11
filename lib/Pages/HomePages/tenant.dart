@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:homeapp/Services/authentification.dart';
 
 import '../../Services/FirebaseService.dart';
 import '../FunctionalityPages/functionality.dart';
@@ -21,6 +22,8 @@ class TenantHomePageWidget extends StatefulWidget {
 
 class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  Authentication _auth = Authentication();
+
 
   Future signOut() async {
     return (await showDialog(
@@ -60,6 +63,9 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
       'last name': lastName,
       'age': age,});
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,9 +111,8 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                     fit: BoxFit.cover, // Fixes border issues
                     width: 100,
                     height: 100,
-                    image: AssetImage(
-                      'assets/images/iconapp.png',
-                    ),
+                    image: NetworkImage(_auth.getProfileImage()),
+
                   ),
                 ),
               ),

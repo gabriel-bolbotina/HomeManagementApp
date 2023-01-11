@@ -657,7 +657,7 @@ class _Address extends State<Address> {
                                       townController.text;
                                   addUserDetails(addressMade);
                                   addZipCode(zipCodeController.text.trim());
-                                   Navigator.pushNamed(context, "role_screen");
+                                   checkAddressAlreadyExists();
                                 },
                                 text: 'Add address',
                                 options: FFButtonOptions(
@@ -722,6 +722,34 @@ class _Address extends State<Address> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> checkAddressAlreadyExists()
+  async {
+    getCurrentUser();
+
+    final userRef = FirebaseFirestore.instance.collection("users").doc(currentUser.uid);
+    DocumentSnapshot doc = await userRef.get();
+    final data = doc.data() as Map<String, dynamic>;
+    if(data["role"] == '')
+    {
+      Navigator.pushNamed(context, "role_screen");
+    }
+    else
+    {
+      if(data["role"] == "homeowner")
+      {
+        Navigator.pushNamed(context, "homeowner_main");
+      }
+      if(data["role"] == "tenant")
+      {
+        Navigator.pushNamed(context, "tenant_main");
+      }
+      if(data["role"] == "landlord")
+      {
+        Navigator.pushNamed(context, "landlord_main");
+      }
     }
   }
 

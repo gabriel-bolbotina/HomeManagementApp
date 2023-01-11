@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:homeapp/Services/authentification.dart';
 
 import '../../Services/FirebaseService.dart';
 import '../HomePages/homeowner.dart';
@@ -30,6 +31,7 @@ class _HomeownerEditPageWidgetState extends State<HomeownerEditPageWidget> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late final CollectionReference userRef;
   late final User currentUser;
+  Authentication _authentication = Authentication();
 
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -79,7 +81,7 @@ class _HomeownerEditPageWidgetState extends State<HomeownerEditPageWidget> {
                         ),
                         alignment: Alignment.topRight,
                         child: Image.network(
-                          'https://picsum.photos/seed/339/600',
+                          _authentication.getProfileImage(),
                         ),
                       )),
                   Padding(

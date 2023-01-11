@@ -6,7 +6,8 @@ class Device{
 
   Device();
 
-  Map<String, dynamic> toJson() =>{'serial number' :serialNumber,
+  Map<String, dynamic> toJson() =>{
+    'serial number' :serialNumber,
   'id' :id,
   'type': type,
   'brand' : brand};

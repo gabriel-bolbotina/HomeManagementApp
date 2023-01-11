@@ -164,7 +164,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget>{
       'first name': firstName,
       'last name': lastName,
       'age': age,
-      'role': 'o',
+      'role': '',
       'address' : '',
       'zip code': '',
     });
