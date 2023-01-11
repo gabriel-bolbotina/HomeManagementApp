@@ -1,4 +1,5 @@
 import 'package:homeapp/Pages/ProfilePages/landlord_profile.dart';
+import 'package:homeapp/Services/authentification.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -15,6 +16,7 @@ class LandlordHomePageWidget extends StatefulWidget {
 
 class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  Authentication _auth = Authentication();
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +57,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                     fit: BoxFit.cover, // Fixes border issues
                     width: 100,
                     height: 100,
-                    image: AssetImage(
-                      'assets/images/iconapp.png',
-                    ),
+                    image: NetworkImage(_auth.getProfileImage()),
                   ),
                 ),
               ),

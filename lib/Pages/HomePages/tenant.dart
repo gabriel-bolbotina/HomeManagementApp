@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:homeapp/Pages/model/device_card.dart';
+
+import 'package:homeapp/Services/authentification.dart';
+
 
 import '../../Services/FirebaseService.dart';
 import '../FunctionalityPages/add_functionality.dart';
@@ -30,6 +34,8 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   List<Object> _devicesList = [];
   Device _devices = Device();
+  Authentication _auth = Authentication();
+
 
   Future signOut() async {
     return (await showDialog(
@@ -69,6 +75,9 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
       'last name': lastName,
       'age': age,});
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +110,24 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                child:InkWell(
+                  onTap: () =>Navigator.push(context,
+                      new MaterialPageRoute(builder: (context) => TenantProfilePageWidget())), // Image tapped
+                  splashColor: Colors.white10, // Splash color over image
+                  child: Ink.image(
+                    fit: BoxFit.cover, // Fixes border issues
+                    width: 100,
+                    height: 100,
+                    image: NetworkImage(_auth.getProfileImage()),
 
+                  ),
+                ),
+              ),
         children: [ListView.builder(
               itemCount: _devicesList.length,
               itemBuilder: (context, index)
