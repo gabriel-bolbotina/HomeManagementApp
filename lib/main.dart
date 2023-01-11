@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
               return const HomePageWidget();
             }
             if (userSnapshot.hasData) {
-              return const HomePageWidget();
+              return const ChooseRoleWidget();
             }
             return const HomePageWidget();
           }

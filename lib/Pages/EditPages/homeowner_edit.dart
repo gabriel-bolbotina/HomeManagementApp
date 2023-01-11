@@ -324,7 +324,6 @@ class _HomeownerEditPageWidgetState extends State<HomeownerEditPageWidget> {
                             obscureText: false,
                             decoration: InputDecoration(
                               labelStyle: FlutterFlowTheme.of(context).bodyText2,
-                              //aici trebe modificat cu adresa lui peste
                               hintText: '${streamSnapshot.data!['role']}',
                               hintStyle: FlutterFlowTheme.of(context).bodyText2,
                               enabledBorder: OutlineInputBorder(
@@ -374,16 +373,16 @@ class _HomeownerEditPageWidgetState extends State<HomeownerEditPageWidget> {
                       children: [
                         FFButtonWidget(
                           onPressed: () async {
-                            if(firstNameController.text != null)
+                            if(firstNameController.hasListeners)
                               addUserRole('first name', firstNameController.text);
 
-                            if(lastNameController.text != null)
+                            if(lastNameController.hasListeners)
                               addUserRole('last name', lastNameController.text);
 
-                            if(addressController.text != null)
+                            if(addressController.hasListeners)
                               addUserRole('role', addressController.text);
 
-                            if(ageController.text != null)
+                            if(ageController.hasListeners)
                               addUserAge(int.parse(ageController.text.trim()));
 
 

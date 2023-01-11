@@ -98,6 +98,9 @@ flutter:
     - assets/pump1.jpg
     - assets/pump2.jpg
     - assets/homeowner.jpg
+    - assets/homeownerRole.jpg
+    - assets/tenantRole.jpg
+    - assets/landlordRole.jpg
     - assets/images/
   #   - images/a_dot_ham.jpeg
 
