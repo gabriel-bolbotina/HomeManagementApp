@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../Services/FirebaseService.dart';
+import '../EditPages/tenant_edit.dart';
 import '../HomePages/tenant.dart';
 import '../NotificationPages/tenant_notification.dart';
 import '../Requests/SendRequest.dart';
@@ -127,7 +128,7 @@ class _TenantProfilePageWidgetState
                             icon: const Icon(Icons.arrow_forward_ios,
                               color: CupertinoColors.systemGrey,),
                             onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const TenantHomePageWidget())),
+                                MaterialPageRoute(builder: (context) => const TenantEditPageWidget())),
                           ),
                         ],
                       ),

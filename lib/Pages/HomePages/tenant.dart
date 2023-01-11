@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../Services/FirebaseService.dart';
+import '../FunctionalityPages/add_functionality.dart';
 import '../FunctionalityPages/functionality.dart';
 import '../ProfilePages/homeowner_profile.dart';
 import '../ProfilePages/tenant_profile.dart';
@@ -348,9 +349,10 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(260, 10, 0, 20),
                 child: FFButtonWidget(
-                  onPressed: () {
-                    print('Button pressed ...');
-                  },
+                  onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddFunctionalityTPageWidget())),
                   text: '+ Add',
                   options: FFButtonOptions(
                     width: 80,
