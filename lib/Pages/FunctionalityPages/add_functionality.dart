@@ -28,6 +28,9 @@ class AddFunctionalityTPageWidget extends StatefulWidget {
 
 class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidget>{
   final TextEditingController deviceNameController = TextEditingController();
+  final TextEditingController serialNumberController = TextEditingController();
+  final TextEditingController typeController = TextEditingController();
+  final TextEditingController brandController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late final CollectionReference userRef;
@@ -48,6 +51,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
       }
     });
   }
+
 
   Future imgFromCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
@@ -70,8 +74,16 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
     try {
       final ref = firebase_storage.FirebaseStorage.instance
           .ref(destination)
-          .child('file/');
-      await ref.putFile(_photo!);
+          .child('file/$fileName');
+      final uploadTask = await ref.putFile(_photo!);
+      final taskSnapshot = await uploadTask;
+
+      final _fileURL = await taskSnapshot.ref.getDownloadURL();
+      await FirebaseFirestore.instance.collection("users").doc(currentUser.uid).collection("devices").doc(deviceNameController.text).update(
+        {
+          'uploadedImage' : _fileURL
+        }
+      );
     } catch (e) {
       print('error occured');
     }
@@ -92,6 +104,18 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
     } catch (e) {
       print(e);
     }
+  }
+
+  Future addUserDetails(String deviceName,
+      int serialNumber, String type, String brand) async {
+    getCurrentUser();
+    await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).collection("devices").doc(deviceName).set({
+      'device name' : deviceName,
+      'serial number': serialNumber,
+      'type': type,
+      'brand': brand,
+      'uploadedImage': '',
+    });
   }
 
   @override
@@ -242,6 +266,297 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                   ),
 
                 ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme
+                          .of(context)
+                          .secondaryBackground,
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 5,
+                          color: Color(0x4D101213),
+                          offset: Offset(0, 2),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: TextFormField(
+                      controller: serialNumberController,
+                      validator: (value) =>
+                      (value!.isEmpty)
+                          ? 'Please enter serial number'
+                          : null,
+
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        labelText: 'Device serial number ...',
+                        labelStyle: FlutterFlowTheme
+                            .of(context)
+                            .bodyText2,
+                        hintText: 'Enter device serial number...',
+                        hintStyle: FlutterFlowTheme
+                            .of(context)
+                            .bodyText1
+                            .override(
+                          fontFamily: 'Lexend Deca',
+                          color: FlutterFlowTheme
+                              .of(context)
+                              .secondaryText,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor: FlutterFlowTheme
+                            .of(context)
+                            .secondaryBackground,
+                        contentPadding:
+                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                      ),
+                      style: FlutterFlowTheme
+                          .of(context)
+                          .bodyText1,
+                      maxLines: 1,
+                    ),
+                  ),
+
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme
+                          .of(context)
+                          .secondaryBackground,
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 5,
+                          color: Color(0x4D101213),
+                          offset: Offset(0, 2),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: TextFormField(
+                      controller: typeController,
+                      validator: (value) =>
+                      (value!.isEmpty)
+                          ? 'Please enter device type'
+                          : null,
+
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        labelText: 'Your device type ...',
+                        labelStyle: FlutterFlowTheme
+                            .of(context)
+                            .bodyText2,
+                        hintText: 'Enter device type...',
+                        hintStyle: FlutterFlowTheme
+                            .of(context)
+                            .bodyText1
+                            .override(
+                          fontFamily: 'Lexend Deca',
+                          color: FlutterFlowTheme
+                              .of(context)
+                              .secondaryText,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor: FlutterFlowTheme
+                            .of(context)
+                            .secondaryBackground,
+                        contentPadding:
+                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                      ),
+                      style: FlutterFlowTheme
+                          .of(context)
+                          .bodyText1,
+                      maxLines: 1,
+                    ),
+                  ),
+
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme
+                          .of(context)
+                          .secondaryBackground,
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 5,
+                          color: Color(0x4D101213),
+                          offset: Offset(0, 2),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: TextFormField(
+                      controller: brandController,
+                      validator: (value) =>
+                      (value!.isEmpty)
+                          ? 'Please enter device brand'
+                          : null,
+
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        labelText: 'Your device brand ...',
+                        labelStyle: FlutterFlowTheme
+                            .of(context)
+                            .bodyText2,
+                        hintText: 'Enter device brand...',
+                        hintStyle: FlutterFlowTheme
+                            .of(context)
+                            .bodyText1
+                            .override(
+                          fontFamily: 'Lexend Deca',
+                          color: FlutterFlowTheme
+                              .of(context)
+                              .secondaryText,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0x00000000),
+                            width: 0,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor: FlutterFlowTheme
+                            .of(context)
+                            .secondaryBackground,
+                        contentPadding:
+                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                      ),
+                      style: FlutterFlowTheme
+                          .of(context)
+                          .bodyText1,
+                      maxLines: 1,
+                    ),
+                  ),
+
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FFButtonWidget(
+                        onPressed: () async {
+                          if(deviceNameController.text != null)
+                            addUserDetails(deviceNameController.text, int.parse(serialNumberController.text), typeController.text, brandController.text);
+                            uploadFile();
+
+
+
+
+                        },
+                        text: 'Save Changes',
+                        options: FFButtonOptions(
+                          width: 130,
+                          height: 40,
+                          color: FlutterFlowTheme.of(context).primaryBtnText,
+                          textStyle: FlutterFlowTheme.of(context).bodyText1,
+                          elevation: 1,
+                          borderSide: const BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
                 ]
                 )
@@ -275,4 +590,5 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
           );
         });
   }
+
 }
