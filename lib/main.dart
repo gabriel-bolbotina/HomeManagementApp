@@ -21,6 +21,7 @@ import 'Services/authentification.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp (MyApp ()) ;
 
 }
@@ -29,6 +30,7 @@ void main() async {
 
 
 class MyApp extends StatelessWidget {
+  Authentication _authentication= Authentication();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -36,8 +38,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Home-App',
       theme: ThemeData(
-        primaryColor: FlutterFlowTheme.of(context).gray600,
-        textTheme:  Theme.of(context).textTheme.apply(bodyColor: FlutterFlowTheme.of(context).gray600),
+        primaryColor: Colors.black,
+        textTheme:  Typography.blackCupertino,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
@@ -49,10 +51,30 @@ class MyApp extends StatelessWidget {
               return const HomePageWidget();
             }
             if (userSnapshot.hasData) {
-              return const HomePageWidget();
+              _authentication.getProfileImage();
+
+              if(_authentication.getUserRole() == "homeowner")
+                {
+                  return const HomeownerHomePageWidget();
+                }
+              else if(_authentication.getUserRole() == "tenant")
+              {
+                return const TenantHomePageWidget();
+              }
+              else if(_authentication.getUserRole() == "landlord")
+            {
+            return LandlordHomePageWidget();
             }
-            return const HomePageWidget();
+             else return HomePageWidget();
+
+
+            }
+
+
+              return HomePageWidget();
+
           }
+
       ),
 
 

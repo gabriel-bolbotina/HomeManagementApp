@@ -89,7 +89,7 @@ class _TenantProfilePageWidgetState
               ),
               alignment: Alignment.topRight,
               child: Image.network(
-                _authentication.getProfileImage(),
+                _authentication.getProfileImage().toString(),
               ),
             ),
           ),

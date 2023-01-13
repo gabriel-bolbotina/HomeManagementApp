@@ -34,10 +34,11 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
   Device _devices = Device();
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     getUsersDeviceList();
+    await _authentication.getProfileImage();
   }
 
   Future addUserDetails (
@@ -48,15 +49,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
       'age': age,});
   }
 
-  String photoUrl()
-  {
-    final url =_authentication.getProfileImage();
-    if(url != null)
-    {
-      return url;
-    }
-    return "null";
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +88,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                           fit: BoxFit.cover, // Fixes border issues
                           width: 100,
                           height: 100,
-                          image: NetworkImage("https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Humaaans-sitting-1.svg/1200px-Humaaans-sitting-1.svg.png"),
+                          image: NetworkImage(_authentication.urlPath?.trim() ??""),
                         ),
 
                       ),

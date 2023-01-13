@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:homeapp/Services/authentification.dart';
 
 import '../../Services/FirebaseService.dart';
 import '../EditPages/homeowner_edit.dart';
@@ -27,24 +28,15 @@ class _HomeownerProfilePageWidgetState
   FirebaseAuth _auth = FirebaseAuth.instance;
   late User currentUser;
   late String url;
+  final Authentication _authentication = Authentication();
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     // TODO: implement didChangeDependencies
-    getPhotoURL();
+    await _authentication.getProfileImage();
 
   }
 
-  void getPhotoURL()
-  async {
-    getCurrentUser();
-
-    final userRef = FirebaseFirestore.instance.collection("users").doc(
-        currentUser.uid);
-    DocumentSnapshot doc = await userRef.get();
-    final data = doc.data() as Map<String, dynamic>;
-    url= data['uploadedImage'];
-  }
 
   Future signOut() async {
     return (await showDialog(
@@ -107,9 +99,17 @@ class _HomeownerProfilePageWidgetState
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.topRight,
-              child: Image.network(
-                'https://picsum.photos/seed/339/600',
-              ),
+              child: InkWell(
+                onTap: () =>Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => HomeownerHomePageWidget())), // Image tapped
+                splashColor: Colors.white10, // Splash color over image
+                child: Ink.image(
+                  fit: BoxFit.cover, // Fixes border issues
+                  width: 100,
+                  height: 100,
+                  image: NetworkImage(_authentication.urlPath?.trim() ??""),
+                ),
+          ),
             ),
           ),
           Padding(

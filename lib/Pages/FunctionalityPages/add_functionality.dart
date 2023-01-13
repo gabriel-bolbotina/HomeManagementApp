@@ -529,8 +529,9 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                     children: [
                       FFButtonWidget(
                         onPressed: () async {
-                          if(deviceNameController.text != null)
+                          if(deviceNameController.text != '') {
                             addUserDetails(deviceNameController.text, int.parse(serialNumberController.text), typeController.text, brandController.text);
+                          }
                             uploadFile();
                             Navigator.pop(context);
 

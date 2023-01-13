@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,24 @@ import '../Pages/LoginPage/Login.dart';
 
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? urlPath;
+  String? userRole;
+
+   getDataImage()
+   {
+     final urlPath = this.urlPath;
+     if(urlPath != null) {
+       return urlPath.trim() ?? "";
+     }
+   }
+  getUserRole()
+  {
+    final userRole = this.userRole;
+    if(userRole != null) {
+      return userRole.trim() ?? "";
+    }
+  }
+
 
 
 
@@ -18,7 +37,7 @@ class Authentication {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
-            return HomePageWidget();
+            return const HomePageWidget();
           }
           else {
             return const LoginPageWidget ();
@@ -30,17 +49,32 @@ class Authentication {
 
   //sign in with google method
 
-  String getProfileImage()
-  {
+  Future<String?> getProfileImage()
+  async {
     if(_auth.currentUser?.photoURL !=  null)
       {
-        final urlpath = _auth.currentUser?.photoURL;
-        if(urlpath != null)
-        return urlpath;
+         urlPath = _auth.currentUser!.photoURL!;
+
       }
     else
       {
-        return "assets/iconapp.png";
+        var uid = _auth.currentUser?.uid;
+        var data = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(uid).get();
+        urlPath = data['uploadedImage'];
+        userRole = data['role'];
+        print(data['uploadedImage']);
+        print(urlPath);
+        print(userRole);
+        if(urlPath != null)
+          {
+            print("$_auth.currentUser?.email in authentification");
+          }
+
+        else {
+          return "assets/homeowner.png";
+        }
       }
     return "";
   }

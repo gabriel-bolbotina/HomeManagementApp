@@ -40,6 +40,12 @@ class _HomeownerEditPageWidgetState extends State<HomeownerEditPageWidget> {
     // TODO: implement initState
     getCurrentUser();
   }
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    _authentication.getProfileImage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +87,7 @@ class _HomeownerEditPageWidgetState extends State<HomeownerEditPageWidget> {
                         ),
                         alignment: Alignment.topRight,
                         child: Image.network(
-                          _authentication.getProfileImage(),
+                          _authentication.getDataImage(),
                         ),
                       )),
                   Padding(

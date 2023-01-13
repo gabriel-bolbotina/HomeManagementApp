@@ -1,3 +1,5 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +15,7 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../model/User.dart';
+import 'package:geocoding/geocoding.dart';
 
 
 class Address extends StatefulWidget {
@@ -28,7 +31,7 @@ class _Address extends State<Address> {
   final TextEditingController numberController = TextEditingController();
   final TextEditingController zipCodeController = TextEditingController();
   final TextEditingController townController = TextEditingController();
-  String googleApikey = "GOOGLE_MAP_API_KAY";
+  String googleApikey = "AIzaSyD5maQo1oIJr7Kaz6Zm_KGHKNL6FusuTDE";
   GoogleMapController? mapController; //contrller for Google map
   CameraPosition? cameraPosition;
   LatLng startLocation = LatLng(27.6602292, 85.308027);
@@ -42,6 +45,18 @@ class _Address extends State<Address> {
   @override
   void initState() {
     super.initState();
+  }
+
+  AddressfromCoord(lat, lon)
+  async {
+
+    // converted the lon from string to double
+
+
+    // Passed the coordinates of latitude and longitude
+    var coordinates = await placemarkFromCoordinates(lat,lon);
+    var first = coordinates.first;
+    return first;
   }
 
   @override
@@ -235,7 +250,7 @@ class _Address extends State<Address> {
                                             //form google_maps_webservice package
                                             final plist = GoogleMapsPlaces(
                                               apiKey: googleApikey,
-                                              apiHeaders: await GoogleApiHeaders()
+                                              apiHeaders: await const GoogleApiHeaders()
                                                   .getHeaders(),
                                               //from google_api_headers package
                                             );
@@ -256,6 +271,9 @@ class _Address extends State<Address> {
                                                     CameraPosition(
                                                         target: newlatlang,
                                                         zoom: 17)));
+
+                                            addUserDetails(AddressfromCoord(lat,lang));
+                                            print(AddressfromCoord(lat, lang));
                                           }
                                         },
                                         child: Padding(
@@ -270,7 +288,8 @@ class _Address extends State<Address> {
                                                 child: ListTile(
                                                   title: Text(location,
                                                     style: TextStyle(
-                                                        fontSize: 18),),
+                                                        fontSize: 18,
+                                                    color: Colors.black26),),
                                                   trailing: Icon(Icons.search),
                                                   dense: true,
                                                 )
@@ -758,4 +777,7 @@ class _Address extends State<Address> {
 
 
 
+}
+
+class Geocoder {
 }

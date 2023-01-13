@@ -81,7 +81,7 @@ class _TenantEditPageWidgetState extends State<TenantEditPageWidget> {
                         ),
                         alignment: Alignment.topRight,
                         child: Image.network(
-                          _authentication.getProfileImage(),
+                          _authentication.getProfileImage().toString(),
                         ),
                       )),
                   Padding(
@@ -374,18 +374,17 @@ class _TenantEditPageWidgetState extends State<TenantEditPageWidget> {
                       children: [
                         FFButtonWidget(
                           onPressed: () async {
-                            if(firstNameController.text != null)
+                            if(firstNameController.hasListeners)
                               addUserRole('first name', firstNameController.text);
 
-                            if(lastNameController.text != null)
+                            if(lastNameController.hasListeners)
                               addUserRole('last name', lastNameController.text);
 
-                            if(addressController.text != null)
+                            if(addressController.hasListeners)
                               addUserRole('role', addressController.text);
 
-                            if(ageController.text != null)
+                            if(ageController.hasListeners)
                               addUserAge(int.parse(ageController.text.trim()));
-
 
                           },
                           text: 'Save Changes',

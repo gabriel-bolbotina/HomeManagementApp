@@ -57,7 +57,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                     fit: BoxFit.cover, // Fixes border issues
                     width: 100,
                     height: 100,
-                    image: NetworkImage(_auth.getProfileImage()),
+                    image: NetworkImage(_auth.getProfileImage().toString()),
                   ),
                 ),
               ),
