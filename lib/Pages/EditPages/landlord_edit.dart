@@ -309,16 +309,16 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                       children: [
                         FFButtonWidget(
                           onPressed: () async {
-                            if(firstNameController.hasListeners)
+                            if(firstNameController != null)
                               addUserRole('first name', firstNameController.text);
 
-                            if(lastNameController.hasListeners)
+                            if(lastNameController != null) {
                               addUserRole('last name', lastNameController.text);
-
-                            if(addressController.hasListeners)
+                            }
+                            if(addressController != null)
                               addUserRole('role', addressController.text);
 
-                            if(ageController.hasListeners)
+                            if(ageController !=null)
                               addUserAge(int.parse(ageController.text.trim()));
 
                           },

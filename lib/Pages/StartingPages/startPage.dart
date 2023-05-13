@@ -194,7 +194,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     options: FFButtonOptions(
                       width: 200,
                       height: 45,
-                      color: const Color.fromARGB(255, 128, 173, 242),
+                      color: const Color.fromARGB(90, 123, 192, 9),
                       textStyle: FlutterFlowTheme
                           .of(context)
                           .subtitle1
@@ -258,6 +258,5 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
 
 }
-
 
 

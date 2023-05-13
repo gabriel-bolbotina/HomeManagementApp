@@ -568,7 +568,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       options: FFButtonOptions(
                         width: 270,
                         height: 50,
-                        color: const Color.fromARGB(255, 128, 173, 242),
+                        color: const Color.fromARGB(90, 123, 192, 9),
                         textStyle: FlutterFlowTheme
                             .of(context)
                             .subtitle2

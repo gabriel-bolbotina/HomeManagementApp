@@ -12,6 +12,7 @@ class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? urlPath;
   String? userRole;
+  String? userName;
 
    getDataImage()
    {
@@ -41,7 +42,7 @@ class Authentication {
           }
           else {
             return const LoginPageWidget ();
-          }
+        }
         });
   }
 // StreamBuilder
@@ -64,6 +65,7 @@ class Authentication {
             .doc(uid).get();
         urlPath = data['uploadedImage'];
         userRole = data['role'];
+        userName= data['first name'];
         print(data['uploadedImage']);
         print(urlPath);
         print(userRole);
@@ -76,6 +78,33 @@ class Authentication {
           return "assets/homeowner.png";
         }
       }
+    return "";
+  }
+
+  Future<String?> getUserName()
+  async {
+    if(_auth.currentUser?.photoURL !=  null)
+    {
+      urlPath = _auth.currentUser!.photoURL!;
+
+    }
+    else
+    {
+      var uid = _auth.currentUser?.uid;
+      var data = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid).get();
+      userName= data['first name'];
+      print(data['first name']);
+      if(urlPath != null)
+      {
+        print("$_auth.currentUser?.email in authentification");
+      }
+
+      else {
+        return "user";
+      }
+    }
     return "";
   }
 }

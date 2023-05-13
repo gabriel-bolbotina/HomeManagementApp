@@ -33,8 +33,8 @@ dependencies:
     sdk: flutter
 
   auto_size_text: 3.0.0
-  cached_network_image: 3.2.1
-  flutter_animate: 1.0.0
+  cached_network_image: 3.2.3
+  flutter_animate: ^4.1.1+1
   flutter_cache_manager: 3.3.0
   font_awesome_flutter: ^9.0.0
   from_css_color: 2.0.0
@@ -52,8 +52,8 @@ dependencies:
   firebase_core:
   firebase_storage:
   firebase_auth: ^4.1.4
-  cloud_firestore:  ^4.0.1
-  google_sign_in: ^5.4.2
+  cloud_firestore:  ^4.6.0
+  google_sign_in: ^6.1.0
   flutter_signin_button: ^2.0.0
   back_button_interceptor:
   google_maps_flutter: ^2.2.3
@@ -100,6 +100,7 @@ flutter:
     - assets/homeownerRole.jpg
     - assets/tenantRole.jpg
     - assets/landlordRole.jpg
+    - assets/images/background.jpeg
     - assets/images/
   #   - images/a_dot_ham.jpeg
 

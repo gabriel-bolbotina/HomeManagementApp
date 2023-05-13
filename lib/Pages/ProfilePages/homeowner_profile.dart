@@ -70,11 +70,15 @@ class _HomeownerProfilePageWidgetState
   @override
   Widget build(BuildContext context) {
     return Scaffold(      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).lineColor,
+      backgroundColor: FlutterFlowTheme
+          .of(context)
+          .primaryBackground,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).lineColor,
+          backgroundColor: FlutterFlowTheme
+              .of(context)
+              .primaryBackground,
           automaticallyImplyLeading: false,
           leading:IconButton(
             icon: const Icon(Icons.arrow_back,
