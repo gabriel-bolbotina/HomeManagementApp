@@ -15,8 +15,8 @@ import 'dart:developer';
 
 import '../../Services/FirebaseService.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/HomeAppTheme.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 
 class AddPhotoWidget extends StatefulWidget {
@@ -119,11 +119,11 @@ class _AddPhotoWidgetState extends State<AddPhotoWidget>{
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).lineColor,
+        backgroundColor: HomeAppTheme.of(context).lineColor,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).lineColor,
+            backgroundColor: HomeAppTheme.of(context).lineColor,
             automaticallyImplyLeading: false,
             leading: IconButton(
               icon: const Icon(
@@ -181,7 +181,7 @@ class _AddPhotoWidgetState extends State<AddPhotoWidget>{
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FFButtonWidget(
+                        HomeAppButtonWidget(
                           onPressed: () async {
                             uploadFile();
                             Navigator.pushNamed(context, "role_screen");
@@ -191,11 +191,11 @@ class _AddPhotoWidgetState extends State<AddPhotoWidget>{
 
                           },
                           text: 'Save Changes',
-                          options: FFButtonOptions(
+                          options: HomeAppButtonOptions(
                             width: 130,
                             height: 40,
-                            color: FlutterFlowTheme.of(context).primaryBtnText,
-                            textStyle: FlutterFlowTheme.of(context).bodyText1,
+                            color: HomeAppTheme.of(context).primaryBtnText,
+                            textStyle: HomeAppTheme.of(context).bodyText1,
                             elevation: 1,
                             borderSide: const BorderSide(
                               color: Colors.transparent,

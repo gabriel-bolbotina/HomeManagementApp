@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:homeapp/Pages/model/User.dart';
+import 'package:homeapp/model/User.dart';
 
 
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -52,9 +52,9 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      backgroundColor: HomeAppTheme.of(context).primaryBackground,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: HomeAppTheme.of(context).primaryBackground,
         centerTitle: false,
         bottomOpacity: 0.0,
         elevation: 0.0,
@@ -72,7 +72,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                       padding: EdgeInsetsDirectional.fromSTEB(24, 20, 0, 0),
                       child: Text(
                         'Select your role',
-                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                        style: HomeAppTheme.of(context).bodyText1.override(
                           fontFamily: 'Poppins',
                           fontSize: 30,
                         ),
@@ -94,7 +94,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                         height: 180,
                         decoration: BoxDecoration(
                           color:
-                          FlutterFlowTheme.of(context).secondaryBackground,
+                          HomeAppTheme.of(context).secondaryBackground,
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: Image.asset(
@@ -127,7 +127,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                                   buttonSize: 60,
                                   icon: Icon(
                                     Icons.check_outlined,
-                                    color: FlutterFlowTheme.of(context)
+                                    color: HomeAppTheme.of(context)
                                         .primaryBtnText,
                                     size: 30,
                                   ),
@@ -159,7 +159,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                       height: 180,
                       decoration: BoxDecoration(
                         color:
-                        FlutterFlowTheme.of(context).secondaryBackground,
+                        HomeAppTheme.of(context).secondaryBackground,
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: Image.asset(
@@ -192,7 +192,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                                 buttonSize: 60,
                                 icon: Icon(
                                   Icons.check_outlined,
-                                  color: FlutterFlowTheme.of(context)
+                                  color: HomeAppTheme.of(context)
                                       .primaryBtnText,
                                   size: 30,
                                 ),
@@ -223,7 +223,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                       height: 180,
                       decoration: BoxDecoration(
                         color:
-                        FlutterFlowTheme.of(context).secondaryBackground,
+                        HomeAppTheme.of(context).secondaryBackground,
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: Image.asset(
@@ -256,7 +256,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                                 buttonSize: 60,
                                 icon: Icon(
                                   Icons.check_outlined,
-                                  color: FlutterFlowTheme.of(context)
+                                  color: HomeAppTheme.of(context)
                                       .primaryBtnText,
                                   size: 30,
                                 ),

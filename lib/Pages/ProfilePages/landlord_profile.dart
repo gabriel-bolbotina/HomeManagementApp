@@ -5,9 +5,9 @@ import '../EditPages/landlord_edit.dart';
 import '../HomePages/landlord.dart';
 import '../NotificationPages/landlord_notification.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -57,11 +57,11 @@ class _LandlordProfilePageWidgetState
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).lineColor,
+      backgroundColor: HomeAppTheme.of(context).lineColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).lineColor,
+          backgroundColor: HomeAppTheme.of(context).lineColor,
           automaticallyImplyLeading: false,
           leading:IconButton(
             icon: const Icon(Icons.arrow_back,
@@ -107,10 +107,10 @@ class _LandlordProfilePageWidgetState
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      color: HomeAppTheme.of(context).secondaryBackground,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        color: HomeAppTheme.of(context).secondaryBackground,
                         width: 0,
                       ),
                     ),
@@ -122,7 +122,7 @@ class _LandlordProfilePageWidgetState
                         children: [
                           Text(
                             'Edit Profile',
-                            style: FlutterFlowTheme.of(context).subtitle2,
+                            style: HomeAppTheme.of(context).subtitle2,
                           ),
                           IconButton(
                             icon: const Icon(Icons.arrow_forward_ios,
@@ -155,10 +155,10 @@ class _LandlordProfilePageWidgetState
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                      color: HomeAppTheme.of(context).secondaryBackground,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        color: HomeAppTheme.of(context).secondaryBackground,
                         width: 0,
                       ),
                     ),
@@ -170,7 +170,7 @@ class _LandlordProfilePageWidgetState
                         children: [
                           Text(
                             'Notification Settings',
-                            style: FlutterFlowTheme.of(context).subtitle2,
+                            style: HomeAppTheme.of(context).subtitle2,
                           ),
                           IconButton(
                             icon: const Icon(Icons.arrow_forward_ios,
@@ -191,15 +191,15 @@ class _LandlordProfilePageWidgetState
             alignment: const AlignmentDirectional(0, -0.15),
             child: Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0, 280, 0, 0),
-              child: FFButtonWidget(
+              child: HomeAppButtonWidget(
                 onPressed: () => signOut(),
 
                 text: 'Log Out',
-                options: FFButtonOptions(
+                options: HomeAppButtonOptions(
                   width: 110,
                   height: 50,
                   color: const Color.fromARGB(255, 253, 238, 186),
-                  textStyle: FlutterFlowTheme.of(context).subtitle1.override(
+                  textStyle: HomeAppTheme.of(context).subtitle1.override(
                     fontFamily: 'Poppins',
                     color: Colors.black54,
                   ),

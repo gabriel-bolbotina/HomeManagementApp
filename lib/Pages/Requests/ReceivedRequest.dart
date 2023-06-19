@@ -1,7 +1,7 @@
 import '../flutter_flow/flutter_flow_animations.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -31,9 +31,9 @@ class _LandlordRequestReceivedWidgetState
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      backgroundColor: HomeAppTheme.of(context).primaryBackground,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: HomeAppTheme.of(context).primaryBackground,
         automaticallyImplyLeading: false,
         /*
         title: Text(
@@ -57,7 +57,7 @@ class _LandlordRequestReceivedWidgetState
                 padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                 child: Text(
                   'Requests',
-                  style: FlutterFlowTheme.of(context).bodyText2,
+                  style: HomeAppTheme.of(context).bodyText2,
                   textScaleFactor: 2,
                 ),
               ),
@@ -65,7 +65,7 @@ class _LandlordRequestReceivedWidgetState
                 padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                 child: Text(
                   'Your tenants requests',
-                  style: FlutterFlowTheme.of(context).bodyText2,
+                  style: HomeAppTheme.of(context).bodyText2,
                 ),
               ),
               Padding(
@@ -74,7 +74,7 @@ class _LandlordRequestReceivedWidgetState
                   width: double.infinity,
                   height: 400,
                   decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    color: HomeAppTheme.of(context).secondaryBackground,
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: Image.asset(
@@ -117,7 +117,7 @@ class _LandlordRequestReceivedWidgetState
                                   children: [
                                     Text(
                                       'Tenant1',
-                                      style: FlutterFlowTheme.of(context)
+                                      style: HomeAppTheme.of(context)
                                           .title2
                                           .override(
                                         fontFamily: 'Poppins',
@@ -128,7 +128,7 @@ class _LandlordRequestReceivedWidgetState
                                       padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                                       child: Text(
                                         'RequestTitle',
-                                        style: FlutterFlowTheme.of(context)
+                                        style: HomeAppTheme.of(context)
                                             .subtitle1
                                             .override(
                                           fontFamily: 'Poppins',
@@ -140,7 +140,7 @@ class _LandlordRequestReceivedWidgetState
                                       padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                                       child: Text(
                                         'Request Details',
-                                        style: FlutterFlowTheme.of(context)
+                                        style: HomeAppTheme.of(context)
                                             .bodyText1
                                             .override(
                                           fontFamily: 'Poppins',
@@ -153,19 +153,19 @@ class _LandlordRequestReceivedWidgetState
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
-                                          FFButtonWidget(
+                                          HomeAppButtonWidget(
                                             onPressed: () {
                                               print('Button pressed ...');
                                             },
                                             text: 'View Request',
-                                            options: FFButtonOptions(
+                                            options: HomeAppButtonOptions(
                                               width: 140,
                                               height: 40,
                                               color:
-                                              FlutterFlowTheme.of(context)
+                                              HomeAppTheme.of(context)
                                                   .primaryColor,
                                               textStyle:
-                                              FlutterFlowTheme.of(context)
+                                              HomeAppTheme.of(context)
                                                   .subtitle2
                                                   .override(
                                                 fontFamily: 'Poppins',
@@ -200,7 +200,7 @@ class _LandlordRequestReceivedWidgetState
                   width: double.infinity,
                   height: 400,
                   decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    color: HomeAppTheme.of(context).secondaryBackground,
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: Image.asset(
@@ -243,7 +243,7 @@ class _LandlordRequestReceivedWidgetState
                                   children: [
                                     Text(
                                       'Tenant2',
-                                      style: FlutterFlowTheme.of(context)
+                                      style: HomeAppTheme.of(context)
                                           .title2
                                           .override(
                                         fontFamily: 'Poppins',
@@ -254,7 +254,7 @@ class _LandlordRequestReceivedWidgetState
                                       padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                                       child: Text(
                                         'RequestTitle',
-                                        style: FlutterFlowTheme.of(context)
+                                        style: HomeAppTheme.of(context)
                                             .subtitle1
                                             .override(
                                           fontFamily: 'Poppins',
@@ -266,7 +266,7 @@ class _LandlordRequestReceivedWidgetState
                                       padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                                       child: Text(
                                         'Request Detail',
-                                        style: FlutterFlowTheme.of(context)
+                                        style: HomeAppTheme.of(context)
                                             .bodyText1
                                             .override(
                                           fontFamily: 'Poppins',
@@ -279,19 +279,19 @@ class _LandlordRequestReceivedWidgetState
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
-                                          FFButtonWidget(
+                                          HomeAppButtonWidget(
                                             onPressed: () {
                                               print('Button pressed ...');
                                             },
                                             text: 'View Request',
-                                            options: FFButtonOptions(
+                                            options: HomeAppButtonOptions(
                                               width: 140,
                                               height: 40,
                                               color:
-                                              FlutterFlowTheme.of(context)
+                                              HomeAppTheme.of(context)
                                                   .primaryColor,
                                               textStyle:
-                                              FlutterFlowTheme.of(context)
+                                              HomeAppTheme.of(context)
                                                   .subtitle2
                                                   .override(
                                                 fontFamily: 'Poppins',

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:homeapp/Pages/EditPages/homeowner_edit.dart';
 import 'package:homeapp/Pages/HomePages/landlord.dart';
 import 'package:homeapp/Pages/HomePages/tenant.dart';
@@ -15,21 +16,23 @@ import 'Pages/Register/ChooseRole.dart';
 import 'Pages/Register/Register.dart';
 import 'Pages/Requests/ReceivedRequest.dart';
 import 'Pages/StartingPages/startPage.dart';
-import 'Pages/flutter_flow/flutter_flow_theme.dart';
+import 'Pages/flutter_flow/HomeAppTheme.dart';
 import 'Services/authentification.dart';
+import 'package:dcdg/dcdg.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   await Firebase.initializeApp();
 
-  runApp (MyApp ()) ;
+  runApp (HomeApp ()) ;
 
 }
 
 
 
 
-class MyApp extends StatelessWidget {
+class HomeApp extends StatelessWidget {
   Authentication _authentication= Authentication();
   // This widget is the root of your application.
   @override
@@ -71,7 +74,7 @@ class MyApp extends StatelessWidget {
             }
 
 
-              return HomePageWidget();
+             return HomePageWidget();
 
           }
 
@@ -83,11 +86,12 @@ class MyApp extends StatelessWidget {
         'login_screen': (context) => LoginPageWidget(),
         'register_screen': (context) =>RegisterPageWidget(),
         'role_screen': (context) =>ChooseRoleWidget(),
-        'address_screen': (context) => Address(),
+        'address_screen': (context) => Address(fromRegister: true,),
         'homeowner_main': (context) => HomeownerHomePageWidget(),
         'tenant_main': (context) => TenantHomePageWidget(),
         'landlord_main': (context) => LandlordHomePageWidget(),
         'photo_screen': (context) => AddPhotoWidget(),
+        'address_update': (context) => Address(fromRegister: false,),
 
       },
 

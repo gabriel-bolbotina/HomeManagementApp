@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 import '../ProfilePages/tenant_profile.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -27,9 +27,9 @@ class _TenantNotificationSettingsWidgetState
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).lineColor,
+      backgroundColor: HomeAppTheme.of(context).lineColor,
       appBar: AppBar(
-        backgroundColor: FlutterFlowTheme.of(context).lineColor,
+        backgroundColor: HomeAppTheme.of(context).lineColor,
         automaticallyImplyLeading: false,
         leading:IconButton(
           icon: const Icon(Icons.arrow_back,
@@ -39,9 +39,9 @@ class _TenantNotificationSettingsWidgetState
         ),
         title: Text(
           'Back',
-          style: FlutterFlowTheme.of(context).title2.override(
+          style: HomeAppTheme.of(context).title2.override(
             fontFamily: 'Poppins',
-            color: FlutterFlowTheme.of(context).gray600,
+            color: HomeAppTheme.of(context).gray600,
             fontSize: 18,
           ),
         ),
@@ -62,7 +62,7 @@ class _TenantNotificationSettingsWidgetState
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                     child: Text(
                       'Choose what notifcations you want to recieve below and we will update the settings.',
-                      style: FlutterFlowTheme.of(context).bodyText2,
+                      style: HomeAppTheme.of(context).bodyText2,
                     ),
                   ),
                 ),
@@ -78,13 +78,13 @@ class _TenantNotificationSettingsWidgetState
               },
               title: Text(
                 'Push Notifications',
-                style: FlutterFlowTheme.of(context).title3,
+                style: HomeAppTheme.of(context).title3,
               ),
               subtitle: Text(
                 'Receive Push notifications from our application on a semi regular basis.',
-                style: FlutterFlowTheme.of(context).bodyText2,
+                style: HomeAppTheme.of(context).bodyText2,
               ),
-              activeColor: FlutterFlowTheme.of(context).primaryColor,
+              activeColor: HomeAppTheme.of(context).primaryColor,
               activeTrackColor: const Color(0x8A4B39EF),
               dense: false,
               controlAffinity: ListTileControlAffinity.trailing,
@@ -98,11 +98,11 @@ class _TenantNotificationSettingsWidgetState
             },
             title: Text(
               'Email Notifications',
-              style: FlutterFlowTheme.of(context).title3,
+              style: HomeAppTheme.of(context).title3,
             ),
             subtitle: Text(
               'Receive email notifications from our marketing team about new features.',
-              style: FlutterFlowTheme.of(context).bodyText2,
+              style: HomeAppTheme.of(context).bodyText2,
             ),
             activeColor: const Color(0xFF4B39EF),
             activeTrackColor: const Color(0xFF3B2DB6),
@@ -117,11 +117,11 @@ class _TenantNotificationSettingsWidgetState
             },
             title: Text(
               'Location Services',
-              style: FlutterFlowTheme.of(context).title3,
+              style: HomeAppTheme.of(context).title3,
             ),
             subtitle: Text(
               'Allow us to track your location, this helps keep track of spending and keeps you safe.',
-              style: FlutterFlowTheme.of(context).bodyText2,
+              style: HomeAppTheme.of(context).bodyText2,
             ),
             activeColor: const Color(0xFF4B39EF),
             activeTrackColor: const Color(0xFF3B2DB6),

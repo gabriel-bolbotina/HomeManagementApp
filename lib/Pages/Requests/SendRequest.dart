@@ -1,7 +1,7 @@
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,7 +38,7 @@ class _TenantRequestsWidgetState extends State<TenantRequestsWidget> {
         automaticallyImplyLeading: false,
         title: Text(
           'Requests',
-          style: FlutterFlowTheme.of(context).title2.override(
+          style: HomeAppTheme.of(context).title2.override(
             fontFamily: 'Lexend Deca',
             color: const Color(0xFF090F13),
             fontSize: 22,
@@ -119,7 +119,7 @@ class _TenantRequestsWidgetState extends State<TenantRequestsWidget> {
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   hintText: 'Enter request title here...',
-                                  hintStyle: FlutterFlowTheme.of(context)
+                                  hintStyle: HomeAppTheme.of(context)
                                       .bodyText2
                                       .override(
                                     fontFamily: 'Lexend Deca',
@@ -159,7 +159,7 @@ class _TenantRequestsWidgetState extends State<TenantRequestsWidget> {
                                   const EdgeInsetsDirectional.fromSTEB(
                                       20, 32, 20, 12),
                                 ),
-                                style: FlutterFlowTheme.of(context)
+                                style: HomeAppTheme.of(context)
                                     .bodyText1
                                     .override(
                                   fontFamily: 'Lexend Deca',
@@ -184,7 +184,7 @@ class _TenantRequestsWidgetState extends State<TenantRequestsWidget> {
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   hintText: 'Enter request details here...',
-                                  hintStyle: FlutterFlowTheme.of(context)
+                                  hintStyle: HomeAppTheme.of(context)
                                       .bodyText2
                                       .override(
                                     fontFamily: 'Lexend Deca',
@@ -224,7 +224,7 @@ class _TenantRequestsWidgetState extends State<TenantRequestsWidget> {
                                   const EdgeInsetsDirectional.fromSTEB(
                                       20, 32, 20, 12),
                                 ),
-                                style: FlutterFlowTheme.of(context)
+                                style: HomeAppTheme.of(context)
                                     .bodyText1
                                     .override(
                                   fontFamily: 'Lexend Deca',
@@ -247,16 +247,16 @@ class _TenantRequestsWidgetState extends State<TenantRequestsWidget> {
           ),
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-            child: FFButtonWidget(
+            child: HomeAppButtonWidget(
               onPressed: () {
                 print('Button pressed ...');
               },
               text: 'Send Request',
-              options: FFButtonOptions(
+              options: HomeAppButtonOptions(
                 width: 270,
                 height: 50,
                 color: const Color(0xFF4B39EF),
-                textStyle: FlutterFlowTheme.of(context).subtitle2.override(
+                textStyle: HomeAppTheme.of(context).subtitle2.override(
                   fontFamily: 'Lexend Deca',
                   color: Colors.white,
                   fontSize: 16,

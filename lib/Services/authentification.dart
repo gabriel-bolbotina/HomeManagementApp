@@ -14,24 +14,19 @@ class Authentication {
   String? userRole;
   String? userName;
 
-   getDataImage()
-   {
-     final urlPath = this.urlPath;
-     if(urlPath != null) {
-       return urlPath.trim() ?? "";
-     }
-   }
-  getUserRole()
-  {
-    final userRole = this.userRole;
-    if(userRole != null) {
-      return userRole.trim() ?? "";
+  getDataImage() {
+    final urlPath = this.urlPath;
+    if (urlPath != null) {
+      return urlPath.trim() ?? "";
     }
   }
 
-
-
-
+  getUserRole() {
+    final userRole = this.userRole;
+    if (userRole != null) {
+      return userRole.trim() ?? "";
+    }
+  }
 
   handleAuthState() {
     return StreamBuilder(
@@ -39,69 +34,51 @@ class Authentication {
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             return const HomePageWidget();
+          } else {
+            return const LoginPageWidget();
           }
-          else {
-            return const LoginPageWidget ();
-        }
         });
   }
 // StreamBuilder
 
-
   //sign in with google method
 
-  Future<String?> getProfileImage()
-  async {
-    if(_auth.currentUser?.photoURL !=  null)
-      {
-         urlPath = _auth.currentUser!.photoURL!;
-
+  Future<String?> getProfileImage() async {
+    if (_auth.currentUser?.photoURL != null) {
+      urlPath = _auth.currentUser!.photoURL!;
+      return urlPath;
+    } else {
+      var uid = _auth.currentUser?.uid;
+      var data =
+          await FirebaseFirestore.instance.collection("users").doc(uid).get();
+      urlPath = data['uploadedImage'];
+      userRole = data['role'];
+      userName = data['first name'];
+      print(data['uploadedImage']);
+      print(urlPath);
+      print(userRole);
+      if (urlPath != null) {
+        print("$_auth.currentUser?.email in authentification");
+      } else {
+        return "assets/homeowner.png";
       }
-    else
-      {
-        var uid = _auth.currentUser?.uid;
-        var data = await FirebaseFirestore.instance
-            .collection("users")
-            .doc(uid).get();
-        urlPath = data['uploadedImage'];
-        userRole = data['role'];
-        userName= data['first name'];
-        print(data['uploadedImage']);
-        print(urlPath);
-        print(userRole);
-        if(urlPath != null)
-          {
-            print("$_auth.currentUser?.email in authentification");
-          }
-
-        else {
-          return "assets/homeowner.png";
-        }
-      }
-    return "";
+    }
+    return urlPath;
   }
 
-  Future<String?> getUserName()
-  async {
-    if(_auth.currentUser?.photoURL !=  null)
-    {
-      urlPath = _auth.currentUser!.photoURL!;
-
-    }
-    else
-    {
+  Future<String?> getUserName() async {
+    if (_auth.currentUser?.displayName != null) {
+      userName = _auth.currentUser!.displayName!;
+    } else {
       var uid = _auth.currentUser?.uid;
-      var data = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(uid).get();
-      userName= data['first name'];
+      var data =
+          await FirebaseFirestore.instance.collection("users").doc(uid).get();
+      userName = data['first name'];
       print(data['first name']);
-      if(urlPath != null)
-      {
+      if (userName != null) {
+        return userName;
         print("$_auth.currentUser?.email in authentification");
-      }
-
-      else {
+      } else {
         return "user";
       }
     }

@@ -1,0 +1,110 @@
+@startuml
+class "homeapp::Pages::FunctionalityPages::add_functionality.dart::AddFunctionalityTPageWidget" {
+  -int _serialNumber
+  +_AddFunctionalityTPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::FunctionalityPages::add_functionality.dart::AddFunctionalityTPageWidget"
+
+class "homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" {
+  +TextEditingController deviceNameController
+  +TextEditingController serialNumberController
+  +TextEditingController typeController
+  +TextEditingController brandController
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  -Device _device
+  -List<Device> _devicesList
+  -File? _photo
+  -ImagePicker _picker
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +dynamic imgFromGallery()
+  +dynamic imgFromCamera()
+  +dynamic uploadFile()
+  +void initState()
+  +void getCurrentUser()
+  +dynamic addUserDetails()
+  +dynamic getUserDevice()
+  +Widget build()
+  -void _showPicker()
+}
+
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "homeapp::model::Devices.dart::Device"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "dart::io::File"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "image_picker::image_picker.dart::ImagePicker"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState"
+
+class "homeapp::Pages::FunctionalityPages::addDevicePage.dart::AddDevicePageWidget" {
+  +_AddDevicePageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::FunctionalityPages::addDevicePage.dart::AddDevicePageWidget"
+
+class "homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" {
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  -Device _device
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +void initState()
+  +Widget build()
+}
+
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "homeapp::model::Devices.dart::Device"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState"
+
+class "homeapp::Pages::FunctionalityPages::addQrCode.dart::AddQRFunctionalityTPageWidget" {
+  +_AddQRFunctionalityTPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::FunctionalityPages::addQrCode.dart::AddQRFunctionalityTPageWidget"
+
+class "homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" {
+  +TextEditingController deviceNameController
+  +TextEditingController serialNumberController
+  +TextEditingController typeController
+  +TextEditingController brandController
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  +dynamic qrCode
+  +RegExp regex
+  -File? _photo
+  -ImagePicker _picker
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +dynamic imgFromGallery()
+  +dynamic imgFromCamera()
+  +dynamic uploadFile()
+  +void initState()
+  +void getCurrentUser()
+  +dynamic addUserDeviceDetails()
+  +Widget build()
+  -void _showPicker()
+}
+
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "dart::io::File"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "image_picker::image_picker.dart::ImagePicker"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState"
+
+@enduml
