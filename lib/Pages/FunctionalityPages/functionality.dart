@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import '../HomePages/homeowner.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -28,11 +28,11 @@ class _PopUpFunctionalityPageWidgetState
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).lineColor,
+      backgroundColor: HomeAppTheme.of(context).lineColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBtnText,
+          backgroundColor: HomeAppTheme.of(context).primaryBtnText,
           automaticallyImplyLeading: false,
           leading:IconButton(
             icon: Icon(Icons.arrow_back,
@@ -62,7 +62,7 @@ class _PopUpFunctionalityPageWidgetState
                 children: [
                   Text(
                     'Device Name',
-                    style: FlutterFlowTheme.of(context).title1,
+                    style: HomeAppTheme.of(context).title1,
                   ),
                 ],
               ),
@@ -90,7 +90,7 @@ class _PopUpFunctionalityPageWidgetState
                     child: AutoSizeText(
                       'Device Info',
                       textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).subtitle2,
+                      style: HomeAppTheme.of(context).subtitle2,
                     ),
                   ),
                 ],
@@ -110,12 +110,12 @@ class _PopUpFunctionalityPageWidgetState
                         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                         child: Text(
                           'Charge',
-                          style: FlutterFlowTheme.of(context).bodyText2,
+                          style: HomeAppTheme.of(context).bodyText2,
                         ),
                       ),
                       Text(
                         '70%',
-                        style: FlutterFlowTheme.of(context).subtitle1,
+                        style: HomeAppTheme.of(context).subtitle1,
                       ),
                     ],
                   ),
@@ -127,12 +127,12 @@ class _PopUpFunctionalityPageWidgetState
                         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                         child: Text(
                           'Info',
-                          style: FlutterFlowTheme.of(context).bodyText2,
+                          style: HomeAppTheme.of(context).bodyText2,
                         ),
                       ),
                       Text(
                         'some value',
-                        style: FlutterFlowTheme.of(context).subtitle1,
+                        style: HomeAppTheme.of(context).subtitle1,
                       ),
                     ],
                   ),
@@ -144,12 +144,12 @@ class _PopUpFunctionalityPageWidgetState
                         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                         child: Text(
                           'Status',
-                          style: FlutterFlowTheme.of(context).bodyText2,
+                          style: HomeAppTheme.of(context).bodyText2,
                         ),
                       ),
                       Text(
                         'Good',
-                        style: FlutterFlowTheme.of(context).subtitle1,
+                        style: HomeAppTheme.of(context).subtitle1,
                       ),
                     ],
                   ),
@@ -164,21 +164,21 @@ class _PopUpFunctionalityPageWidgetState
                   children: [
                     Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(0, 24, 0, 40),
-                      child: FFButtonWidget(
+                      child: HomeAppButtonWidget(
                         onPressed: () {
                           print('Button pressed ...');
                         },
                         text: 'Change',
-                        options: FFButtonOptions(
+                        options: HomeAppButtonOptions(
                           width: 110,
                           height: 50,
-                          color: FlutterFlowTheme.of(context).tertiary400,
-                          textStyle: FlutterFlowTheme.of(context)
+                          color: HomeAppTheme.of(context).tertiary400,
+                          textStyle: HomeAppTheme.of(context)
                               .subtitle1
                               .override(
                             fontFamily: 'Poppins',
                             color:
-                            FlutterFlowTheme.of(context).primaryBtnText,
+                            HomeAppTheme.of(context).primaryBtnText,
                           ),
                           elevation: 3,
                           borderSide: const BorderSide(

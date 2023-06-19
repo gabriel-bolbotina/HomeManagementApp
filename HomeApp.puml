@@ -1,0 +1,1214 @@
+@startuml
+set namespaceSeparator ::
+
+class "homeapp::main.dart::HomeApp" {
+  -Authentication _authentication
+  +Widget build()
+  -Route<dynamic> _createRoute()
+}
+
+"homeapp::main.dart::HomeApp" o-- "homeapp::Services::authentification.dart::Authentication"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "homeapp::main.dart::HomeApp"
+
+class "homeapp::reusables::devicePage.dart::DeviceDetailPage" {
+  +String deviceName
+  +String imageUrl
+  +int? serialNumber
+  +String? type
+  +String? brand
+  +Timestamp? timestamp
+  +Widget build()
+}
+
+"homeapp::reusables::devicePage.dart::DeviceDetailPage" o-- "cloud_firestore_platform_interface::src::timestamp.dart::Timestamp"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "homeapp::reusables::devicePage.dart::DeviceDetailPage"
+
+class "homeapp::reusables::doorContainer.dart::DoorStatusContainer" {
+  +bool isDoorOpen
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "homeapp::reusables::doorContainer.dart::DoorStatusContainer"
+
+class "homeapp::reusables::roomPage.dart::RoomDetailsPage" {
+  +String name
+  +Color color
+  +Widget build()
+}
+
+"homeapp::reusables::roomPage.dart::RoomDetailsPage" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "homeapp::reusables::roomPage.dart::RoomDetailsPage"
+
+class "homeapp::reusables::device_card.dart::DeviceCard" {
+  -Device _device
+  +Widget build()
+}
+
+"homeapp::reusables::device_card.dart::DeviceCard" o-- "homeapp::model::Devices.dart::Device"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "homeapp::reusables::device_card.dart::DeviceCard"
+
+class "homeapp::reusables::PopUpMenu.dart::PopUpMenu" {
+  +List<PopupMenuEntry<dynamic>> menuList
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "homeapp::reusables::PopUpMenu.dart::PopUpMenu"
+
+class "homeapp::model::Devices.dart::Device" {
+  +String? deviceName
+  +int? serialNumber
+  +String? type
+  +String? brand
+  +String? uploadedImage
+  +Timestamp? timestamp
+  +Map<String, dynamic> toJson()
+  +String? getBrand()
+}
+
+"homeapp::model::Devices.dart::Device" o-- "cloud_firestore_platform_interface::src::timestamp.dart::Timestamp"
+
+class "homeapp::model::User.dart::Users" {
+  +String? firstName
+  +String? lastName
+  +int? age
+  +String? role
+  +String? address
+  +String? zipCode
+  +String? getUserRole()
+  +Map<String, dynamic> toFirestore()
+}
+
+class "homeapp::model::sampleDevice.dart::ImageAssets" {
+  {static} +List<String> imageList
+}
+
+class "homeapp::model::roomModel.dart::RoomNamesWidget" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "homeapp::model::roomModel.dart::RoomNamesWidget"
+
+class "homeapp::model::roomModel.dart::RoomNameItem" {
+  +String name
+  +Color color
+  +Widget build()
+}
+
+"homeapp::model::roomModel.dart::RoomNameItem" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "homeapp::model::roomModel.dart::RoomNameItem"
+
+class "homeapp::Pages::FunctionalityPages::add_functionality.dart::AddFunctionalityTPageWidget" {
+  -int _serialNumber
+  +_AddFunctionalityTPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::FunctionalityPages::add_functionality.dart::AddFunctionalityTPageWidget"
+
+class "homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" {
+  +TextEditingController deviceNameController
+  +TextEditingController serialNumberController
+  +TextEditingController typeController
+  +TextEditingController brandController
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  -Device _device
+  -List<Device> _devicesList
+  -File? _photo
+  -ImagePicker _picker
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +dynamic imgFromGallery()
+  +dynamic imgFromCamera()
+  +dynamic uploadFile()
+  +void initState()
+  +void getCurrentUser()
+  +dynamic addUserDetails()
+  +dynamic getUserDevice()
+  +Widget build()
+  -void _showPicker()
+}
+
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "homeapp::model::Devices.dart::Device"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "dart::io::File"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "image_picker::image_picker.dart::ImagePicker"
+"homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::FunctionalityPages::add_functionality.dart::_AddFunctionalityTPageWidgetState"
+
+class "homeapp::Pages::FunctionalityPages::addDevicePage.dart::AddDevicePageWidget" {
+  +_AddDevicePageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::FunctionalityPages::addDevicePage.dart::AddDevicePageWidget"
+
+class "homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" {
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  -Device _device
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +void initState()
+  +Widget build()
+}
+
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "homeapp::model::Devices.dart::Device"
+"homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::FunctionalityPages::addDevicePage.dart::_AddDevicePageWidgetState"
+
+class "homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::PhilipsLight" {
+  +State<PhilipsLight> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::PhilipsLight"
+
+class "homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::_PhilipsLightState" {
+  {static} +double padding
+  +bool isLoading
+  +List<String> bridges
+  +List<String> bridgeIps
+  +DiscoveryTimeoutController timeoutController
+  +void Function()? onContactCancel
+  +Bridge? bridge
+  +HueNetwork? hueNetwork
+  +Light? light
+  +StreamSubscription<dynamic> deepLinkStream
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +Widget sectionHeader()
+  +void showIps()
+  +dynamic discoverBridges()
+  +dynamic firstContact()
+  +dynamic remoteContact()
+  +dynamic fetchNetwork()
+  +dynamic fetchBridge()
+  +dynamic fetchLight()
+  +dynamic identifyLight()
+  +dynamic toggleLight()
+  +dynamic colorLight()
+}
+
+"homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::_PhilipsLightState" o-- "flutter_hue::domain::repos::bridge_discovery_repo.dart::DiscoveryTimeoutController"
+"homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::_PhilipsLightState" o-- "dart::ui::void Function()"
+"homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::_PhilipsLightState" o-- "flutter_hue::domain::models::bridge::bridge.dart::Bridge"
+"homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::_PhilipsLightState" o-- "flutter_hue::domain::models::hue_network.dart::HueNetwork"
+"homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::_PhilipsLightState" o-- "flutter_hue::domain::models::light::light.dart::Light"
+"homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::_PhilipsLightState" o-- "dart::async::StreamSubscription<dynamic>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::FunctionalityPages::PhilipsHueLight.dart::_PhilipsLightState"
+
+class "homeapp::Pages::FunctionalityPages::addHousePage.dart::AddHousePage" {
+  +_AddHousePageController createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::FunctionalityPages::addHousePage.dart::AddHousePage"
+
+class "homeapp::Pages::FunctionalityPages::addHousePage.dart::_AddHousePageController" {
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  -Device _device
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +void initState()
+  +Widget build()
+}
+
+"homeapp::Pages::FunctionalityPages::addHousePage.dart::_AddHousePageController" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::FunctionalityPages::addHousePage.dart::_AddHousePageController" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::FunctionalityPages::addHousePage.dart::_AddHousePageController" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::FunctionalityPages::addHousePage.dart::_AddHousePageController" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::FunctionalityPages::addHousePage.dart::_AddHousePageController" o-- "homeapp::model::Devices.dart::Device"
+"homeapp::Pages::FunctionalityPages::addHousePage.dart::_AddHousePageController" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::FunctionalityPages::addHousePage.dart::_AddHousePageController"
+
+class "homeapp::Pages::FunctionalityPages::functionality.dart::PopUpFunctionalityPageWidget" {
+  +_PopUpFunctionalityPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::FunctionalityPages::functionality.dart::PopUpFunctionalityPageWidget"
+
+class "homeapp::Pages::FunctionalityPages::functionality.dart::_PopUpFunctionalityPageWidgetState" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +Widget build()
+}
+
+"homeapp::Pages::FunctionalityPages::functionality.dart::_PopUpFunctionalityPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::FunctionalityPages::functionality.dart::_PopUpFunctionalityPageWidgetState"
+"flutter::src::widgets::ticker_provider.dart::TickerProviderStateMixin" <|-- "homeapp::Pages::FunctionalityPages::functionality.dart::_PopUpFunctionalityPageWidgetState"
+
+class "homeapp::Pages::FunctionalityPages::addQrCode.dart::AddQRFunctionalityTPageWidget" {
+  +_AddQRFunctionalityTPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::FunctionalityPages::addQrCode.dart::AddQRFunctionalityTPageWidget"
+
+class "homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" {
+  +TextEditingController deviceNameController
+  +TextEditingController serialNumberController
+  +TextEditingController typeController
+  +TextEditingController brandController
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  +dynamic qrCode
+  +RegExp regex
+  -File? _photo
+  -ImagePicker _picker
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +dynamic imgFromGallery()
+  +dynamic imgFromCamera()
+  +dynamic uploadFile()
+  +void initState()
+  +void getCurrentUser()
+  +dynamic addUserDeviceDetails()
+  +Widget build()
+  -void _showPicker()
+}
+
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "dart::io::File"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "image_picker::image_picker.dart::ImagePicker"
+"homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::FunctionalityPages::addQrCode.dart::_AddQRFunctionalityTPageWidgetState"
+
+class "homeapp::Pages::flutter_flow::flutter_flow_icon_button.dart::FlutterFlowIconButton" {
+  +double? borderRadius
+  +double? buttonSize
+  +Color? fillColor
+  +Color? borderColor
+  +double? borderWidth
+  +Widget icon
+  +void Function()? onPressed
+  +dynamic ontap
+  +Widget build()
+}
+
+"homeapp::Pages::flutter_flow::flutter_flow_icon_button.dart::FlutterFlowIconButton" o-- "dart::ui::Color"
+"homeapp::Pages::flutter_flow::flutter_flow_icon_button.dart::FlutterFlowIconButton" o-- "flutter::src::widgets::framework.dart::Widget"
+"homeapp::Pages::flutter_flow::flutter_flow_icon_button.dart::FlutterFlowIconButton" o-- "null::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "homeapp::Pages::flutter_flow::flutter_flow_icon_button.dart::FlutterFlowIconButton"
+
+abstract class "homeapp::Pages::flutter_flow::HomeAppTheme.dart::HomeAppTheme" {
+  +Color primaryColor
+  +Color secondaryColor
+  +Color tertiaryColor
+  +Color alternate
+  +Color primaryBackground
+  +Color secondaryBackground
+  +Color primaryText
+  +Color secondaryText
+  +Color primaryBtnText
+  +Color lineColor
+  +Color gray600
+  +Color black600
+  +Color tertiary400
+  {static} +ThemeMode themeMode
+  +TextStyle title1
+  +TextStyle title2
+  +TextStyle title3
+  +TextStyle subtitle1
+  +TextStyle subtitle2
+  +TextStyle bodyText1
+  +TextStyle bodyText2
+  {static} +dynamic initialize()
+  {static} +void saveThemeMode()
+  {static} +HomeAppTheme of()
+}
+
+"homeapp::Pages::flutter_flow::HomeAppTheme.dart::HomeAppTheme" o-- "dart::ui::Color"
+"homeapp::Pages::flutter_flow::HomeAppTheme.dart::HomeAppTheme" o-- "flutter::src::material::app.dart::ThemeMode"
+"homeapp::Pages::flutter_flow::HomeAppTheme.dart::HomeAppTheme" o-- "flutter::src::painting::text_style.dart::TextStyle"
+
+class "homeapp::Pages::flutter_flow::HomeAppTheme.dart::LightModeTheme" {
+  +Color primaryColor
+  +Color secondaryColor
+  +Color tertiaryColor
+  +Color alternate
+  +Color primaryBackground
+  +Color secondaryBackground
+  +Color primaryText
+  +Color secondaryText
+  +Color primaryBtnText
+  +Color lineColor
+  +Color gray600
+  +Color black600
+  +Color tertiary400
+}
+
+"homeapp::Pages::flutter_flow::HomeAppTheme.dart::LightModeTheme" o-- "dart::ui::Color"
+"homeapp::Pages::flutter_flow::HomeAppTheme.dart::HomeAppTheme" <|-- "homeapp::Pages::flutter_flow::HomeAppTheme.dart::LightModeTheme"
+
+class "homeapp::Pages::flutter_flow::HomeAppTheme.dart::DarkModeTheme" {
+  +Color primaryColor
+  +Color secondaryColor
+  +Color tertiaryColor
+  +Color alternate
+  +Color primaryBackground
+  +Color secondaryBackground
+  +Color primaryText
+  +Color secondaryText
+  +Color primaryBtnText
+  +Color lineColor
+}
+
+"homeapp::Pages::flutter_flow::HomeAppTheme.dart::DarkModeTheme" o-- "dart::ui::Color"
+"homeapp::Pages::flutter_flow::HomeAppTheme.dart::HomeAppTheme" <|-- "homeapp::Pages::flutter_flow::HomeAppTheme.dart::DarkModeTheme"
+
+class "homeapp::Pages::flutter_flow::flutter_flow_util.dart::FormatType" {
+  +int index
+  {static} +List<FormatType> values
+  {static} +FormatType decimal
+  {static} +FormatType percent
+  {static} +FormatType scientific
+  {static} +FormatType compact
+  {static} +FormatType compactLong
+  {static} +FormatType custom
+}
+
+"homeapp::Pages::flutter_flow::flutter_flow_util.dart::FormatType" o-- "homeapp::Pages::flutter_flow::flutter_flow_util.dart::FormatType"
+"dart::core::Enum" <|-- "homeapp::Pages::flutter_flow::flutter_flow_util.dart::FormatType"
+
+class "homeapp::Pages::flutter_flow::flutter_flow_util.dart::DecimalType" {
+  +int index
+  {static} +List<DecimalType> values
+  {static} +DecimalType automatic
+  {static} +DecimalType periodDecimal
+  {static} +DecimalType commaDecimal
+}
+
+"homeapp::Pages::flutter_flow::flutter_flow_util.dart::DecimalType" o-- "homeapp::Pages::flutter_flow::flutter_flow_util.dart::DecimalType"
+"dart::core::Enum" <|-- "homeapp::Pages::flutter_flow::flutter_flow_util.dart::DecimalType"
+
+class "homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationState" {
+  +Offset offset
+  +double opacity
+  +double scale
+}
+
+"homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationState" o-- "dart::ui::Offset"
+
+class "homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationInfo" {
+  +Curve curve
+  +AnimationTrigger trigger
+  +int duration
+  +int delay
+  +bool fadeIn
+  +AnimationState initialState
+  +AnimationState finalState
+  +CurvedAnimation curvedAnimation
+}
+
+"homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationInfo" o-- "flutter::src::animation::curves.dart::Curve"
+"homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationInfo" o-- "homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationTrigger"
+"homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationInfo" o-- "homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationState"
+"homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationInfo" o-- "flutter::src::animation::animations.dart::CurvedAnimation"
+
+class "homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationTrigger" {
+  +int index
+  {static} +List<AnimationTrigger> values
+  {static} +AnimationTrigger onPageLoad
+  {static} +AnimationTrigger onActionTrigger
+}
+
+"homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationTrigger" o-- "homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationTrigger"
+"dart::core::Enum" <|-- "homeapp::Pages::flutter_flow::flutter_flow_animations.dart::AnimationTrigger"
+
+class "homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonOptions" {
+  +TextStyle? textStyle
+  +double? elevation
+  +double? height
+  +double? width
+  +EdgeInsetsGeometry? padding
+  +Color? color
+  +Color? disabledColor
+  +Color? disabledTextColor
+  +Color? splashColor
+  +double? iconSize
+  +Color? iconColor
+  +EdgeInsetsGeometry? iconPadding
+  +double? borderRadius
+  +BorderSide? borderSide
+}
+
+"homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonOptions" o-- "flutter::src::painting::text_style.dart::TextStyle"
+"homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonOptions" o-- "flutter::src::painting::edge_insets.dart::EdgeInsetsGeometry"
+"homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonOptions" o-- "dart::ui::Color"
+"homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonOptions" o-- "flutter::src::painting::borders.dart::BorderSide"
+
+class "homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonWidget" {
+  +String text
+  +Widget? icon
+  +IconData? iconData
+  +dynamic Function() onPressed
+  +HomeAppButtonOptions options
+  +bool showLoadingIndicator
+  +State<HomeAppButtonWidget> createState()
+}
+
+"homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonWidget" o-- "flutter::src::widgets::framework.dart::Widget"
+"homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonWidget" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonWidget" o-- "null::dynamic Function()"
+"homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonWidget" o-- "homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonOptions"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::flutter_flow::homeAppWidgets.dart::HomeAppButtonWidget"
+
+class "homeapp::Pages::flutter_flow::homeAppWidgets.dart::_HomeAppButtonWidgetState" {
+  +bool loading
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::flutter_flow::homeAppWidgets.dart::_HomeAppButtonWidgetState"
+
+class "homeapp::Pages::StartingPages::startPage.dart::HomePageWidget" {
+  +_HomePageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::StartingPages::startPage.dart::HomePageWidget"
+
+class "homeapp::Pages::StartingPages::startPage.dart::_HomePageWidgetState" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  -Route<dynamic> _createRoute()
+  +Widget build()
+}
+
+"homeapp::Pages::StartingPages::startPage.dart::_HomePageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::StartingPages::startPage.dart::_HomePageWidgetState"
+
+class "homeapp::Pages::LoginPage::Login.dart::LoginPageWidget" {
+  +_LoginPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::LoginPage::Login.dart::LoginPageWidget"
+
+class "homeapp::Pages::LoginPage::Login.dart::_LoginPageWidgetState" {
+  +TextEditingController emailAddressController
+  +TextEditingController passwordLoginController
+  +TextEditingController passwordConfirmedLoginController
+  -FirebaseAuth _auth
+  -GlobalKey<FormState> _formKey
+  +bool isloading
+  +bool passwordLoginVisibility
+  +bool emailAddressVisibility
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +User currentUser
+  +dynamic Navigation()
+  +dynamic googleSignIn()
+  +String? getFirstName()
+  +String? getLastName()
+  +void getCurrentUser()
+  +dynamic errorMessage()
+  +dynamic signIn()
+  +dynamic addUserDetails()
+  -Route<dynamic> _createRoute()
+  +void initState()
+  +void dispose()
+  +Widget build()
+  +void showMessage()
+}
+
+"homeapp::Pages::LoginPage::Login.dart::_LoginPageWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::LoginPage::Login.dart::_LoginPageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::LoginPage::Login.dart::_LoginPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"homeapp::Pages::LoginPage::Login.dart::_LoginPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::LoginPage::Login.dart::_LoginPageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::LoginPage::Login.dart::_LoginPageWidgetState"
+
+class "homeapp::Pages::EditPages::tenant_edit.dart::TenantEditPageWidget" {
+  +_TenantEditPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::EditPages::tenant_edit.dart::TenantEditPageWidget"
+
+class "homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" {
+  +TextEditingController firstNameController
+  +TextEditingController lastNameController
+  +TextEditingController ageController
+  +TextEditingController addressController
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  -Authentication _authentication
+  +bool isImageAvailable
+  +String imageUrl
+  -bool _isModified
+  +GlobalKey<ScaffoldState> scaffoldKey
+  -File? _photo
+  -ImagePicker _picker
+  +void initState()
+  +void didChangeDependencies()
+  +dynamic imgFromGallery()
+  +dynamic fetchImage()
+  +dynamic imgFromCamera()
+  -void _showPicker()
+  +dynamic uploadFile()
+  +Widget build()
+  +void getCurrentUser()
+  +void addUserRole()
+  +void addUserAge()
+  +bool isUrlValid()
+}
+
+"homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" o-- "homeapp::Services::authentification.dart::Authentication"
+"homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" o-- "dart::io::File"
+"homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState" o-- "image_picker::image_picker.dart::ImagePicker"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::EditPages::tenant_edit.dart::_TenantEditPageWidgetState"
+
+class "homeapp::Pages::EditPages::homeowner_edit.dart::HomeownerEditPageWidget" {
+  +_HomeownerEditPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::EditPages::homeowner_edit.dart::HomeownerEditPageWidget"
+
+class "homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" {
+  +TextEditingController firstNameController
+  +TextEditingController lastNameController
+  +TextEditingController ageController
+  +TextEditingController addressController
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  -Authentication _authentication
+  +bool isImageAvailable
+  +String imageUrl
+  -bool _isModified
+  +GlobalKey<ScaffoldState> scaffoldKey
+  -File? _photo
+  -ImagePicker _picker
+  +void initState()
+  +void didChangeDependencies()
+  +dynamic imgFromGallery()
+  +dynamic fetchImage()
+  +dynamic imgFromCamera()
+  -void _showPicker()
+  +dynamic uploadFile()
+  +Widget build()
+  +void getCurrentUser()
+  +void addUserRole()
+  +void addUserAge()
+  +bool isUrlValid()
+}
+
+"homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" o-- "homeapp::Services::authentification.dart::Authentication"
+"homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" o-- "dart::io::File"
+"homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState" o-- "image_picker::image_picker.dart::ImagePicker"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::EditPages::homeowner_edit.dart::_HomeownerEditPageWidgetState"
+
+class "homeapp::Pages::EditPages::landlord_edit.dart::LandlordEditPageWidget" {
+  +_LandlordEditPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::EditPages::landlord_edit.dart::LandlordEditPageWidget"
+
+class "homeapp::Pages::EditPages::landlord_edit.dart::_LandlordEditPageWidgetState" {
+  +TextEditingController firstNameController
+  +TextEditingController lastNameController
+  +TextEditingController ageController
+  +TextEditingController addressController
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  -Authentication _authentication
+  +bool isImageAvailable
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +void initState()
+  +Widget build()
+  +void getCurrentUser()
+  +void addUserRole()
+  +void addUserAge()
+}
+
+"homeapp::Pages::EditPages::landlord_edit.dart::_LandlordEditPageWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::EditPages::landlord_edit.dart::_LandlordEditPageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::EditPages::landlord_edit.dart::_LandlordEditPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::EditPages::landlord_edit.dart::_LandlordEditPageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::EditPages::landlord_edit.dart::_LandlordEditPageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::EditPages::landlord_edit.dart::_LandlordEditPageWidgetState" o-- "homeapp::Services::authentification.dart::Authentication"
+"homeapp::Pages::EditPages::landlord_edit.dart::_LandlordEditPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::EditPages::landlord_edit.dart::_LandlordEditPageWidgetState"
+
+class "homeapp::Pages::Requests::SendRequest.dart::TenantRequestsWidget" {
+  +_TenantRequestsWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::Requests::SendRequest.dart::TenantRequestsWidget"
+
+class "homeapp::Pages::Requests::SendRequest.dart::_TenantRequestsWidgetState" {
+  +TextEditingController? textController
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +void initState()
+  +void dispose()
+  +Widget build()
+}
+
+"homeapp::Pages::Requests::SendRequest.dart::_TenantRequestsWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::Requests::SendRequest.dart::_TenantRequestsWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::Requests::SendRequest.dart::_TenantRequestsWidgetState"
+
+class "homeapp::Pages::Requests::ReceivedRequest.dart::LandlordRequestReceivedWidget" {
+  +_LandlordRequestReceivedWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::Requests::ReceivedRequest.dart::LandlordRequestReceivedWidget"
+
+class "homeapp::Pages::Requests::ReceivedRequest.dart::_LandlordRequestReceivedWidgetState" {
+  -FocusNode _unfocusNode
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +void dispose()
+  +Widget build()
+}
+
+"homeapp::Pages::Requests::ReceivedRequest.dart::_LandlordRequestReceivedWidgetState" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"homeapp::Pages::Requests::ReceivedRequest.dart::_LandlordRequestReceivedWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::Requests::ReceivedRequest.dart::_LandlordRequestReceivedWidgetState"
+"flutter::src::widgets::ticker_provider.dart::TickerProviderStateMixin" <|-- "homeapp::Pages::Requests::ReceivedRequest.dart::_LandlordRequestReceivedWidgetState"
+
+class "homeapp::Pages::Register::Photo.dart::AddPhotoWidget" {
+  +_AddPhotoWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::Register::Photo.dart::AddPhotoWidget"
+
+class "homeapp::Pages::Register::Photo.dart::_AddPhotoWidgetState" {
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  -File? _photo
+  -ImagePicker _picker
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +dynamic imgFromGallery()
+  +dynamic imgFromCamera()
+  +dynamic uploadFile()
+  +void initState()
+  +void getCurrentUser()
+  +dynamic addUserDetails()
+  +Widget build()
+  -void _showPicker()
+}
+
+"homeapp::Pages::Register::Photo.dart::_AddPhotoWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::Register::Photo.dart::_AddPhotoWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::Register::Photo.dart::_AddPhotoWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::Register::Photo.dart::_AddPhotoWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::Register::Photo.dart::_AddPhotoWidgetState" o-- "dart::io::File"
+"homeapp::Pages::Register::Photo.dart::_AddPhotoWidgetState" o-- "image_picker::image_picker.dart::ImagePicker"
+"homeapp::Pages::Register::Photo.dart::_AddPhotoWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::Register::Photo.dart::_AddPhotoWidgetState"
+
+class "homeapp::Pages::Register::Register.dart::RegisterPageWidget" {
+  +_RegisterPageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::Register::Register.dart::RegisterPageWidget"
+
+class "homeapp::Pages::Register::Register.dart::_RegisterPageWidgetState" {
+  +TextEditingController? confirmPasswordController
+  +bool confirmPasswordVisibility
+  +TextEditingController emailAddressController
+  +TextEditingController passwordController
+  +TextEditingController firstNameController
+  +TextEditingController lastNameController
+  +TextEditingController ageController
+  +bool passwordVisibility
+  +GlobalKey<ScaffoldState> scaffoldKey
+  -FirebaseAuth _auth
+  +GlobalKey<FormState> formkey
+  +bool isloading
+  +User currentUser
+  {static} -Users _user
+  +void initState()
+  +void getCurrentUser()
+  +dynamic errorMessage()
+  +bool isValidEmail()
+  +bool emailConfirmed()
+  +bool firstNameConfirmed()
+  +bool lastNameConfirmed()
+  +bool ageConfirmed()
+  +void dispose()
+  +dynamic addUserDetails()
+  +bool confirmedPassword()
+  +dynamic signUp()
+  -dynamic _onWillPop()
+  +Widget build()
+  +void addUser()
+}
+
+"homeapp::Pages::Register::Register.dart::_RegisterPageWidgetState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::Register::Register.dart::_RegisterPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::Register::Register.dart::_RegisterPageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::Register::Register.dart::_RegisterPageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"homeapp::Pages::Register::Register.dart::_RegisterPageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::Register::Register.dart::_RegisterPageWidgetState" o-- "homeapp::model::User.dart::Users"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::Register::Register.dart::_RegisterPageWidgetState"
+
+class "homeapp::Pages::Register::Address.dart::Address" {
+  +bool fromRegister
+  +_Address createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::Register::Address.dart::Address"
+
+class "homeapp::Pages::Register::Address.dart::_Address" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +TextEditingController streetController
+  +TextEditingController numberController
+  +TextEditingController zipCodeController
+  +TextEditingController townController
+  -Completer<GoogleMapController> _cntr
+  +String googleApikey
+  +GoogleMapController? mapController
+  +CameraPosition? cameraPosition
+  +LatLng startLocation
+  +Placemark locationName
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +User currentUser
+  +String addressMade
+  -String? _currentAddress
+  -Position _currentPosition
+  +bool mapToggle
+  +bool loading
+  +String strLatLong
+  +String strAlamat
+  +LocationSettings locationSettings
+  +void initState()
+  -dynamic _getGeoLocationPosition()
+  +dynamic getAddressFromLongLat()
+  -void _onMapCreated()
+  +Widget build()
+  +dynamic addUserDetails()
+  +void updateAddress()
+  +dynamic addZipCode()
+  +void getCurrentUser()
+  +dynamic checkAddressAlreadyExists()
+}
+
+"homeapp::Pages::Register::Address.dart::_Address" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "dart::async::Completer<GoogleMapController>"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "google_maps_flutter::google_maps_flutter.dart::GoogleMapController"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "google_maps_flutter_platform_interface::src::types::camera.dart::CameraPosition"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "google_maps_flutter_platform_interface::src::types::location.dart::LatLng"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "geocoding_platform_interface::src::models::placemark.dart::Placemark"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "geolocator_platform_interface::src::models::position.dart::Position"
+"homeapp::Pages::Register::Address.dart::_Address" o-- "geolocator_platform_interface::src::models::location_settings.dart::LocationSettings"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::Register::Address.dart::_Address"
+
+class "homeapp::Pages::Register::Address.dart::Geocoder" {
+}
+
+class "homeapp::Pages::Register::UploadPhoto.dart::ImageUploads" {
+  +_ImageUploadsState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::Register::UploadPhoto.dart::ImageUploads"
+
+class "homeapp::Pages::Register::UploadPhoto.dart::_ImageUploadsState" {
+  +FirebaseStorage storage
+  -File? _photo
+  -ImagePicker _picker
+  +dynamic imgFromGallery()
+  +dynamic imgFromCamera()
+  +dynamic uploadFile()
+  +Widget build()
+  -void _showPicker()
+}
+
+"homeapp::Pages::Register::UploadPhoto.dart::_ImageUploadsState" o-- "firebase_storage::firebase_storage.dart::FirebaseStorage"
+"homeapp::Pages::Register::UploadPhoto.dart::_ImageUploadsState" o-- "dart::io::File"
+"homeapp::Pages::Register::UploadPhoto.dart::_ImageUploadsState" o-- "image_picker::image_picker.dart::ImagePicker"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::Register::UploadPhoto.dart::_ImageUploadsState"
+
+class "homeapp::Pages::Register::ChooseRole.dart::ChooseRoleWidget" {
+  +_ChooseRoleWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::Register::ChooseRole.dart::ChooseRoleWidget"
+
+class "homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState" {
+  -FocusNode _unfocusNode
+  +GlobalKey<ScaffoldState> scaffoldKey
+  -FirebaseAuth _auth
+  -FirebaseFirestore _firestore
+  +CollectionReference<Object?> userRef
+  +User currentUser
+  +String role
+  {static} -Users _user
+  +void dispose()
+  +void initState()
+  +Widget build()
+  +void addUserRole()
+  +void getCurrentUser()
+}
+
+"homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState" o-- "homeapp::model::User.dart::Users"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState"
+"flutter::src::widgets::ticker_provider.dart::TickerProviderStateMixin" <|-- "homeapp::Pages::Register::ChooseRole.dart::_ChooseRoleWidgetState"
+
+class "homeapp::Pages::NotificationPages::landlord_notification.dart::LandlordNotificationSettingsWidget" {
+  +_LandlordNotificationSettingsWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::NotificationPages::landlord_notification.dart::LandlordNotificationSettingsWidget"
+
+class "homeapp::Pages::NotificationPages::landlord_notification.dart::_LandlordNotificationSettingsWidgetState" {
+  +bool? switchListTileValue1
+  +bool? switchListTileValue2
+  +bool? switchListTileValue3
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +Widget build()
+}
+
+"homeapp::Pages::NotificationPages::landlord_notification.dart::_LandlordNotificationSettingsWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::NotificationPages::landlord_notification.dart::_LandlordNotificationSettingsWidgetState"
+
+class "homeapp::Pages::NotificationPages::homeowner_notification.dart::HomeownerNotificationSettingsWidget" {
+  +_HomeownerNotificationSettingsWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::NotificationPages::homeowner_notification.dart::HomeownerNotificationSettingsWidget"
+
+class "homeapp::Pages::NotificationPages::homeowner_notification.dart::_HomeownerNotificationSettingsWidgetState" {
+  +bool? switchListTileValue1
+  +bool? switchListTileValue2
+  +bool? switchListTileValue3
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +Widget build()
+}
+
+"homeapp::Pages::NotificationPages::homeowner_notification.dart::_HomeownerNotificationSettingsWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::NotificationPages::homeowner_notification.dart::_HomeownerNotificationSettingsWidgetState"
+
+class "homeapp::Pages::NotificationPages::tenant_notification.dart::TenantNotificationSettingsWidget" {
+  +_TenantNotificationSettingsWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::NotificationPages::tenant_notification.dart::TenantNotificationSettingsWidget"
+
+class "homeapp::Pages::NotificationPages::tenant_notification.dart::_TenantNotificationSettingsWidgetState" {
+  +bool? switchListTileValue1
+  +bool? switchListTileValue2
+  +bool? switchListTileValue3
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +Widget build()
+}
+
+"homeapp::Pages::NotificationPages::tenant_notification.dart::_TenantNotificationSettingsWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::NotificationPages::tenant_notification.dart::_TenantNotificationSettingsWidgetState"
+
+class "homeapp::Pages::HomePages::landlord.dart::LandlordHomePageWidget" {
+  +_LandlordHomePageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::HomePages::landlord.dart::LandlordHomePageWidget"
+
+class "homeapp::Pages::HomePages::landlord.dart::_LandlordHomePageWidgetState" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +bool isRefreshing
+  -Device _device
+  -Authentication _authentication
+  -FirebaseAuth _auth
+  +User currentUser
+  -List<Object> _devicesList
+  -FirebaseFirestore _firestore
+  -Device _devices
+  +DateTime now
+  +String? date
+  -bool _pinned
+  -bool _snap
+  -bool _floating
+  +dynamic didChangeDependencies()
+  +dynamic addUserDetails()
+  +Widget build()
+  -void _addDevice()
+  +void getCurrentUser()
+  +String getCurrentDate()
+  +dynamic getUsersDeviceList()
+  +dynamic refreshDevices()
+}
+
+"homeapp::Pages::HomePages::landlord.dart::_LandlordHomePageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::HomePages::landlord.dart::_LandlordHomePageWidgetState" o-- "homeapp::model::Devices.dart::Device"
+"homeapp::Pages::HomePages::landlord.dart::_LandlordHomePageWidgetState" o-- "homeapp::Services::authentification.dart::Authentication"
+"homeapp::Pages::HomePages::landlord.dart::_LandlordHomePageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::HomePages::landlord.dart::_LandlordHomePageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::HomePages::landlord.dart::_LandlordHomePageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::HomePages::landlord.dart::_LandlordHomePageWidgetState"
+
+class "homeapp::Pages::HomePages::landlordhome.dart::LandlordHomeDetailsWidget" {
+  +_LandlordHomeDetailsWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::HomePages::landlordhome.dart::LandlordHomeDetailsWidget"
+
+class "homeapp::Pages::HomePages::landlordhome.dart::_LandlordHomeDetailsWidgetState" {
+  -FocusNode _unfocusNode
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +void dispose()
+  +Widget build()
+}
+
+"homeapp::Pages::HomePages::landlordhome.dart::_LandlordHomeDetailsWidgetState" o-- "flutter::src::widgets::focus_manager.dart::FocusNode"
+"homeapp::Pages::HomePages::landlordhome.dart::_LandlordHomeDetailsWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::HomePages::landlordhome.dart::_LandlordHomeDetailsWidgetState"
+
+class "homeapp::Pages::HomePages::tenant.dart::TenantHomePageWidget" {
+  +_TenantHomePageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::HomePages::tenant.dart::TenantHomePageWidget"
+
+class "homeapp::Pages::HomePages::tenant.dart::_TenantHomePageWidgetState" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +bool isRefreshing
+  -Device _device
+  -Authentication _authentication
+  -FirebaseAuth _auth
+  +User currentUser
+  -List<Object> _devicesList
+  -FirebaseFirestore _firestore
+  -Device _devices
+  +DateTime now
+  +String? date
+  -bool _pinned
+  -bool _snap
+  -bool _floating
+  -bool _hasDevices
+  +void initState()
+  +dynamic didChangeDependencies()
+  +dynamic addUserDetails()
+  +Widget build()
+  -void _addDevice()
+  +void getCurrentUser()
+  +String getCurrentDate()
+  +dynamic getUsersDeviceList()
+  +dynamic refreshDevices()
+}
+
+"homeapp::Pages::HomePages::tenant.dart::_TenantHomePageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::HomePages::tenant.dart::_TenantHomePageWidgetState" o-- "homeapp::model::Devices.dart::Device"
+"homeapp::Pages::HomePages::tenant.dart::_TenantHomePageWidgetState" o-- "homeapp::Services::authentification.dart::Authentication"
+"homeapp::Pages::HomePages::tenant.dart::_TenantHomePageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::HomePages::tenant.dart::_TenantHomePageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::HomePages::tenant.dart::_TenantHomePageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::HomePages::tenant.dart::_TenantHomePageWidgetState"
+
+class "homeapp::Pages::HomePages::homeowner.dart::HomeownerHomePageWidget" {
+  +_HomeownerHomePageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::HomePages::homeowner.dart::HomeownerHomePageWidget"
+
+class "homeapp::Pages::HomePages::homeowner.dart::_HomeownerHomePageWidgetState" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +bool isRefreshing
+  -Device _device
+  -Authentication _authentication
+  -FirebaseAuth _auth
+  +User currentUser
+  -List<Object> _devicesList
+  -FirebaseFirestore _firestore
+  -Device _devices
+  +DateTime now
+  +String? date
+  -bool _pinned
+  -bool _snap
+  -bool _floating
+  +bool isImageAvailable
+  +String? image
+  +String imageUrl
+  -bool _hasDevices
+  +dynamic didChangeDependencies()
+  +void initState()
+  +dynamic fetchImage()
+  +dynamic addUserDetails()
+  +Widget build()
+  -void _addDevice()
+  +void getCurrentUser()
+  +String getCurrentDate()
+  +dynamic getUsersDeviceList()
+  +dynamic refreshDevices()
+  +bool isUrlValid()
+}
+
+"homeapp::Pages::HomePages::homeowner.dart::_HomeownerHomePageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::HomePages::homeowner.dart::_HomeownerHomePageWidgetState" o-- "homeapp::model::Devices.dart::Device"
+"homeapp::Pages::HomePages::homeowner.dart::_HomeownerHomePageWidgetState" o-- "homeapp::Services::authentification.dart::Authentication"
+"homeapp::Pages::HomePages::homeowner.dart::_HomeownerHomePageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::HomePages::homeowner.dart::_HomeownerHomePageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::HomePages::homeowner.dart::_HomeownerHomePageWidgetState" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::HomePages::homeowner.dart::_HomeownerHomePageWidgetState"
+
+class "homeapp::Pages::ProfilePages::landlord_profile.dart::LandlordProfilePageWidget" {
+  +_LandlordProfilePageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::ProfilePages::landlord_profile.dart::LandlordProfilePageWidget"
+
+class "homeapp::Pages::ProfilePages::landlord_profile.dart::_LandlordProfilePageWidgetState" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +dynamic signOut()
+  +Widget build()
+}
+
+"homeapp::Pages::ProfilePages::landlord_profile.dart::_LandlordProfilePageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::ProfilePages::landlord_profile.dart::_LandlordProfilePageWidgetState"
+
+class "homeapp::Pages::ProfilePages::homeowner_profile.dart::HomeownerProfilePageWidget" {
+  +_HomeownerProfilePageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::ProfilePages::homeowner_profile.dart::HomeownerProfilePageWidget"
+
+class "homeapp::Pages::ProfilePages::homeowner_profile.dart::_HomeownerProfilePageWidgetState" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  -FirebaseAuth _auth
+  +User currentUser
+  +String url
+  -Authentication _authentication
+  +String imageUrl
+  +bool isImageAvailable
+  +dynamic didChangeDependencies()
+  +void initState()
+  +dynamic fetchImage()
+  +dynamic signOut()
+  +Widget build()
+  +void getCurrentUser()
+}
+
+"homeapp::Pages::ProfilePages::homeowner_profile.dart::_HomeownerProfilePageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::ProfilePages::homeowner_profile.dart::_HomeownerProfilePageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::ProfilePages::homeowner_profile.dart::_HomeownerProfilePageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::ProfilePages::homeowner_profile.dart::_HomeownerProfilePageWidgetState" o-- "homeapp::Services::authentification.dart::Authentication"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::ProfilePages::homeowner_profile.dart::_HomeownerProfilePageWidgetState"
+
+class "homeapp::Pages::ProfilePages::tenant_profile.dart::TenantProfilePageWidget" {
+  +_TenantProfilePageWidgetState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "homeapp::Pages::ProfilePages::tenant_profile.dart::TenantProfilePageWidget"
+
+class "homeapp::Pages::ProfilePages::tenant_profile.dart::_TenantProfilePageWidgetState" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  -FirebaseAuth _auth
+  +User currentUser
+  +String url
+  -Authentication _authentication
+  +String imageUrl
+  +bool isImageAvailable
+  +dynamic didChangeDependencies()
+  +void initState()
+  +dynamic fetchImage()
+  +dynamic signOut()
+  +Widget build()
+  +void getCurrentUser()
+}
+
+"homeapp::Pages::ProfilePages::tenant_profile.dart::_TenantProfilePageWidgetState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"homeapp::Pages::ProfilePages::tenant_profile.dart::_TenantProfilePageWidgetState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Pages::ProfilePages::tenant_profile.dart::_TenantProfilePageWidgetState" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Pages::ProfilePages::tenant_profile.dart::_TenantProfilePageWidgetState" o-- "homeapp::Services::authentification.dart::Authentication"
+"flutter::src::widgets::framework.dart::State" <|-- "homeapp::Pages::ProfilePages::tenant_profile.dart::_TenantProfilePageWidgetState"
+
+class "homeapp::Services::authentification.dart::Authentication" {
+  -FirebaseAuth _auth
+  +String? urlPath
+  +String? userRole
+  +String? userName
+  +dynamic getDataImage()
+  +dynamic getUserRole()
+  +dynamic handleAuthState()
+  +dynamic getProfileImage()
+  +dynamic getUserName()
+}
+
+"homeapp::Services::authentification.dart::Authentication" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+
+class "homeapp::Services::FirebaseService.dart::FirebaseService" {
+  -FirebaseAuth _auth
+  -GoogleSignIn _googleSignIn
+  +dynamic signInwithGoogle()
+  +dynamic signOutFromGoogle()
+}
+
+"homeapp::Services::FirebaseService.dart::FirebaseService" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Services::FirebaseService.dart::FirebaseService" o-- "google_sign_in::google_sign_in.dart::GoogleSignIn"
+
+class "homeapp::Services::DatabaseService.dart::DatabaseService" {
+  -Users _user
+  -FirebaseAuth _auth
+  +User currentUser
+  +String firstName
+  +CollectionReference<Object?> userCollection
+  +void getCurrentUser()
+  +dynamic updateUserData()
+  +dynamic getUserData()
+  +dynamic getUserField()
+  +String getFirstName()
+}
+
+"homeapp::Services::DatabaseService.dart::DatabaseService" o-- "homeapp::model::User.dart::Users"
+"homeapp::Services::DatabaseService.dart::DatabaseService" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"homeapp::Services::DatabaseService.dart::DatabaseService" o-- "firebase_auth::firebase_auth.dart::User"
+"homeapp::Services::DatabaseService.dart::DatabaseService" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+
+class "homeapp::Services::Animations.dart::Animations" {
+  +Widget page
+  +RouteAnimationType animationType
+}
+
+"homeapp::Services::Animations.dart::Animations" o-- "flutter::src::widgets::framework.dart::Widget"
+"homeapp::Services::Animations.dart::Animations" o-- "homeapp::Services::Animations.dart::RouteAnimationType"
+"flutter::src::widgets::pages.dart::PageRouteBuilder" <|-- "homeapp::Services::Animations.dart::Animations"
+
+class "homeapp::Services::Animations.dart::RouteAnimationType" {
+  +int index
+  {static} +List<RouteAnimationType> values
+  {static} +RouteAnimationType fade
+  {static} +RouteAnimationType slideFromRight
+  {static} +RouteAnimationType slideFromBottom
+}
+
+"homeapp::Services::Animations.dart::RouteAnimationType" o-- "homeapp::Services::Animations.dart::RouteAnimationType"
+"dart::core::Enum" <|-- "homeapp::Services::Animations.dart::RouteAnimationType"
+
+
+@enduml

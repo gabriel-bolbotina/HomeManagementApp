@@ -1,5 +1,5 @@
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,11 +26,11 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      backgroundColor: HomeAppTheme.of(context).primaryBackground,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          backgroundColor: HomeAppTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Column(
             mainAxisSize: MainAxisSize.max,
@@ -51,7 +51,7 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                         buttonSize: 44,
                         icon: Icon(
                           Icons.close_rounded,
-                          color: FlutterFlowTheme.of(context).black600,
+                          color: HomeAppTheme.of(context).black600,
                           size: 24,
                         ),
                         onPressed: () {
@@ -96,7 +96,7 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                             color: Color(0xFF4B39EF),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: FlutterFlowTheme.of(context)
+                              color: HomeAppTheme.of(context)
                                   .secondaryBackground,
                               width: 0,
                             ),
@@ -110,11 +110,11 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                               children: [
                                 Text(
                                   'Requests',
-                                  style: FlutterFlowTheme.of(context)
+                                  style: HomeAppTheme.of(context)
                                       .subtitle2
                                       .override(
                                     fontFamily: 'Poppins',
-                                    color: FlutterFlowTheme.of(context)
+                                    color: HomeAppTheme.of(context)
                                         .primaryBtnText,
                                     fontSize: 24,
                                   ),
@@ -125,7 +125,7 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                                   buttonSize: 46,
                                   icon: Icon(
                                     Icons.chevron_right_rounded,
-                                    color: FlutterFlowTheme.of(context)
+                                    color: HomeAppTheme.of(context)
                                         .primaryBtnText,
                                     size: 20,
                                   ),
@@ -157,11 +157,11 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                           width: MediaQuery.of(context).size.width * 0.9,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
+                            color: HomeAppTheme.of(context)
                                 .secondaryBackground,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: FlutterFlowTheme.of(context)
+                              color: HomeAppTheme.of(context)
                                   .secondaryBackground,
                               width: 0,
                             ),
@@ -175,7 +175,7 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                               children: [
                                 Text(
                                   'Change Home Photo',
-                                  style: FlutterFlowTheme.of(context).subtitle2,
+                                  style: HomeAppTheme.of(context).subtitle2,
                                 ),
                                 FlutterFlowIconButton(
                                   borderColor: Colors.transparent,
@@ -183,7 +183,7 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                                   buttonSize: 46,
                                   icon: Icon(
                                     Icons.chevron_right_rounded,
-                                    color: FlutterFlowTheme.of(context)
+                                    color: HomeAppTheme.of(context)
                                         .secondaryText,
                                     size: 20,
                                   ),
@@ -215,11 +215,11 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                           width: MediaQuery.of(context).size.width * 0.9,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
+                            color: HomeAppTheme.of(context)
                                 .secondaryBackground,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: FlutterFlowTheme.of(context)
+                              color: HomeAppTheme.of(context)
                                   .secondaryBackground,
                               width: 0,
                             ),
@@ -233,7 +233,7 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                               children: [
                                 Text(
                                   'Notification Settings',
-                                  style: FlutterFlowTheme.of(context).subtitle2,
+                                  style: HomeAppTheme.of(context).subtitle2,
                                 ),
                                 FlutterFlowIconButton(
                                   borderColor: Colors.transparent,
@@ -241,7 +241,7 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                                   buttonSize: 46,
                                   icon: Icon(
                                     Icons.chevron_right_rounded,
-                                    color: FlutterFlowTheme.of(context)
+                                    color: HomeAppTheme.of(context)
                                         .secondaryText,
                                     size: 20,
                                   ),
@@ -273,11 +273,11 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                           width: MediaQuery.of(context).size.width * 0.9,
                           height: 60,
                           decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
+                            color: HomeAppTheme.of(context)
                                 .secondaryBackground,
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
-                              color: FlutterFlowTheme.of(context)
+                              color: HomeAppTheme.of(context)
                                   .secondaryBackground,
                               width: 0,
                             ),
@@ -291,7 +291,7 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                               children: [
                                 Text(
                                   'Change Adress',
-                                  style: FlutterFlowTheme.of(context).subtitle2,
+                                  style: HomeAppTheme.of(context).subtitle2,
                                 ),
                                 FlutterFlowIconButton(
                                   borderColor: Colors.transparent,
@@ -299,7 +299,7 @@ class _LandlordHomeDetailsWidgetState extends State<LandlordHomeDetailsWidget> {
                                   buttonSize: 46,
                                   icon: Icon(
                                     Icons.chevron_right_rounded,
-                                    color: FlutterFlowTheme.of(context)
+                                    color: HomeAppTheme.of(context)
                                         .secondaryText,
                                     size: 20,
                                   ),

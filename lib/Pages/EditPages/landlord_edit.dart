@@ -9,9 +9,9 @@ import '../NotificationPages/homeowner_notification.dart';
 import '../ProfilePages/homeowner_profile.dart';
 import '../ProfilePages/landlord_profile.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -32,24 +32,32 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late final CollectionReference userRef;
   late final User currentUser;
-  Authentication _authentication = Authentication();
+  late Authentication _authentication;
+  bool isImageAvailable = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     // TODO: implement initState
     getCurrentUser();
+    _authentication = Authentication();
+    if(_authentication.getDataImage() != "") {
+      isImageAvailable = true;
+      print(_authentication.getDataImage());
+    } else {
+      isImageAvailable = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).lineColor,
+        backgroundColor: HomeAppTheme.of(context).primaryBackground,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).lineColor,
+            backgroundColor: HomeAppTheme.of(context).primaryBackground,
             automaticallyImplyLeading: false,
             leading: IconButton(
               icon: const Icon(
@@ -60,7 +68,7 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                      const HomeownerProfilePageWidget())),
+                      const LandlordProfilePageWidget())),
             ),
             centerTitle: false,
             elevation: 0,
@@ -80,24 +88,47 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                           shape: BoxShape.circle,
                         ),
                         alignment: Alignment.topRight,
-                        child: Image.network(
-                          _authentication.getProfileImage().toString(),
+                        child:  Visibility(
+                          visible: isImageAvailable,
+                            child: Image.network(_authentication.getDataImage()))
+
+
                         ),
-                      )),
+                      ),
+
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                    child: Container(
+                        width: 100,
+                        height: 100,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.topRight,
+                        child:  Visibility(
+                            visible: !isImageAvailable,
+                            child: CupertinoActivityIndicator())
+
+
+                    ),
+                  ),
+
+
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FFButtonWidget(
+                        HomeAppButtonWidget(
                           onPressed: () async {},
                           text: 'Change Photo',
-                          options: FFButtonOptions(
+                          options: HomeAppButtonOptions(
                             width: 130,
                             height: 40,
-                            color: FlutterFlowTheme.of(context).primaryBtnText,
-                            textStyle: FlutterFlowTheme.of(context).bodyText1,
+                            color: HomeAppTheme.of(context).primaryBtnText,
+                            textStyle: HomeAppTheme.of(context).bodyText1,
                             elevation: 1,
                             borderSide: const BorderSide(
                               color: Colors.transparent,
@@ -131,19 +162,19 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                             readOnly: false,
                             obscureText: false,
                             decoration: InputDecoration(
-                              labelStyle: FlutterFlowTheme.of(context).bodyText2,
+                              labelStyle: HomeAppTheme.of(context).bodyText2,
                               hintText: '${streamSnapshot.data!['first name']}',
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                              hintStyle: HomeAppTheme.of(context).bodyText2,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).primaryBackground,
+                                  color: HomeAppTheme.of(context).primaryBackground,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).primaryBackground,
+                                  color: HomeAppTheme.of(context).primaryBackground,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(8),
@@ -164,11 +195,11 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                               ),
                               filled: true,
                               fillColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                              HomeAppTheme.of(context).secondaryBackground,
                               contentPadding:
                               const EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: HomeAppTheme.of(context).bodyText1,
                             maxLines: null,
                           );
                         }),
@@ -195,19 +226,19 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                             readOnly: false,
                             obscureText: false,
                             decoration: InputDecoration(
-                              labelStyle: FlutterFlowTheme.of(context).bodyText2,
+                              labelStyle: HomeAppTheme.of(context).bodyText2,
                               hintText: '${streamSnapshot.data!['last name']}',
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                              hintStyle: HomeAppTheme.of(context).bodyText2,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).primaryBackground,
+                                  color: HomeAppTheme.of(context).primaryBackground,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).primaryBackground,
+                                  color: HomeAppTheme.of(context).primaryBackground,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(8),
@@ -228,11 +259,11 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                               ),
                               filled: true,
                               fillColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                              HomeAppTheme.of(context).secondaryBackground,
                               contentPadding:
                               const EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: HomeAppTheme.of(context).bodyText1,
                             maxLines: null,
                           );
                         }),
@@ -259,19 +290,19 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                             readOnly: false,
                             obscureText: false,
                             decoration: InputDecoration(
-                              labelStyle: FlutterFlowTheme.of(context).bodyText2,
+                              labelStyle: HomeAppTheme.of(context).bodyText2,
                               hintText: '${streamSnapshot.data!['age']}',
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                              hintStyle: HomeAppTheme.of(context).bodyText2,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).primaryBackground,
+                                  color: HomeAppTheme.of(context).primaryBackground,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).primaryBackground,
+                                  color: HomeAppTheme.of(context).primaryBackground,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(8),
@@ -292,11 +323,11 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                               ),
                               filled: true,
                               fillColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                              HomeAppTheme.of(context).secondaryBackground,
                               contentPadding:
                               const EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: HomeAppTheme.of(context).bodyText1,
                             maxLines: null,
                           );
                         }),
@@ -307,7 +338,7 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FFButtonWidget(
+                        HomeAppButtonWidget(
                           onPressed: () async {
                             if(firstNameController != null)
                               addUserRole('first name', firstNameController.text);
@@ -323,11 +354,11 @@ class _LandlordEditPageWidgetState extends State<LandlordEditPageWidget> {
 
                           },
                           text: 'Save Changes',
-                          options: FFButtonOptions(
+                          options: HomeAppButtonOptions(
                             width: 130,
                             height: 40,
-                            color: FlutterFlowTheme.of(context).primaryBtnText,
-                            textStyle: FlutterFlowTheme.of(context).bodyText1,
+                            color: HomeAppTheme.of(context).primaryBtnText,
+                            textStyle: HomeAppTheme.of(context).bodyText1,
                             elevation: 1,
                             borderSide: const BorderSide(
                               color: Colors.transparent,

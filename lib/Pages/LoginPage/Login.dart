@@ -8,9 +8,9 @@ import '../../Services/authentification.dart';
 import '../HomePages/homeowner.dart';
 import '../StartingPages/startPage.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:homeapp/Services/FirebaseService.dart';
@@ -28,8 +28,8 @@ class LoginPageWidget extends StatefulWidget {
 
 class _LoginPageWidgetState extends State<LoginPageWidget> {
   final emailAddressController = TextEditingController();
-  final passwordLoginController =TextEditingController();
-  final passwordConfirmedLoginController =TextEditingController() ;
+  final passwordLoginController = TextEditingController();
+  final passwordConfirmedLoginController = TextEditingController();
 
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
@@ -40,52 +40,32 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late User currentUser;
 
-
-
-
   Future Navigation() async {
     getCurrentUser();
 
-    var userRef = FirebaseFirestore.instance.collection("users").doc(
-        currentUser.uid);
+    var userRef =
+        FirebaseFirestore.instance.collection("users").doc(currentUser.uid);
     DocumentSnapshot doc = await userRef.get();
     final data = doc.data() as Map<String, dynamic>;
 
-
-/*
-    FireBaseFirestore.instance.collection("users).where("uid", isNotEqualTo : currentUser.uid)
-      {
-        addUserDetails(currentUser.uid, getFirstName(), getLastName());
-        Navigator.pushNamed(context, "address_screen");
-      }
-
-
-
- */
-
     if (data["address"] == '') {
       Navigator.pushNamed(context, "address_screen");
-    }
-
-    else if (data["address"] != '' && data["role"] == '') {
+    } else if (data["address"] != '' && data["role"] == '') {
       Navigator.pushNamed(context, "role_screen");
     }
 
-
-      if (data["role"] == "homeowner") {
-        Navigator.pushNamed(context, "homeowner_main");
-      }
-      if (data["role"] == "tenant") {
-        Navigator.pushNamed(context, "tenant_main");
-      }
-      if (data["role"] == "landlord") {
-        Navigator.pushNamed(context, "landlord_main");
-      }
-
+    if (data["role"] == "homeowner") {
+      Navigator.pushNamed(context, "homeowner_main");
+    }
+    if (data["role"] == "tenant") {
+      Navigator.pushNamed(context, "tenant_main");
+    }
+    if (data["role"] == "landlord") {
+      Navigator.pushNamed(context, "landlord_main");
+    }
   }
 
-
-  Future googleSignIn() async{
+  Future googleSignIn() async {
     setState(() {
       isloading = true;
     });
@@ -93,9 +73,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     try {
       await service.signInwithGoogle();
       Navigation();
-
-    } catch(e){
-      if(e is FirebaseAuthException){
+    } catch (e) {
+      if (e is FirebaseAuthException) {
         showMessage(e.message!);
       }
     }
@@ -103,43 +82,20 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     setState(() {
       isloading = false;
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   }
 
-
-
-
-
-
-  String? getFirstName()
-  {
+  String? getFirstName() {
     String firstName;
     getCurrentUser();
-    List<String> spiltName =currentUser.displayName!.split(" ");
+    List<String> spiltName = currentUser.displayName!.split(" ");
     firstName = spiltName[0];
     return firstName;
-
   }
 
-  String? getLastName()
-  {
+  String? getLastName() {
     String lastName;
     getCurrentUser();
-    List<String> spiltName =currentUser.displayName!.split(" ");
+    List<String> spiltName = currentUser.displayName!.split(" ");
     lastName = spiltName[1];
     return lastName;
   }
@@ -156,17 +112,15 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     }
   }
 
-
-  
-  Future errorMessage(String message)
-  async {
+  Future errorMessage(String message) async {
     return await showDialog(
       context: context,
-      builder: (context) =>
-      new AlertDialog(
-          title: new Text(message,
+      builder: (context) => new AlertDialog(
+          title: new Text(
+            message,
             selectionColor: CupertinoColors.systemGrey,
-            style: TextStyle(color: Colors.grey, fontFamily: 'Lexend Deca', fontSize: 15),
+            style: TextStyle(
+                color: Colors.grey, fontFamily: 'Lexend Deca', fontSize: 15),
           ),
           backgroundColor: Colors.white,
           actions: <Widget>[
@@ -174,59 +128,49 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               onPressed: () => Navigator.pop(context),
               child: new Text('OK'),
             ),
-          ]
-      ),
+          ]),
     );
   }
 
-  Future signIn() async{
-      try {
-        final credential = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-            email: emailAddressController.text.trim(),
-            password: passwordLoginController.text.trim()
-        );
-        Navigation();
-
-
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-          errorMessage("Incorrect credentials!") ?? false;
-        } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
-        }
+  Future signIn() async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailAddressController.text.trim(),
+          password: passwordLoginController.text.trim());
+      Navigation();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+        errorMessage("Incorrect credentials!") ?? false;
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
       }
-
-
+    }
   }
 
-  Future addUserDetails(String uid,
-      String? firstName, String? lastName) async {
+  Future addUserDetails(String uid, String? firstName, String? lastName) async {
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
-      'uid' : uid,
+      'uid': uid,
       'first name': firstName ?? "",
       'last name': lastName,
       'age': "",
       'role': 'o',
-      'address' : '',
+      'address': '',
       'zip code': '',
       'uploadedImage': '',
-
     });
   }
 
   Route _createRoute() {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          HomePageWidget(),
+      pageBuilder: (context, animation, secondaryAnimation) => HomePageWidget(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;
         const curve = Curves.ease;
 
-        var tween = Tween(begin: begin, end: end).chain(
-            CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
           position: animation.drive(tween),
@@ -235,6 +179,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       },
     );
   }
+
   @override
   void initState() {
     super.initState();
@@ -253,18 +198,18 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
-        backgroundColor: Color(0xFFF1F4F8),
+        backgroundColor: HomeAppTheme.of(context).primaryBackground,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: AppBar(
             leading: IconButton(
-              icon: Icon(Icons.arrow_back,
-                color: CupertinoColors.systemGrey,),
-              onPressed: () =>{ Navigator.of(context).push(_createRoute())},
+              icon: Icon(
+                Icons.arrow_back,
+                color: CupertinoColors.systemGrey,
+              ),
+              onPressed: () => {Navigator.of(context).push(_createRoute())},
             ),
-            backgroundColor: FlutterFlowTheme
-                .of(context)
-                .primaryBackground,
+            backgroundColor: HomeAppTheme.of(context).primaryBackground,
             automaticallyImplyLeading: false,
             title: Align(
               alignment: AlignmentDirectional(-0.3, -0.05),
@@ -288,9 +233,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             buttonSize: 50,
                             icon: Icon(
                               Icons.arrow_back_rounded,
-                              color: FlutterFlowTheme
-                                  .of(context)
-                                  .gray600,
+                              color: HomeAppTheme.of(context).gray600,
                               size: 24,
                             ),
                             onPressed: () async {
@@ -302,17 +245,12 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
                           child: Text(
                             'Back',
-                            style: FlutterFlowTheme
-                                .of(context)
-                                .title1
-                                .override(
-                              fontFamily: 'Outfit',
-                              color: FlutterFlowTheme
-                                  .of(context)
-                                  .gray600,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: HomeAppTheme.of(context).title1.override(
+                                  fontFamily: 'Outfit',
+                                  color: HomeAppTheme.of(context).gray600,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
                           ),
                         ),
                       ],
@@ -342,15 +280,14 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
                             child: Text(
                               'Access your account by logging in below.',
-                              style: FlutterFlowTheme
-                                  .of(context)
+                              style: HomeAppTheme.of(context)
                                   .subtitle2
                                   .override(
-                                fontFamily: 'Outfit',
-                                color: Color(0xFF57636C),
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                              ),
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF57636C),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                             ),
                           ),
                         ),
@@ -375,33 +312,28 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       ),
                       child: TextFormField(
                         controller: emailAddressController,
-                        validator: (value) => (value!.isEmpty)
-                            ? 'Please enter email'
-                            : null,
+                        validator: (value) =>
+                            (value!.isEmpty) ? 'Please enter email' : null,
                         maxLines: 1,
                         obscureText: false,
                         //obscureText: !emailAddressVisibility,
                         decoration: InputDecoration(
                           labelText: 'Your email address...',
-                          labelStyle: FlutterFlowTheme
-                              .of(context)
-                              .bodyText2
-                              .override(
-                            fontFamily: 'Outfit',
-                            color: Color(0xFF57636C),
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
+                          labelStyle:
+                              HomeAppTheme.of(context).bodyText2.override(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF57636C),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                           hintText: 'Enter your email...',
-                          hintStyle: FlutterFlowTheme
-                              .of(context)
-                              .bodyText1
-                              .override(
-                            fontFamily: 'Lexend Deca',
-                            color: Color(0xFF57636C),
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
+                          hintStyle:
+                              HomeAppTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Lexend Deca',
+                                    color: Color(0xFF57636C),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Color(0x00000000),
@@ -433,19 +365,15 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           filled: true,
                           fillColor: Colors.white,
                           contentPadding:
-                          EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                              EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                         ),
-                        style: FlutterFlowTheme
-                            .of(context)
-                            .bodyText1
-                            .override(
-                          fontFamily: 'Outfit',
-                          color: Color(0xFF0F1113),
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        expands:  false,
-
+                        style: HomeAppTheme.of(context).bodyText1.override(
+                              fontFamily: 'Outfit',
+                              color: Color(0xFF0F1113),
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                            ),
+                        expands: false,
                       ),
                     ),
                   ),
@@ -470,25 +398,21 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                         obscureText: !passwordLoginVisibility,
                         decoration: InputDecoration(
                           labelText: 'Password',
-                          labelStyle: FlutterFlowTheme
-                              .of(context)
-                              .bodyText2
-                              .override(
-                            fontFamily: 'Outfit',
-                            color: Color(0xFF57636C),
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
+                          labelStyle:
+                              HomeAppTheme.of(context).bodyText2.override(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF57636C),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                           hintText: 'Please enter your password...',
-                          hintStyle: FlutterFlowTheme
-                              .of(context)
-                              .bodyText1
-                              .override(
-                            fontFamily: 'Lexend Deca',
-                            color: Color(0xFF57636C),
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
+                          hintStyle:
+                              HomeAppTheme.of(context).bodyText1.override(
+                                    fontFamily: 'Lexend Deca',
+                                    color: Color(0xFF57636C),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Color(0x00000000),
@@ -520,13 +444,12 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                           filled: true,
                           fillColor: Colors.white,
                           contentPadding:
-                          EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                              EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                           suffixIcon: InkWell(
-                            onTap: () =>
-                                setState(
-                                      () =>
-                                  passwordLoginVisibility = !passwordLoginVisibility,
-                                ),
+                            onTap: () => setState(
+                              () => passwordLoginVisibility =
+                                  !passwordLoginVisibility,
+                            ),
                             focusNode: FocusNode(skipTraversal: true),
                             child: Icon(
                               passwordLoginVisibility
@@ -537,117 +460,80 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             ),
                           ),
                         ),
-                        style: FlutterFlowTheme
-                            .of(context)
-                            .bodyText1
-                            .override(
-                          fontFamily: 'Outfit',
-                          color: Color(0xFF0F1113),
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
+                        style: HomeAppTheme.of(context).bodyText1.override(
+                              fontFamily: 'Outfit',
+                              color: Color(0xFF0F1113),
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                            ),
                         maxLines: 1,
                         expands: false,
                       ),
                     ),
                   ),
-
-
-
-
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
-                    child: FFButtonWidget(
+                    child: HomeAppButtonWidget(
                       //implementam cu firebase
 
                       onPressed: () {
                         signIn();
-
                       },
                       text: 'Login',
-                      options: FFButtonOptions(
+                      options: HomeAppButtonOptions(
                         width: 270,
                         height: 50,
-                        color: const Color.fromARGB(90, 123, 192, 9),
-                        textStyle: FlutterFlowTheme
-                            .of(context)
+                        color: HomeAppTheme.of(context).primaryColor,
+                        textStyle: HomeAppTheme.of(context)
                             .subtitle2
                             .override(
-                          fontFamily: 'Outfit',
-                          color: FlutterFlowTheme
-                              .of(context)
-                              .primaryBtnText,
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
-                        ),
+                              fontFamily: 'Poppins',
+                              color: HomeAppTheme.of(context).primaryText,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
                         elevation: 3,
                         borderSide: BorderSide(
                           width: 1,
+                          color: Colors.transparent,
                         ),
                         borderRadius: 20,
                       ),
                     ),
-
                   ),
                   Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
-                      child:
-                      SignInButton(
-                        Buttons.Google,
-                        text: "Sign in with Google",
-                        onPressed: () {
-                          googleSignIn();
-
-                        }
-
-                      )
-                  ),
+                      child: SignInButton(Buttons.Google,
+                          text: "Sign in with Google", onPressed: () {
+                        googleSignIn();
+                      })),
                   SizedBox(height: 10),
-
-
-
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
-                      //implementam cu firebase
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [GestureDetector(
-                        onTap: ()
-                    {
-                      print("forgot password");
-                    },
-                        child: Text(
-                       'Forgot password?',
-                        style: TextStyle(
-                        color: CupertinoColors.black,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        )
-
-                        ),
-
-
-                    ]
-                    ),
-
+                        //implementam cu firebase
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                print("forgot password");
+                              },
+                              child: Text(
+                                'Forgot password?',
+                                style: TextStyle(
+                                  color: CupertinoColors.black,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )),
+                        ]),
                   ),
-
-
-
-
-
-
                 ],
               ),
-            )
-        )
-    );
+            )));
   }
 
   void showMessage(String s) {
     print(s);
   }
-
-
 }

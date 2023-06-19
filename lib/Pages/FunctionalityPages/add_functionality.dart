@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
+import 'package:homeapp/Pages/HomePages/homeowner.dart';
 import 'package:homeapp/Pages/HomePages/tenant.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
@@ -13,14 +14,21 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'dart:developer';
 
+import '../../Services/Animations.dart';
 import '../../Services/FirebaseService.dart';
+import '../../model/sampleDevice.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/HomeAppTheme.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 
+import 'package:homeapp/model/Devices.dart';
+
+
 class AddFunctionalityTPageWidget extends StatefulWidget {
-  const AddFunctionalityTPageWidget({Key? key}) : super(key: key);
+  final int _serialNumber;
+
+  AddFunctionalityTPageWidget(this._serialNumber,  {super.key});
 
   @override
   _AddFunctionalityTPageWidgetState createState() => _AddFunctionalityTPageWidgetState();
@@ -35,6 +43,8 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late final CollectionReference userRef;
   late final User currentUser;
+  late final Device _device;
+  late final List<Device> _devicesList;
 
   File? _photo;
   final ImagePicker _picker = ImagePicker();
@@ -79,7 +89,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
       final taskSnapshot = await uploadTask;
 
       final _fileURL = await taskSnapshot.ref.getDownloadURL();
-      await FirebaseFirestore.instance.collection("users").doc(currentUser.uid).collection("devices").doc(deviceNameController.text).update(
+      await FirebaseFirestore.instance.collection("users").doc(currentUser.uid).collection("devices").doc(_device.deviceName).update(
         {
           'uploadedImage' : _fileURL
         }
@@ -93,6 +103,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
   void initState() {
     // TODO: implement initState
     getCurrentUser();
+    getUserDevice();
   }
   void getCurrentUser() async {
     try {
@@ -115,6 +126,24 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
       'type': type,
       'brand': brand,
       'uploadedImage': '',
+      'timestamp' : FieldValue.serverTimestamp()
+    });
+  }
+
+  Future getUserDevice() async {
+    getCurrentUser();
+    var uid = currentUser.uid;
+    var data = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .collection("devices")
+        .orderBy('device name', descending: true)
+        .get();
+
+    setState(() {
+      _devicesList =
+          List.from(data.docs.map((doc) => Device.fromSnapshot(doc)));
+      _device = _devicesList.firstWhere((Device) => Device.serialNumber == 123);
     });
   }
 
@@ -122,11 +151,11 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).lineColor,
+        backgroundColor: HomeAppTheme.of(context).primaryBackground,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).lineColor,
+            backgroundColor: HomeAppTheme.of(context).primaryBackground,
             automaticallyImplyLeading: false,
             leading: IconButton(
               icon: const Icon(
@@ -177,13 +206,47 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                     ),
                   ),
                 ),
-                Padding(
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
+              child: Container(
+                constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width,
+                  maxHeight: 100,
+                ),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: ImageAssets.imageList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    String imagePath = ImageAssets.imageList[index];
+                    return GestureDetector(
+                      onTap: () {
+                        // Handle the tap event for the first image
+                        // You can perform any action, such as setting the selected image or opening a dialog
+                      },
+                      child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            imagePath,
+                            width: 100.0,
+                            height: 100.0,
+                          )
+
+
+                        // Add more Image widgets for additional ima
+                      ),
+                    );
+                  }
+                      ),
+              )
+                    ),
+
+            Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
                   child: Container(
                     width: double.infinity,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme
+                      color: HomeAppTheme
                           .of(context)
                           .secondaryBackground,
                       boxShadow: const [
@@ -199,22 +262,22 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                       controller: deviceNameController,
                       validator: (value) =>
                       (value!.isEmpty)
-                          ? 'Please enter device name'
+                          ? '$_auth.'
                           : null,
 
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Your device name ...',
-                        labelStyle: FlutterFlowTheme
+                        labelText: _device.deviceName,
+                        labelStyle: HomeAppTheme
                             .of(context)
                             .bodyText2,
                         hintText: 'Enter device name...',
-                        hintStyle: FlutterFlowTheme
+                        hintStyle: HomeAppTheme
                             .of(context)
                             .bodyText1
                             .override(
                           fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme
+                          color: HomeAppTheme
                               .of(context)
                               .secondaryText,
                           fontSize: 14,
@@ -249,13 +312,13 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                           borderRadius: BorderRadius.circular(12),
                         ),
                         filled: true,
-                        fillColor: FlutterFlowTheme
+                        fillColor: HomeAppTheme
                             .of(context)
                             .secondaryBackground,
                         contentPadding:
                         EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                       ),
-                      style: FlutterFlowTheme
+                      style: HomeAppTheme
                           .of(context)
                           .bodyText1,
                       maxLines: 1,
@@ -269,7 +332,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                     width: double.infinity,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme
+                      color: HomeAppTheme
                           .of(context)
                           .secondaryBackground,
                       boxShadow: const [
@@ -285,22 +348,22 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                       controller: serialNumberController,
                       validator: (value) =>
                       (value!.isEmpty)
-                          ? 'Please enter serial number'
+                          ? ''
                           : null,
 
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Device serial number ...',
-                        labelStyle: FlutterFlowTheme
+                        labelText: _device.serialNumber.toString(),
+                        labelStyle: HomeAppTheme
                             .of(context)
                             .bodyText2,
                         hintText: 'Enter device serial number...',
-                        hintStyle: FlutterFlowTheme
+                        hintStyle: HomeAppTheme
                             .of(context)
                             .bodyText1
                             .override(
                           fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme
+                          color: HomeAppTheme
                               .of(context)
                               .secondaryText,
                           fontSize: 14,
@@ -335,13 +398,13 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                           borderRadius: BorderRadius.circular(12),
                         ),
                         filled: true,
-                        fillColor: FlutterFlowTheme
+                        fillColor: HomeAppTheme
                             .of(context)
                             .secondaryBackground,
                         contentPadding:
                         EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                       ),
-                      style: FlutterFlowTheme
+                      style: HomeAppTheme
                           .of(context)
                           .bodyText1,
                       maxLines: 1,
@@ -355,7 +418,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                     width: double.infinity,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme
+                      color: HomeAppTheme
                           .of(context)
                           .secondaryBackground,
                       boxShadow: const [
@@ -376,17 +439,17 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
 
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Your device type ...',
-                        labelStyle: FlutterFlowTheme
+                        labelText: _device.type,
+                        labelStyle: HomeAppTheme
                             .of(context)
                             .bodyText2,
                         hintText: 'Enter device type...',
-                        hintStyle: FlutterFlowTheme
+                        hintStyle: HomeAppTheme
                             .of(context)
                             .bodyText1
                             .override(
                           fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme
+                          color: HomeAppTheme
                               .of(context)
                               .secondaryText,
                           fontSize: 14,
@@ -421,13 +484,13 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                           borderRadius: BorderRadius.circular(12),
                         ),
                         filled: true,
-                        fillColor: FlutterFlowTheme
+                        fillColor: HomeAppTheme
                             .of(context)
                             .secondaryBackground,
                         contentPadding:
                         EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                       ),
-                      style: FlutterFlowTheme
+                      style: HomeAppTheme
                           .of(context)
                           .bodyText1,
                       maxLines: 1,
@@ -441,7 +504,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                     width: double.infinity,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme
+                      color: HomeAppTheme
                           .of(context)
                           .secondaryBackground,
                       boxShadow: const [
@@ -462,17 +525,17 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
 
                       obscureText: false,
                       decoration: InputDecoration(
-                        labelText: 'Your device brand ...',
-                        labelStyle: FlutterFlowTheme
+                        labelText: _device.brand,
+                        labelStyle: HomeAppTheme
                             .of(context)
                             .bodyText2,
                         hintText: 'Enter device brand...',
-                        hintStyle: FlutterFlowTheme
+                        hintStyle: HomeAppTheme
                             .of(context)
                             .bodyText1
                             .override(
                           fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme
+                          color: HomeAppTheme
                               .of(context)
                               .secondaryText,
                           fontSize: 14,
@@ -507,13 +570,13 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                           borderRadius: BorderRadius.circular(12),
                         ),
                         filled: true,
-                        fillColor: FlutterFlowTheme
+                        fillColor: HomeAppTheme
                             .of(context)
                             .secondaryBackground,
                         contentPadding:
                         EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
                       ),
-                      style: FlutterFlowTheme
+                      style: HomeAppTheme
                           .of(context)
                           .bodyText1,
                       maxLines: 1,
@@ -527,24 +590,29 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      FFButtonWidget(
+                      HomeAppButtonWidget(
                         onPressed: () async {
-                          if(deviceNameController.text != '') {
-                            addUserDetails(deviceNameController.text, int.parse(serialNumberController.text), typeController.text, brandController.text);
-                          }
+
                             uploadFile();
-                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                Animations(
+                                  page:
+                                  HomeownerHomePageWidget(),
+                                  animationType: RouteAnimationType
+                                      .slideFromBottom,
+                                ));
 
 
 
 
                         },
                         text: 'Save Changes',
-                        options: FFButtonOptions(
+                        options: HomeAppButtonOptions(
                           width: 130,
                           height: 40,
-                          color: FlutterFlowTheme.of(context).primaryBtnText,
-                          textStyle: FlutterFlowTheme.of(context).bodyText1,
+                          color: HomeAppTheme.of(context).primaryBtnText,
+                          textStyle: HomeAppTheme.of(context).bodyText1,
                           elevation: 1,
                           borderSide: const BorderSide(
                             color: Colors.transparent,
@@ -589,5 +657,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
           );
         });
   }
+
+
 
 }

@@ -1,11 +1,22 @@
+import 'dart:ui';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:homeapp/Pages/FunctionalityPages/addHousePage.dart';
 import 'package:homeapp/Pages/ProfilePages/landlord_profile.dart';
 import 'package:homeapp/Services/authentification.dart';
 
-import '../flutter_flow/flutter_flow_theme.dart';
+import '../../Services/Animations.dart';
+import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:homeapp/model/Devices.dart';
+import 'package:homeapp/reusables/device_card.dart';
 
 class LandlordHomePageWidget extends StatefulWidget {
   const LandlordHomePageWidget({Key? key}) : super(key: key);
@@ -16,311 +27,336 @@ class LandlordHomePageWidget extends StatefulWidget {
 
 class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  Authentication _auth = Authentication();
+  bool isRefreshing = false;
+  Device _device = Device();
+  final Authentication _authentication = Authentication();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late User currentUser;
+  List<Object> _devicesList = [];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  Device _devices = Device();
+  DateTime now = DateTime.now();
+  String? date;
+  final bool _pinned = true;
+  final bool _snap = false;
+  bool _floating = false;
+
+  @override
+  Future<void> didChangeDependencies() async {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    getUsersDeviceList();
+    await _authentication.getProfileImage();
+    await _authentication.getUserName();
+    date = getCurrentDate();
+  }
+
+  Future addUserDetails(String firstName, String lastName, int age) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'first name': firstName,
+      'last name': lastName,
+      'age': age,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          automaticallyImplyLeading: false,
-          title: Text(
-            'Hello, Xulescu',
-            style: FlutterFlowTheme.of(context).title2.override(
-              fontFamily: 'Poppins',
-              color: FlutterFlowTheme.of(context).black600,
-            ),
-          ),
+      backgroundColor: HomeAppTheme.of(context).primaryBackground,
+      body: RefreshIndicator(
+        onRefresh: refreshDevices,
+        child: CustomScrollView(slivers: <Widget>[
+          SliverAppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: HomeAppTheme.of(context).primaryBackground,
+              pinned: _pinned,
+              snap: _snap,
+              floating: _floating,
+              expandedHeight: size.height * 0.2,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.parallax,
+                background: Container(
+                  //crossAxisAlignment: CrossAxisAlignment.center,
+                    height: size.height * 0.2,
+                    child: Column(children: <Widget>[
+                      Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              20, 70, 0, 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              // menu icon
+                              //Image.asset(
+                              //'assets/images/iconapp.png',
+                              //height: 30,
+                              //color: Colors.grey[800],
+                              //),
+                              Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      10, 0, 0, 0),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          customBorder: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(100)),
+                                          onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                  const LandlordProfilePageWidget())), // Image tapped
+                                          splashColor: Colors
+                                              .white10, // Splash color over image
+                                          child: Ink(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(10),
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                    _authentication.urlPath
+                                                        ?.trim() ??
+                                                        ""),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            width: 65,
+                                            height: 65,
+                                          ),
+                                        ),
+                                      ])),
+                              //const SizedBox(height: 10),
+                              // account icon
+                              Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      20, 0, 0, 0),
+                                  child: RichText(
+                                    overflow: TextOverflow.visible,
+                                    text: TextSpan(
+                                      style:  TextStyle(
+                                        fontSize: 25.0,
+                                        color: HomeAppTheme.of(context).primaryText ,
+                                      ),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: "Welcome Home, \n",
+                                          style: TextStyle(
+                                              fontFamily: 'Fira Sans',
+                                              fontWeight: FontWeight.w600),
+                                          //color: FlutterFlowTheme.of(context).primaryText),
+                                        ),
 
-          centerTitle: false,
-          elevation: 0,
-        ),
+                                        TextSpan(
+                                            text: _authentication.userName ?? "",
+                                            style: const TextStyle(
+
+                                                fontFamily: 'Fira Sans',
+                                                fontWeight: FontWeight.w600)),
+                                        TextSpan(
+                                            text: " \n",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text: "$date",
+                                            style: const TextStyle(
+                                              fontSize: 14,fontFamily: 'Fira Sans',
+                                              fontWeight: FontWeight.w600,
+                                              //fontStyle: FontStyle.italic)
+                                            )),
+
+
+
+                                      ],
+                                    ),
+                                  )),
+                            ],
+                          ))
+                    ])),
+              )),
+          /*SliverToBoxAdapter(
+            child: RoomNamesWidget(),
+          ),*/
+          const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 20,
+              )),
+          SliverToBoxAdapter(
+              child: SizedBox(
+                  height: 20,
+                  child: Center(
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
+                        child: RichText(
+                          overflow: TextOverflow.visible,
+                          text: const TextSpan(
+                            text: "Your Devices",
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black38,
+                            ),
+                          ),
+                        ),
+                      )))),
+          const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 10,
+              )),
+          SliverGrid(
+            delegate:
+            SliverChildBuilderDelegate(childCount: _devicesList.length ?? 0,
+                    (BuildContext context, int index) {
+                  if (_devicesList.length != 0)
+                    return DeviceCard(_devicesList[index] as Device);
+                  else
+                    return RichText(
+                      overflow: TextOverflow.visible,
+                      text: const TextSpan(
+                        text: "You don't have any devices yet!",
+                        style: TextStyle(
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(232, 10, 10, 10),
+                        ),
+                      ),
+                    );
+                }),
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 300,
+                childAspectRatio: 2 / 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 20),
+          )
+        ]),
       ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                child:InkWell(
-                  onTap: () =>Navigator.push(context,
-                      new MaterialPageRoute(builder: (context) => LandlordProfilePageWidget())), // Image tapped
-                  splashColor: Colors.white10, // Splash color over image
-                  child: Ink.image(
-                    fit: BoxFit.cover, // Fixes border issues
-                    width: 100,
-                    height: 100,
-                    image: NetworkImage(_auth.getProfileImage().toString()),
-                  ),
-                ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 10),
+        child: SpeedDial(
+          direction: SpeedDialDirection.up,
+          icon: Icons.add, //icon on Floating action button
+          activeIcon: Icons.close, //icon when menu is expanded on button
+          backgroundColor: const Color.fromARGB(255, 253, 238, 186), //background color of button
+          foregroundColor: Colors.white, //font color, icon color in button
+          activeBackgroundColor: HomeAppTheme.of(context).primaryColor, //background color when menu is expanded
+          activeForegroundColor: Colors.white,
+          visible: true,
+          closeManually: false,
+          curve: Curves.easeInExpo,
+          overlayColor: Colors.white,
+          overlayOpacity: 0.8, //background layer opacity
+          onOpen: () => BackdropFilter(
+              filter:ImageFilter.blur(sigmaX: 5, sigmaY: 5)),// action when menu opens
+          onClose: () => print('DIAL CLOSED'),
+          childPadding: const EdgeInsets.symmetric(vertical: 0),
+          spacing: 15,
+          spaceBetweenChildren: 15,//action when menu closes
+
+          elevation: 8.0, //shadow elevation of button
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ), //shape of button
+
+          children: [
+            SpeedDialChild( //speed dial child
+              child: Icon(CupertinoIcons.add_circled_solid),
+              backgroundColor: HomeAppTheme.of(context).secondaryColor,
+              foregroundColor: Colors.white,
+              label: 'Generate QR code for tenants',
+              labelBackgroundColor: Colors.white,
+
+              labelStyle: HomeAppTheme.of(context).subtitle2.override(
+                fontFamily: 'Poppins',
+                color: HomeAppTheme.of(context).secondaryText,
+              ),
+              onTap: () => Navigator.push(
+                  context,
+                  Animations(
+                    page: const AddHousePage(),
+                    animationType: RouteAnimationType.slideFromBottom,
+                  )
               ),
 
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
-                      child: Text(
-                        'Homes',
-                        style: FlutterFlowTheme.of(context).subtitle1,
-                      ),
-                    ),
-                  ],
-                ),
+              onLongPress: () => print('FIRST CHILD LONG PRESS'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 44),
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  alignment: WrapAlignment.start,
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  direction: Axis.horizontal,
-                  runAlignment: WrapAlignment.start,
-                  verticalDirection: VerticalDirection.down,
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      height: 190,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x230E151B),
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                'https://www.thelightbulb.co.uk/wp-content/uploads/2022/05/quick-guide-buying-best-light-bulbs-1.jpg',
-                                width: double.infinity,
-                                height: 115,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
-                              child: Text(
-                                'Home Name',
-                                style: FlutterFlowTheme.of(context).subtitle1,
-                              ),
-                            ),
-                            Expanded(
-                              child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Details',
-                                options: FFButtonOptions(
-                                  width: 80,
-                                  height: 40,
-                                  color: const Color.fromARGB(255, 128, 173, 242),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                  ),
-                                  borderSide: const BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      height: 190,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x230E151B),
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                'https://i.pinimg.com/736x/b8/be/cb/b8becbabf3d406035aa1611245e8f6c2.jpg',
-                                width: double.infinity,
-                                height: 115,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
-                              child: Text(
-                                'Home Name',
-                                style: FlutterFlowTheme.of(context).subtitle1,
-                              ),
-                            ),
-                            Expanded(
-                              child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Details',
-                                options: FFButtonOptions(
-                                  width: 80,
-                                  height: 40,
-                                  color: const Color.fromARGB(255, 128, 173, 242),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                  ),
-                                  borderSide: const BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      height: 190,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x230E151B),
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                'https://images.unsplash.com/photo-1527352774566-e4916e36c645?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8b3V0c2lkZSUyMHRoZSUyMHdpbmRvd3xlbnwwfHwwfHw%3D&w=1000&q=80',
-                                width: double.infinity,
-                                height: 115,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
-                              child: Text(
-                                'Home Name',
-                                style: FlutterFlowTheme.of(context).subtitle1,
-                              ),
-                            ),
-                            Expanded(
-                              child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'Details',
-                                options: FFButtonOptions(
-                                  width: 80,
-                                  height: 40,
-                                  color: const Color.fromARGB(255, 128, 173, 242),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                    fontFamily: 'Poppins',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBtnText,
-                                  ),
-                                  borderSide: const BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            ),
+            SpeedDialChild(
+              child: Icon(CupertinoIcons.app),
+              backgroundColor: HomeAppTheme.of(context).alternate,
+              foregroundColor: Colors.white,
+              label: 'Add a house',
+              labelStyle: HomeAppTheme.of(context).subtitle2.override(
+                fontFamily: 'Poppins',
+                color: HomeAppTheme.of(context).secondaryText,
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(260, 10, 0, 20),
-                child: FFButtonWidget(
-                  onPressed: () {
-                    print('Button pressed ...');
-                  },
-                  text: '+ Add',
-                  options: FFButtonOptions(
-                    width: 80,
-                    height: 40,
-                    color: const Color.fromARGB(255, 253, 238, 186),
-                    textStyle: FlutterFlowTheme.of(context).subtitle2.override(
-                      fontFamily: 'Poppins',
-                      color: Colors.black54,
-                    ),
-                    borderSide: const BorderSide(
-                      color: Colors.transparent,
-                      width: 1,
-                    ),
-                    borderRadius: 20,
-                  ),
-                ),
+              onTap: () => print('SECOND CHILD'),
+              onLongPress: () => print('SECOND CHILD LONG PRESS'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
               ),
-            ],
-          ),
+            ),
+
+
+            //add more menu item children here
+          ],
         ),
       ),
     );
+  }
+
+  void _addDevice() {
+    //_device.serialNumber =
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        currentUser = user;
+        print(currentUser.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  String getCurrentDate() {
+    String formatter = DateFormat.yMMMMd('en_US').format(now);
+    return formatter;
+  }
+
+  Future getUsersDeviceList() async {
+    getCurrentUser();
+    var uid = currentUser.uid;
+    var data = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .collection("devices")
+        .orderBy('device name', descending: true)
+        .get();
+
+    setState(() {
+      _devicesList =
+          List.from(data.docs.map((doc) => Device.fromSnapshot(doc)));
+
+    });
+    print(_devicesList);
+  }
+
+
+  Future<void> refreshDevices() async {
+    setState(() {
+      isRefreshing = true;
+    });
+
+    await getUsersDeviceList();
+
+    setState(() {
+      isRefreshing = false;
+    });
   }
 }

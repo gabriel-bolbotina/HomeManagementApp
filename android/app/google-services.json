@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "961585638656",
+    "firebase_url": "https://homeapp-38efa-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "homeapp-38efa",
     "storage_bucket": "homeapp-38efa.appspot.com"
   },
@@ -37,6 +38,13 @@
             {
               "client_id": "961585638656-897vd7ekcingvu6gbkvajbeukjtegffo.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "961585638656-ufsm2qvhmc8md5260i7pa1bvgp2sp8gb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.homeapp.homeapp"
+              }
             }
           ]
         }
