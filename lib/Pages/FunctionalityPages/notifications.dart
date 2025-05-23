@@ -43,9 +43,7 @@ class Notifications {
         'Don\'t forget to check your commonly forgotten items!',
         _nextInstanceOfTime(time),
         platformChannelSpecifics,
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime);
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle);
   }
 
   tz.TZDateTime _nextInstanceOfTime(TimeOfDay time) {

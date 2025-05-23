@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -13,8 +12,9 @@ import 'package:flutter_hue/domain/models/resource_type.dart';
 import 'package:flutter_hue/domain/repos/bridge_discovery_repo.dart';
 import 'package:flutter_hue/domain/repos/flutter_hue_maintenance_repo.dart';
 import 'package:flutter_hue/domain/repos/token_repo.dart';
-import 'package:uni_links/uni_links.dart';
+
 import 'package:flutter_hue/flutter_hue.dart';
+import 'package:app_links/app_links.dart'; // <--- Changed from uni_links
 
 class PhilipsLight extends StatefulWidget {
   const PhilipsLight({Key? key}) : super(key: key);
@@ -53,17 +53,29 @@ class _PhilipsLightState extends State<PhilipsLight> {
   /// Watches for deep links.
   late final StreamSubscription deepLinkStream;
 
+  // AppLinks instance
+  late final AppLinks _appLinks; // <--- Added AppLinks instance
+
   @override
   void initState() {
     super.initState();
 
-    deepLinkStream = uriLinkStream.listen(
+    _appLinks = AppLinks(); // <--- Initialize AppLinks
+
+    deepLinkStream = _appLinks.uriLinkStream.listen( // <--- Changed to _appLinks.uriLinkStream
           (Uri? uri) {
         if (uri == null) return;
 
+        // The uni_links package often returned the full URL, including the scheme.
+        // app_links returns the full Uri.
+        // Your existing parsing logic might need slight adjustment if '?' was
+        // sometimes at the very beginning of the string due to uni_links
+        // behavior. Assuming 'flutterhue://auth?pkce=...' is the format.
+        // Let's keep the existing logic, as it's robust enough for a full Uri.
         final int start = uri.toString().indexOf("?");
         String queryParams = uri.toString().substring(start);
         Uri truncatedUri = Uri.parse(queryParams);
+
 
         try {
           final String? pkce = truncatedUri.queryParameters[ApiFields.pkce];

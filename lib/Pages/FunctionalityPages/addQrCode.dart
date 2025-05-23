@@ -173,11 +173,11 @@ class _AddQRFunctionalityTPageWidgetState
 
                   child: MobileScanner(
                       fit: BoxFit.cover,
-                      onDetect: (barcode, args) {
-                        if (barcode.rawValue == null) {
+                      onDetect: (BarcodeCapture barcode) {
+                        if (barcode.raw == null) {
                           debugPrint('Failed to scan Barcode');
                         } else {
-                          qrCode = barcode.rawValue!;
+                          qrCode = barcode.raw!;
                           debugPrint('Barcode found! $qrCode');
                           showDialog(
                             context: context,
