@@ -114,18 +114,26 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   }
 
   bool ageConfirmed() {
-    int _age = ageController.text as int;
     if (ageController.text.isEmpty) {
       errorMessage("Please write your age!");
       return false;
-    } else if (_age <= 16 || _age > 0) {
-      errorMessage("You must be over 16 to use this app!");
+    }
+
+    try {
+      int _age = int.parse(ageController.text);
+      if (_age <= 16) {
+        errorMessage("You must be over 16 to use this app!");
+        return false;
+      } else if (_age <= 0) {
+        errorMessage("Please write an eligible age!");
+        return false;
+      } else {
+        return true;
+      }
+    } catch (e) {
+      errorMessage("Please enter a valid number for age!");
       return false;
-    } else if (_age <= 0) {
-      errorMessage("Please write an eligible age!");
-      return false;
-    } else
-      return true;
+    }
   }
 
   @override

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:homeapp/Pages/FunctionalityPages/PhilipsHueLight.dart';
+import 'package:homeapp/Pages/FunctionalityPages/addDevicePage.dart';
 import 'package:homeapp/Pages/HomePages/tenant.dart';
 import 'package:homeapp/Pages/flutter_flow/flutter_flow_util.dart';
 import 'package:image_picker/image_picker.dart';
@@ -272,6 +273,12 @@ class _AddQRFunctionalityTPageWidgetState
               children: [
                 HomeAppButtonWidget(
                   onPressed: () async {
+                    Navigator.push(
+                        context,
+                        Animations(
+                          page: AddFunctionalityTPageWidget(0),
+                          animationType: RouteAnimationType.slideFromBottom,
+                        ));
                     /*if (qrCode != '' && qrCode.contains("HUE")) {
                       addUserDeviceDetails(
                           "Philips Hue Light bulb",

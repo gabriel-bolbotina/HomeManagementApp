@@ -7,7 +7,6 @@ import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 
-
 import '../../Services/FirebaseService.dart';
 import '../HomePages/homeowner.dart';
 import '../NotificationPages/homeowner_notification.dart';
@@ -25,8 +24,7 @@ class TenantEditPageWidget extends StatefulWidget {
   const TenantEditPageWidget({Key? key}) : super(key: key);
 
   @override
-  _TenantEditPageWidgetState createState() =>
-      _TenantEditPageWidgetState();
+  _TenantEditPageWidgetState createState() => _TenantEditPageWidgetState();
 }
 
 class _TenantEditPageWidgetState extends State<TenantEditPageWidget> {
@@ -43,8 +41,6 @@ class _TenantEditPageWidgetState extends State<TenantEditPageWidget> {
   late String imageUrl;
   bool _isModified = false;
 
-
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -60,7 +56,6 @@ class _TenantEditPageWidgetState extends State<TenantEditPageWidget> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     _authentication = Authentication();
-
   }
 
   File? _photo;
@@ -142,11 +137,10 @@ class _TenantEditPageWidgetState extends State<TenantEditPageWidget> {
       final taskSnapshot = await uploadTask;
 
       final _fileURL = await taskSnapshot.ref.getDownloadURL();
-      await FirebaseFirestore.instance.collection("users").doc(currentUser.uid).update(
-          {
-            'uploadedImage' : _fileURL
-          }
-      );
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(currentUser.uid)
+          .update({'uploadedImage': _fileURL});
     } catch (e) {
       print('error occured');
     }
@@ -156,26 +150,21 @@ class _TenantEditPageWidgetState extends State<TenantEditPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
-        backgroundColor: HomeAppTheme
-            .of(context)
-            .primaryBackground,
+        backgroundColor: HomeAppTheme.of(context).primaryBackground,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: AppBar(
-            backgroundColor: HomeAppTheme
-                .of(context)
-                .primaryBackground,
+            backgroundColor: HomeAppTheme.of(context).primaryBackground,
             automaticallyImplyLeading: false,
             leading: IconButton(
               icon: const Icon(
                 Icons.arrow_back,
                 color: CupertinoColors.systemGrey,
               ),
-              onPressed: () =>
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
                           const HomeownerProfilePageWidget())),
             ),
             centerTitle: false,
@@ -183,396 +172,324 @@ class _TenantEditPageWidgetState extends State<TenantEditPageWidget> {
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-
-                children: [
-                  Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        alignment: Alignment.topRight,
-                        child: isImageAvailable
-                            ? Image.network(_authentication.urlPath!.trim())
-                            : Image.asset('assets/images/iconapp.png'),
-                      )),
-
-
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        HomeAppButtonWidget(
-                          onPressed: ()  {
-                            _showPicker(context);
-                          },
-                          text: 'Change Photo',
-                          options: HomeAppButtonOptions(
-                            width: 130,
-                            height: 40,
-                            color: HomeAppTheme
-                                .of(context)
-                                .primaryBtnText,
-                            textStyle: HomeAppTheme
-                                .of(context)
-                                .bodyText1,
-                            elevation: 1,
-                            borderSide: const BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: 20,
-                          ),
-                        ),
-
-
-                      ],
+            child: Column(children: [
+          Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+              child: Container(
+                width: 100,
+                height: 100,
+                clipBehavior: Clip.antiAlias,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.topRight,
+                child: isImageAvailable
+                    ? Image.network(_authentication.urlPath!.trim())
+                    : Image.asset('assets/images/iconapp.png'),
+              )),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                HomeAppButtonWidget(
+                  onPressed: () {
+                    _showPicker(context);
+                  },
+                  text: 'Change Photo',
+                  options: HomeAppButtonOptions(
+                    width: 130,
+                    height: 40,
+                    color: HomeAppTheme.of(context).primaryBtnText,
+                    textStyle: HomeAppTheme.of(context).bodyText1,
+                    elevation: 1,
+                    borderSide: const BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
                     ),
-
-
+                    borderRadius: 20,
                   ),
-
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                        20, 0, 20, 16),
-                    child: HomeAppButtonWidget(
-                      onPressed: ()  {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                const Address(fromRegister: false,)));
-                      },
-                      text: 'Change Address',
-                      options: HomeAppButtonOptions(
-                        width: 130,
-                        height: 40,
-                        color: HomeAppTheme
-                            .of(context)
-                            .primaryBtnText,
-                        textStyle: HomeAppTheme
-                            .of(context)
-                            .bodyText1,
-                        elevation: 1,
-                        borderSide: const BorderSide(
-                          color: Colors.transparent,
-                          width: 1,
-                        ),
-                        borderRadius: 20,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+            child: HomeAppButtonWidget(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Address(
+                              fromRegister: false,
+                            )));
+              },
+              text: 'Change Address',
+              options: HomeAppButtonOptions(
+                width: 130,
+                height: 40,
+                color: HomeAppTheme.of(context).primaryBtnText,
+                textStyle: HomeAppTheme.of(context).bodyText1,
+                elevation: 1,
+                borderSide: const BorderSide(
+                  color: Colors.transparent,
+                  width: 1,
+                ),
+                borderRadius: 20,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+            child: StreamBuilder<DocumentSnapshot>(
+                stream: _firestore
+                    .collection("users")
+                    .doc(currentUser.uid)
+                    .snapshots(),
+                builder: (ctx, streamSnapshot) {
+                  if (streamSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                        20, 0, 20, 16),
-                    child: StreamBuilder<DocumentSnapshot>(
-                        stream: _firestore
-                            .collection("users")
-                            .doc(currentUser.uid)
-                            .snapshots(),
-                        builder: (ctx, streamSnapshot) {
-                          if (streamSnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.blue,
-                              ),
-                            );
-                          }
+                    );
+                  }
 
-                          return TextFormField(
-                            controller: firstNameController,
-                            readOnly: false,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelStyle: HomeAppTheme
-                                  .of(context)
-                                  .bodyText2,
-                              hintText: '${streamSnapshot.data!['first name']}',
-                              hintStyle: HomeAppTheme
-                                  .of(context)
-                                  .bodyText2,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: HomeAppTheme
-                                      .of(context)
-                                      .primaryBackground,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: HomeAppTheme
-                                      .of(context)
-                                      .primaryBackground,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              filled: true,
-                              fillColor:
-                              HomeAppTheme
-                                  .of(context)
-                                  .secondaryBackground,
-                              contentPadding:
-                              const EdgeInsetsDirectional.fromSTEB(
-                                  20, 24, 0, 24),
-                            ),
-                            style: HomeAppTheme
-                                .of(context)
-                                .bodyText1,
-                            maxLines: null,
-                          );
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                        20, 0, 20, 16),
-                    child: StreamBuilder<DocumentSnapshot>(
-                        stream: _firestore
-                            .collection("users")
-                            .doc(currentUser.uid)
-                            .snapshots(),
-                        builder: (ctx, streamSnapshot) {
-                          if (streamSnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.blue,
-                              ),
-                            );
-                          }
-
-                          return TextFormField(
-                            controller: lastNameController,
-                            readOnly: false,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelStyle: HomeAppTheme
-                                  .of(context)
-                                  .bodyText2,
-                              hintText: '${streamSnapshot.data!['last name']}',
-                              hintStyle: HomeAppTheme
-                                  .of(context)
-                                  .bodyText2,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: HomeAppTheme
-                                      .of(context)
-                                      .primaryBackground,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: HomeAppTheme
-                                      .of(context)
-                                      .primaryBackground,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              filled: true,
-                              fillColor:
-                              HomeAppTheme
-                                  .of(context)
-                                  .secondaryBackground,
-                              contentPadding:
-                              const EdgeInsetsDirectional.fromSTEB(
-                                  20, 24, 0, 24),
-                            ),
-                            style: HomeAppTheme
-                                .of(context)
-                                .bodyText1,
-                            maxLines: null,
-                          );
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(
-                        20, 0, 20, 16),
-                    child: StreamBuilder<DocumentSnapshot>(
-                        stream: _firestore
-                            .collection("users")
-                            .doc(currentUser.uid)
-                            .snapshots(),
-                        builder: (ctx, streamSnapshot) {
-                          if (streamSnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.blue,
-                              ),
-                            );
-                          }
-
-                          return TextFormField(
-                            controller: ageController,
-                            readOnly: false,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelStyle: HomeAppTheme
-                                  .of(context)
-                                  .bodyText2,
-                              hintText: '${streamSnapshot.data!['age']}',
-                              hintStyle: HomeAppTheme
-                                  .of(context)
-                                  .bodyText2,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: HomeAppTheme
-                                      .of(context)
-                                      .primaryBackground,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: HomeAppTheme
-                                      .of(context)
-                                      .primaryBackground,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              filled: true,
-                              fillColor:
-                              HomeAppTheme
-                                  .of(context)
-                                  .secondaryBackground,
-                              contentPadding:
-                              const EdgeInsetsDirectional.fromSTEB(
-                                  20, 24, 0, 24),
-                            ),
-                            style: HomeAppTheme
-                                .of(context)
-                                .bodyText1,
-                            maxLines: null,
-                          );
-                        }),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        HomeAppButtonWidget(
-                          onPressed: () {
-                            if (firstNameController.text.isNotEmpty) {
-                              addUserRole(
-                                  'first name', firstNameController.text);
-                              _isModified = true;
-                            }
-                            print(firstNameController);
-
-                            if (lastNameController.text.isNotEmpty) {
-                              addUserRole('last name', lastNameController.text);
-                              _isModified = true;
-                            }
-
-                            if (ageController.text.isNotEmpty) {
-                              addUserAge(int.parse(ageController.text.trim()));
-                              _isModified = true;
-                            }
-                            if(_isModified == false)
-                            {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  backgroundColor: Colors.blueGrey,
-                                  content: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                        'No modification have been made, press back to go the the other stage'),
-                                  ),
-                                  duration: Duration(seconds: 5),
-                                ),
-                              );
-                            }
-                            else
-                            {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => const TenantProfilePageWidget()));
-                            }
-
-
-
-                          },
-                          text: 'Save Changes',
-                          options: HomeAppButtonOptions(
-                            width: 130,
-                            height: 40,
-                            color: HomeAppTheme
-                                .of(context)
-                                .primaryBtnText,
-                            textStyle: HomeAppTheme
-                                .of(context)
-                                .bodyText1,
-                            elevation: 1,
-                            borderSide: const BorderSide(
-                              color: Colors.transparent,
-                              width: 1,
-                            ),
-                            borderRadius: 20,
-                          ),
+                  return TextFormField(
+                    controller: firstNameController,
+                    readOnly: false,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelStyle: HomeAppTheme.of(context).bodyText2,
+                      hintText: '${streamSnapshot.data!['first name']}',
+                      hintStyle: HomeAppTheme.of(context).bodyText2,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: HomeAppTheme.of(context).primaryBackground,
+                          width: 2,
                         ),
-                      ],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: HomeAppTheme.of(context).primaryBackground,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      filled: true,
+                      fillColor: HomeAppTheme.of(context).secondaryBackground,
+                      contentPadding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
                     ),
+                    style: HomeAppTheme.of(context).bodyText1,
+                    maxLines: null,
+                  );
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+            child: StreamBuilder<DocumentSnapshot>(
+                stream: _firestore
+                    .collection("users")
+                    .doc(currentUser.uid)
+                    .snapshots(),
+                builder: (ctx, streamSnapshot) {
+                  if (streamSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      ),
+                    );
+                  }
+
+                  return TextFormField(
+                    controller: lastNameController,
+                    readOnly: false,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelStyle: HomeAppTheme.of(context).bodyText2,
+                      hintText: '${streamSnapshot.data!['last name']}',
+                      hintStyle: HomeAppTheme.of(context).bodyText2,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: HomeAppTheme.of(context).primaryBackground,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: HomeAppTheme.of(context).primaryBackground,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      filled: true,
+                      fillColor: HomeAppTheme.of(context).secondaryBackground,
+                      contentPadding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                    ),
+                    style: HomeAppTheme.of(context).bodyText1,
+                    maxLines: null,
+                  );
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+            child: StreamBuilder<DocumentSnapshot>(
+                stream: _firestore
+                    .collection("users")
+                    .doc(currentUser.uid)
+                    .snapshots(),
+                builder: (ctx, streamSnapshot) {
+                  if (streamSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      ),
+                    );
+                  }
+
+                  return TextFormField(
+                    controller: ageController,
+                    readOnly: false,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelStyle: HomeAppTheme.of(context).bodyText2,
+                      hintText: '${streamSnapshot.data!['age']}',
+                      hintStyle: HomeAppTheme.of(context).bodyText2,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: HomeAppTheme.of(context).primaryBackground,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: HomeAppTheme.of(context).primaryBackground,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color(0x00000000),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      filled: true,
+                      fillColor: HomeAppTheme.of(context).secondaryBackground,
+                      contentPadding:
+                          const EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                    ),
+                    style: HomeAppTheme.of(context).bodyText1,
+                    maxLines: null,
+                  );
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                HomeAppButtonWidget(
+                  onPressed: () {
+                    if (firstNameController.text.isNotEmpty) {
+                      addUserRole('first name', firstNameController.text);
+                      _isModified = true;
+                    }
+                    print(firstNameController);
+
+                    if (lastNameController.text.isNotEmpty) {
+                      addUserRole('last name', lastNameController.text);
+                      _isModified = true;
+                    }
+
+                    if (ageController.text.isNotEmpty) {
+                      addUserAge(int.parse(ageController.text.trim()));
+                      _isModified = true;
+                    }
+                    if (_isModified == false) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: Colors.blueGrey,
+                          content: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                                'No modification have been made, press back to go the the other stage'),
+                          ),
+                          duration: Duration(seconds: 5),
+                        ),
+                      );
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const TenantProfilePageWidget()));
+                    }
+                  },
+                  text: 'Save Changes',
+                  options: HomeAppButtonOptions(
+                    width: 130,
+                    height: 40,
+                    color: HomeAppTheme.of(context).primaryBtnText,
+                    textStyle: HomeAppTheme.of(context).bodyText1,
+                    elevation: 1,
+                    borderSide: const BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                    borderRadius: 20,
                   ),
-                ])
-        ));
+                ),
+              ],
+            ),
+          ),
+        ])));
   }
 
   void getCurrentUser() async {

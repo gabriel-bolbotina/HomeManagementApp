@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hue/flutter_hue.dart';
-import 'package:uni_links/uni_links.dart';
+import 'package:app_links/app_links.dart';
 
 class PhilipsHue extends StatefulWidget {
   const PhilipsHue({Key? key}) : super(key: key);
@@ -43,7 +43,7 @@ class _PhilipsHueState extends State<PhilipsHue> {
   void initState() {
     super.initState();
 
-    deepLinkStream = uriLinkStream.listen(
+    deepLinkStream = AppLinks().uriLinkStream.listen(
           (Uri? uri) {
         if (uri == null) return;
 

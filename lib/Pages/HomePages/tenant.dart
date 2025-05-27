@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:homeapp/reusables/device_card.dart';
 
 import 'package:homeapp/Services/authentification.dart';
-
 
 import '../../Services/Animations.dart';
 import '../../Services/FirebaseService.dart';
@@ -32,8 +30,7 @@ class TenantHomePageWidget extends StatefulWidget {
   const TenantHomePageWidget({Key? key}) : super(key: key);
 
   @override
-  _TenantHomePageWidgetState createState() =>
-      _TenantHomePageWidgetState();
+  _TenantHomePageWidgetState createState() => _TenantHomePageWidgetState();
 }
 
 class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
@@ -97,7 +94,7 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 background: Container(
-                  //crossAxisAlignment: CrossAxisAlignment.center,
+                    //crossAxisAlignment: CrossAxisAlignment.center,
                     height: size.height * 0.2,
                     child: Column(children: <Widget>[
                       Padding(
@@ -117,27 +114,27 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                                       10, 0, 0, 0),
                                   child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         InkWell(
                                           customBorder: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(100)),
+                                                  BorderRadius.circular(100)),
                                           onTap: () => Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                  const TenantProfilePageWidget())), // Image tapped
+                                                      const TenantProfilePageWidget())), // Image tapped
                                           splashColor: Colors
                                               .white10, // Splash color over image
                                           child: Ink(
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(10),
+                                                  BorderRadius.circular(10),
                                               image: DecorationImage(
                                                 image: NetworkImage(
                                                     _authentication.urlPath
-                                                        ?.trim() ??
+                                                            ?.trim() ??
                                                         ""),
                                                 fit: BoxFit.cover,
                                               ),
@@ -155,9 +152,10 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                                   child: RichText(
                                     overflow: TextOverflow.visible,
                                     text: TextSpan(
-                                      style:  TextStyle(
+                                      style: TextStyle(
                                         fontSize: 25.0,
-                                        color: HomeAppTheme.of(context).primaryText ,
+                                        color: HomeAppTheme.of(context)
+                                            .primaryText,
                                       ),
                                       children: <TextSpan>[
                                         TextSpan(
@@ -167,11 +165,10 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                                               fontWeight: FontWeight.w600),
                                           //color: FlutterFlowTheme.of(context).primaryText),
                                         ),
-
                                         TextSpan(
-                                            text: _authentication.userName ?? "",
+                                            text:
+                                                _authentication.userName ?? "",
                                             style: const TextStyle(
-
                                                 fontFamily: 'Fira Sans',
                                                 fontWeight: FontWeight.w600)),
                                         TextSpan(
@@ -181,13 +178,11 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                                         TextSpan(
                                             text: "$date",
                                             style: const TextStyle(
-                                              fontSize: 14,fontFamily: 'Fira Sans',
+                                              fontSize: 14,
+                                              fontFamily: 'Fira Sans',
                                               fontWeight: FontWeight.w600,
                                               //fontStyle: FontStyle.italic)
                                             )),
-
-
-
                                       ],
                                     ),
                                   )),
@@ -196,77 +191,76 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
                     ])),
               )),
           SliverToBoxAdapter(
-            child: RoomNamesWidget(),
+            child: RoomNamesWidget(rooms: []),
           ),
           SliverToBoxAdapter(
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                   child: Align(
                       alignment: Alignment.centerLeft,
-                      child: DoorStatusContainer(isDoorOpen: true,)))),
+                      child: DoorStatusContainer(
+                        isDoorOpen: true,
+                      )))),
           const SliverToBoxAdapter(
               child: SizedBox(
-                height: 20,
-              )),
+            height: 20,
+          )),
           SliverToBoxAdapter(
               child: SizedBox(
                   height: 20,
                   child: Center(
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
-                        child: RichText(
-                          overflow: TextOverflow.visible,
-                          text: const TextSpan(
-                            text: "Your Devices",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black38,
-                            ),
-                          ),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
+                    child: RichText(
+                      overflow: TextOverflow.visible,
+                      text: const TextSpan(
+                        text: "Your Devices",
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black38,
                         ),
-                      )))),
+                      ),
+                    ),
+                  )))),
           const SliverToBoxAdapter(
               child: SizedBox(
-                height: 10,
-              )),
-
+            height: 10,
+          )),
           SliverToBoxAdapter(
               child: Visibility(
-                visible: _hasDevices,
-                child: SizedBox(
-                    height: 30,
-                    child: Center(
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
-                          child: RichText(
-                            overflow: TextOverflow.visible,
-                            text: const TextSpan(
-                              text: "You have no devices yet, please add some",
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black38,
-                              ),
-                            ),
-                          ),
-                        ))),
-              )),
+            visible: _hasDevices,
+            child: SizedBox(
+                height: 30,
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
+                  child: RichText(
+                    overflow: TextOverflow.visible,
+                    text: const TextSpan(
+                      text: "You have no devices yet, please add some",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black38,
+                      ),
+                    ),
+                  ),
+                ))),
+          )),
           SliverGrid(
-            delegate:
-            SliverChildBuilderDelegate(childCount: _devicesList.length+1 ?? 0,
-                    (BuildContext context, int index) {
-                  if (index == 0) {
-                    return Container(
-                      color: HomeAppTheme.of(context).primaryBackground,
-
-                    );
-
-
-                  } else {
-                    return DeviceCard(_devicesList[index-1] as Device);
-                  }
-                }),
+            delegate: SliverChildBuilderDelegate(
+                childCount: _devicesList.length + 1 ?? 0,
+                (BuildContext context, int index) {
+              if (index == 0) {
+                return Container(
+                  color: HomeAppTheme.of(context).primaryBackground,
+                );
+              } else {
+                return DeviceCard(_devicesList[index - 1] as Device);
+              }
+            }),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 300,
                 childAspectRatio: 2 / 2,
@@ -281,9 +275,11 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
           direction: SpeedDialDirection.up,
           icon: Icons.add, //icon on Floating action button
           activeIcon: Icons.close, //icon when menu is expanded on button
-          backgroundColor: const Color.fromARGB(255, 253, 238, 186), //background color of button
+          backgroundColor: const Color.fromARGB(
+              255, 253, 238, 186), //background color of button
           foregroundColor: Colors.white, //font color, icon color in button
-          activeBackgroundColor: HomeAppTheme.of(context).primaryColor, //background color when menu is expanded
+          activeBackgroundColor: HomeAppTheme.of(context)
+              .primaryColor, //background color when menu is expanded
           activeForegroundColor: Colors.white,
           visible: true,
           closeManually: false,
@@ -291,11 +287,12 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
           overlayColor: Colors.white,
           overlayOpacity: 0.8, //background layer opacity
           onOpen: () => BackdropFilter(
-              filter:ImageFilter.blur(sigmaX: 5, sigmaY: 5)),// action when menu opens
+              filter: ImageFilter.blur(
+                  sigmaX: 5, sigmaY: 5)), // action when menu opens
           onClose: () => print('DIAL CLOSED'),
           childPadding: const EdgeInsets.symmetric(vertical: 0),
           spacing: 15,
-          spaceBetweenChildren: 15,//action when menu closes
+          spaceBetweenChildren: 15, //action when menu closes
 
           elevation: 8.0, //shadow elevation of button
           shape: RoundedRectangleBorder(
@@ -303,7 +300,8 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
           ), //shape of button
 
           children: [
-            SpeedDialChild( //speed dial child
+            SpeedDialChild(
+              //speed dial child
               child: Icon(CupertinoIcons.add_circled_solid),
               backgroundColor: HomeAppTheme.of(context).secondaryColor,
               foregroundColor: Colors.white,
@@ -311,16 +309,15 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
               labelBackgroundColor: Colors.white,
 
               labelStyle: HomeAppTheme.of(context).subtitle2.override(
-                fontFamily: 'Poppins',
-                color: HomeAppTheme.of(context).secondaryText,
-              ),
+                    fontFamily: 'Poppins',
+                    color: HomeAppTheme.of(context).secondaryText,
+                  ),
               onTap: () => Navigator.push(
                   context,
                   Animations(
                     page: const AddDevicePageWidget(),
                     animationType: RouteAnimationType.slideFromBottom,
-                  )
-              ),
+                  )),
 
               onLongPress: () => print('FIRST CHILD LONG PRESS'),
               shape: RoundedRectangleBorder(
@@ -333,16 +330,15 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
               foregroundColor: Colors.white,
               label: 'Add a room or zone',
               labelStyle: HomeAppTheme.of(context).subtitle2.override(
-                fontFamily: 'Poppins',
-                color: HomeAppTheme.of(context).secondaryText,
-              ),
+                    fontFamily: 'Poppins',
+                    color: HomeAppTheme.of(context).secondaryText,
+                  ),
               onTap: () => print('SECOND CHILD'),
               onLongPress: () => print('SECOND CHILD LONG PRESS'),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-
 
             //add more menu item children here
           ],
@@ -382,14 +378,13 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
         .orderBy('device name', descending: true)
         .get();
 
-    if (data.size !> 0 ) {
+    if (data.size! > 0) {
       setState(() {
         // Update your state variable accordingly
         _devicesList = [];
         _hasDevices = false;
       });
-    }
-    else {
+    } else {
       setState(() {
         _devicesList =
             List.from(data.docs.map((doc) => Device.fromSnapshot(doc)));
@@ -397,7 +392,6 @@ class _TenantHomePageWidgetState extends State<TenantHomePageWidget> {
       });
     }
   }
-
 
   Future<void> refreshDevices() async {
     setState(() {
