@@ -18,6 +18,8 @@
 		C69346662DE5B60E004A92F6 /* Pods_Runner.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CD1F3E34024ACD3BC790462B /* Pods_Runner.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		C69346672DE5BB62004A92F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		C69346682DE5BB6A004A92F6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
+		C6D60DAB2DE5E5CE001E25A0 /* Main.storyboard in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
+		C6D60DAC2DE5E5D4001E25A0 /* LaunchScreen.storyboard in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +39,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				C6D60DAC2DE5E5D4001E25A0 /* LaunchScreen.storyboard in Embed Frameworks */,
+				C6D60DAB2DE5E5CE001E25A0 /* Main.storyboard in Embed Frameworks */,
 				C69346662DE5B60E004A92F6 /* Pods_Runner.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
