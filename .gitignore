@@ -72,3 +72,6 @@ build/
 
 android/key.properties
 ios/GoogleMaps.xcconfig
+ios/Flutter/flutter_export_environment.sh
+.flutter-plugins-dependencies
+ios/Runner.xcodeproj/project.pbxproj
