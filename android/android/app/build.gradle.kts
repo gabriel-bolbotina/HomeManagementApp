@@ -28,6 +28,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders = [
+            googleMapsApiKey: localProperties.getProperty('Maps_API_KEY')
+        ]
     }
 
     buildTypes {

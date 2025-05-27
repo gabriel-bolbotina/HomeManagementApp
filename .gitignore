@@ -72,3 +72,5 @@ build/
 
 **/ios/Runner/GoogleService-Info.plist
 
+ios/GoogleMaps.xcconfig
+android/key.properties
