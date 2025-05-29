@@ -2,28 +2,26 @@ import 'dart:core';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:homeapp/Pages/FunctionalityPages/addDevicePage.dart';
 import 'package:homeapp/Pages/FunctionalityPages/addRoomWidget.dart';
+import 'package:homeapp/Pages/FunctionalityPages/door_prediction_page.dart';
+import 'package:homeapp/Pages/flutter_flow/homeAppWidgets.dart';
 import 'package:homeapp/Services/authentification.dart';
+import 'package:homeapp/reusables/modelContainer.dart';
 
 import '../../Services/Animations.dart';
-import '../../Services/FirebaseService.dart';
-import '../FunctionalityPages/add_functionality.dart';
-import '../FunctionalityPages/functionality.dart';
 import '../ProfilePages/homeowner_profile.dart';
 import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:homeapp/model/Devices.dart';
 import 'package:homeapp/reusables/device_card.dart';
 import 'package:homeapp/reusables/doorContainer.dart';
 import 'package:homeapp/model/roomModel.dart';
+import 'package:intl/intl.dart';
 
 class HomeownerHomePageWidget extends StatefulWidget {
   const HomeownerHomePageWidget({Key? key}) : super(key: key);
@@ -35,60 +33,103 @@ class HomeownerHomePageWidget extends StatefulWidget {
 
 class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isRefreshing = false;
-  List<Room> _rooms = [];
-  Device _device = Device();
   final Authentication _authentication = Authentication();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  late User currentUser;
-  List<Object> _devicesList = [];
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Device _devices = Device();
-  DateTime now = DateTime.now();
-  String? date;
-  final bool _pinned = true;
-  final bool _snap = false;
-  bool _floating = false;
+
+  bool isRefreshing = false;
   bool isImageAvailable = false;
-  late String? image;
-  late String imageUrl;
   bool _hasDevices = false;
 
-  @override
-  Future<void> didChangeDependencies() async {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    getUsersDeviceList();
-    fetchImage();
-    await _authentication.getUserName();
-    await _authentication.getProfileImage();
-    date = getCurrentDate();
-    print(isImageAvailable);
-    _loadRooms();
-  }
+  List<Room> _rooms = [];
+  List<Device> _devicesList = [];
+  String? date;
+  DateTime now = DateTime.now();
 
   @override
   void initState() {
-    fetchImage();
-    getUsersDeviceList();
-    date = getCurrentDate();
-    _loadRooms();
+    super.initState();
+    _initializeData();
   }
 
-  Future<void> fetchImage() async {
-    imageUrl = (await _authentication.getProfileImage())!;
-    print(imageUrl);
-    setState(() {
-      isImageAvailable = imageUrl != null && imageUrl.isNotEmpty;
-    });
+  Future<void> _initializeData() async {
+    try {
+      // Get user data
+      final userData = await _authentication.getUserData();
+      if (userData == null) return;
+
+      // Get profile image and user name
+      final imageUrl = await _authentication.getProfileImage();
+      final userName = await _authentication.getUserName();
+
+      // Get rooms and devices
+      await Future.wait([
+        _loadRooms(userData['uid']),
+        _loadDevices(userData['uid']),
+      ]);
+
+      setState(() {
+        isImageAvailable = imageUrl != null && imageUrl.isNotEmpty;
+        date = DateFormat.yMMMMd('en_US').format(now);
+      });
+    } catch (e) {
+      print('Error initializing data: $e');
+    }
   }
 
-  Future addUserDetails(String firstName, String lastName, int age) async {
-    await FirebaseFirestore.instance.collection('users').add({
-      'first name': firstName,
-      'last name': lastName,
-      'age': age,
-    });
+  Future<void> _loadRooms(String uid) async {
+    try {
+      var data = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .collection("rooms")
+          .get();
+
+      if (data.size > 0) {
+        setState(() {
+          _rooms = data.docs.map((doc) {
+            return Room(
+              name: doc['name'],
+              color: HomeAppTheme.of(context).primaryColor,
+            );
+          }).toList();
+        });
+      }
+    } catch (e) {
+      print("Error fetching rooms: $e");
+    }
+  }
+
+  Future<void> _loadDevices(String uid) async {
+    try {
+      var data = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .collection("devices")
+          .orderBy('device name', descending: true)
+          .get();
+
+      setState(() {
+        _devicesList =
+            data.docs.map((doc) => Device.fromSnapshot(doc)).toList();
+        _hasDevices = _devicesList.isNotEmpty;
+      });
+    } catch (e) {
+      print("Error fetching devices: $e");
+      _devicesList = [];
+      _hasDevices = false;
+    }
+  }
+
+  Future<void> refreshDevices() async {
+    setState(() => isRefreshing = true);
+
+    try {
+      final userData = await _authentication.getUserData();
+      if (userData != null) {
+        await _loadDevices(userData['uid']);
+      }
+    } finally {
+      setState(() => isRefreshing = false);
+    }
   }
 
   @override
@@ -103,9 +144,9 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
           SliverAppBar(
               automaticallyImplyLeading: false,
               backgroundColor: HomeAppTheme.of(context).primaryBackground,
-              pinned: _pinned,
-              snap: _snap,
-              floating: _floating,
+              pinned: true,
+              snap: false,
+              floating: false,
               expandedHeight: size.height * 0.2,
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
@@ -167,7 +208,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                               // account icon
                               Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 0, 0),
+                                      20, 20, 0, 0),
                                   child: RichText(
                                     overflow: TextOverflow.visible,
                                     text: TextSpan(
@@ -185,8 +226,8 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                                           //color: FlutterFlowTheme.of(context).primaryText),
                                         ),
                                         TextSpan(
-                                            text:
-                                                _authentication.userName ?? "",
+                                            text: _authentication.userName ??
+                                                "User",
                                             style: const TextStyle(
                                                 fontFamily: 'Fira Sans',
                                                 fontWeight: FontWeight.w600)),
@@ -215,11 +256,49 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
           const SliverToBoxAdapter(
               child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: DoorStatusContainer(
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: DoorStatusContainer(
                         isDoorOpen: true,
-                      )))),
+                      )),
+                      SizedBox(width: 16), // Add spacing between containers
+                      Expanded(
+                        child: PredictionContainer(
+                            // onTap: () {
+                            //   Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) =>
+                            //             const DoorPredictionPageWidget()),
+                            //   );
+                            // },
+                            ),
+                      ),
+                    ],
+                  ))),
+          // HomeAppButtonWidget(
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => const DoorPredictionPageWidget()),
+          //     );
+          //   },
+          //   text: 'Door Lock Predictor',
+          //   options: HomeAppButtonOptions(
+          //     width: 200,
+          //     height: 40,
+          //     color: HomeAppTheme.of(context).primaryBtnText,
+          //     textStyle: HomeAppTheme.of(context).bodyText1,
+          //     elevation: 1,
+          //     borderSide: const BorderSide(
+          //       color: Colors.transparent,
+          //       width: 1,
+          //     ),
+          //     borderRadius: 20,
+          //   ),
+          // // ),
           const SliverToBoxAdapter(
               child: SizedBox(
             height: 20,
@@ -272,7 +351,7 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
                 SliverChildBuilderDelegate(childCount: _devicesList.length,
                     (BuildContext context, int index) {
               if (_hasDevices == true) {
-                return DeviceCard(_devicesList[index] as Device);
+                return DeviceCard(_devicesList[index]);
               } else {
                 return Container(
                   color: Colors.transparent,
@@ -370,100 +449,9 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
     );
   }
 
-  void _addDevice() {
-    //_device.serialNumber =
-  }
-
-  void getCurrentUser() async {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        currentUser = user;
-        print(currentUser.email);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   // Method to load rooms (can be from any source)
-  Future<void> _loadRooms() async {
-    // Simulate fetching from a data source (e.g., Firebase, local storage)
-    // For now, we'll use a static list
-    getCurrentUser();
-    var uid = currentUser.uid;
-    List<Room> loadedRooms = [];
-    try {
-      var data = await FirebaseFirestore.instance
-          .collection("users")
-          .doc(uid)
-          .collection("rooms")
-          .get();
-
-      if (data.size > 0) {
-        loadedRooms = data.docs.map((doc) {
-          return Room(
-              name: doc['name'], color: HomeAppTheme.of(context).primaryColor);
-        }).toList();
-      }
-    } catch (e) {
-      print("Error fetching rooms from Firebase: $e");
-      // Handle error (e.g., show an error message)
-    }
-    setState(() {
-      _rooms = loadedRooms;
-    });
-  }
-
   String getCurrentDate() {
     String formatter = DateFormat.yMMMMd('en_US').format(now);
     return formatter;
-  }
-
-  Future getUsersDeviceList() async {
-    getCurrentUser();
-    var uid = currentUser.uid;
-    var data = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(uid)
-        .collection("devices")
-        .orderBy('device name', descending: true)
-        .get();
-
-    if (data.size < 0) {
-      setState(() {
-        // Update your state variable accordingly
-        _devicesList = [];
-        _hasDevices = false;
-      });
-    } else {
-      setState(() {
-        _devicesList =
-            List.from(data.docs.map((doc) => Device.fromSnapshot(doc)));
-        _hasDevices = true;
-      });
-    }
-    print(_devicesList);
-  }
-
-  Future<void> refreshDevices() async {
-    setState(() {
-      isRefreshing = true;
-    });
-
-    await getUsersDeviceList();
-
-    setState(() {
-      isRefreshing = false;
-    });
-  }
-
-  bool isUrlValid(String url) {
-    RegExp urlRegex = RegExp(
-      r"^(http(s)?://)?([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?$",
-      caseSensitive: false,
-      multiLine: false,
-    );
-    return urlRegex.hasMatch(url);
   }
 }

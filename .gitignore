@@ -75,3 +75,6 @@ ios/GoogleMaps.xcconfig
 ios/Flutter/flutter_export_environment.sh
 .flutter-plugins-dependencies
 ios/Runner.xcodeproj/project.pbxproj
+ios/Flutter/Debug.xcconfig
+ios/Flutter/Debug.xcconfig
+ios/Flutter/GoogleMaps.xcconfig
