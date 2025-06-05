@@ -8,8 +8,9 @@ import 'package:homeapp/Pages/FunctionalityPages/addDevicePage.dart';
 import 'package:homeapp/Pages/FunctionalityPages/addRoomWidget.dart';
 import 'package:homeapp/Pages/FunctionalityPages/door_prediction_page.dart';
 import 'package:homeapp/Pages/flutter_flow/homeAppWidgets.dart';
-import 'package:homeapp/Services/authentification.dart';
+import 'package:homeapp/Services/authentication.dart';
 import 'package:homeapp/reusables/modelContainer.dart';
+import 'package:homeapp/reusables/thermostatPage.dart';
 
 import '../../Services/Animations.dart';
 import '../ProfilePages/homeowner_profile.dart';
@@ -542,6 +543,8 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget>
                 child: _buildRoomsSection(),
               ),
 
+              SliverToBoxAdapter(child: _buildThermostatSection()),
+
               // Devices Section Header
               SliverToBoxAdapter(
                 child: _buildDevicesSection(),
@@ -585,6 +588,10 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget>
         child: _buildEnhancedSpeedDial(),
       ),
     );
+  }
+
+  Widget _buildThermostatSection() {
+    return const ThermostatWidget();
   }
 
   @override

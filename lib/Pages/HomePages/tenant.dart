@@ -7,7 +7,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'package:homeapp/reusables/device_card.dart';
 
-import 'package:homeapp/Services/authentification.dart';
+import 'package:homeapp/Services/authentication.dart';
 
 import '../../Services/Animations.dart';
 import '../../Services/FirebaseService.dart';

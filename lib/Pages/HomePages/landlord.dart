@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:homeapp/Pages/FunctionalityPages/addHousePage.dart';
 import 'package:homeapp/Pages/ProfilePages/landlord_profile.dart';
-import 'package:homeapp/Services/authentification.dart';
+import 'package:homeapp/Services/authentication.dart';
 
 import '../../Services/Animations.dart';
 import '../flutter_flow/HomeAppTheme.dart';
@@ -78,7 +78,7 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 background: Container(
-                  //crossAxisAlignment: CrossAxisAlignment.center,
+                    //crossAxisAlignment: CrossAxisAlignment.center,
                     height: size.height * 0.2,
                     child: Column(children: <Widget>[
                       Padding(
@@ -98,27 +98,27 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                                       10, 0, 0, 0),
                                   child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         InkWell(
                                           customBorder: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(100)),
+                                                  BorderRadius.circular(100)),
                                           onTap: () => Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                  const LandlordProfilePageWidget())), // Image tapped
+                                                      const LandlordProfilePageWidget())), // Image tapped
                                           splashColor: Colors
                                               .white10, // Splash color over image
                                           child: Ink(
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                              BorderRadius.circular(10),
+                                                  BorderRadius.circular(10),
                                               image: DecorationImage(
                                                 image: NetworkImage(
                                                     _authentication.urlPath
-                                                        ?.trim() ??
+                                                            ?.trim() ??
                                                         ""),
                                                 fit: BoxFit.cover,
                                               ),
@@ -136,9 +136,10 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                                   child: RichText(
                                     overflow: TextOverflow.visible,
                                     text: TextSpan(
-                                      style:  TextStyle(
+                                      style: TextStyle(
                                         fontSize: 25.0,
-                                        color: HomeAppTheme.of(context).primaryText ,
+                                        color: HomeAppTheme.of(context)
+                                            .primaryText,
                                       ),
                                       children: <TextSpan>[
                                         TextSpan(
@@ -148,11 +149,10 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                                               fontWeight: FontWeight.w600),
                                           //color: FlutterFlowTheme.of(context).primaryText),
                                         ),
-
                                         TextSpan(
-                                            text: _authentication.userName ?? "",
+                                            text:
+                                                _authentication.userName ?? "",
                                             style: const TextStyle(
-
                                                 fontFamily: 'Fira Sans',
                                                 fontWeight: FontWeight.w600)),
                                         TextSpan(
@@ -162,13 +162,11 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
                                         TextSpan(
                                             text: "$date",
                                             style: const TextStyle(
-                                              fontSize: 14,fontFamily: 'Fira Sans',
+                                              fontSize: 14,
+                                              fontFamily: 'Fira Sans',
                                               fontWeight: FontWeight.w600,
                                               //fontStyle: FontStyle.italic)
                                             )),
-
-
-
                                       ],
                                     ),
                                   )),
@@ -181,49 +179,49 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
           ),*/
           const SliverToBoxAdapter(
               child: SizedBox(
-                height: 20,
-              )),
+            height: 20,
+          )),
           SliverToBoxAdapter(
               child: SizedBox(
                   height: 20,
                   child: Center(
                       child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
-                        child: RichText(
-                          overflow: TextOverflow.visible,
-                          text: const TextSpan(
-                            text: "Your Devices",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black38,
-                            ),
-                          ),
-                        ),
-                      )))),
-          const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 10,
-              )),
-          SliverGrid(
-            delegate:
-            SliverChildBuilderDelegate(childCount: _devicesList.length ?? 0,
-                    (BuildContext context, int index) {
-                  if (_devicesList.length != 0)
-                    return DeviceCard(_devicesList[index] as Device);
-                  else
-                    return RichText(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
+                    child: RichText(
                       overflow: TextOverflow.visible,
                       text: const TextSpan(
-                        text: "You don't have any devices yet!",
+                        text: "Your Devices",
                         style: TextStyle(
-                          fontSize: 30.0,
+                          fontSize: 15.0,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(232, 10, 10, 10),
+                          color: Colors.black38,
                         ),
                       ),
-                    );
-                }),
+                    ),
+                  )))),
+          const SliverToBoxAdapter(
+              child: SizedBox(
+            height: 10,
+          )),
+          SliverGrid(
+            delegate:
+                SliverChildBuilderDelegate(childCount: _devicesList.length ?? 0,
+                    (BuildContext context, int index) {
+              if (_devicesList.length != 0)
+                return DeviceCard(_devicesList[index] as Device);
+              else
+                return RichText(
+                  overflow: TextOverflow.visible,
+                  text: const TextSpan(
+                    text: "You don't have any devices yet!",
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(232, 10, 10, 10),
+                    ),
+                  ),
+                );
+            }),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 300,
                 childAspectRatio: 2 / 2,
@@ -238,9 +236,11 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
           direction: SpeedDialDirection.up,
           icon: Icons.add, //icon on Floating action button
           activeIcon: Icons.close, //icon when menu is expanded on button
-          backgroundColor: const Color.fromARGB(255, 253, 238, 186), //background color of button
+          backgroundColor: const Color.fromARGB(
+              255, 253, 238, 186), //background color of button
           foregroundColor: Colors.white, //font color, icon color in button
-          activeBackgroundColor: HomeAppTheme.of(context).primaryColor, //background color when menu is expanded
+          activeBackgroundColor: HomeAppTheme.of(context)
+              .primaryColor, //background color when menu is expanded
           activeForegroundColor: Colors.white,
           visible: true,
           closeManually: false,
@@ -248,11 +248,12 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
           overlayColor: Colors.white,
           overlayOpacity: 0.8, //background layer opacity
           onOpen: () => BackdropFilter(
-              filter:ImageFilter.blur(sigmaX: 5, sigmaY: 5)),// action when menu opens
+              filter: ImageFilter.blur(
+                  sigmaX: 5, sigmaY: 5)), // action when menu opens
           onClose: () => print('DIAL CLOSED'),
           childPadding: const EdgeInsets.symmetric(vertical: 0),
           spacing: 15,
-          spaceBetweenChildren: 15,//action when menu closes
+          spaceBetweenChildren: 15, //action when menu closes
 
           elevation: 8.0, //shadow elevation of button
           shape: RoundedRectangleBorder(
@@ -260,7 +261,8 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
           ), //shape of button
 
           children: [
-            SpeedDialChild( //speed dial child
+            SpeedDialChild(
+              //speed dial child
               child: Icon(CupertinoIcons.add_circled_solid),
               backgroundColor: HomeAppTheme.of(context).secondaryColor,
               foregroundColor: Colors.white,
@@ -268,16 +270,15 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
               labelBackgroundColor: Colors.white,
 
               labelStyle: HomeAppTheme.of(context).subtitle2.override(
-                fontFamily: 'Poppins',
-                color: HomeAppTheme.of(context).secondaryText,
-              ),
+                    fontFamily: 'Poppins',
+                    color: HomeAppTheme.of(context).secondaryText,
+                  ),
               onTap: () => Navigator.push(
                   context,
                   Animations(
                     page: const AddHousePage(),
                     animationType: RouteAnimationType.slideFromBottom,
-                  )
-              ),
+                  )),
 
               onLongPress: () => print('FIRST CHILD LONG PRESS'),
               shape: RoundedRectangleBorder(
@@ -290,16 +291,15 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
               foregroundColor: Colors.white,
               label: 'Add a house',
               labelStyle: HomeAppTheme.of(context).subtitle2.override(
-                fontFamily: 'Poppins',
-                color: HomeAppTheme.of(context).secondaryText,
-              ),
+                    fontFamily: 'Poppins',
+                    color: HomeAppTheme.of(context).secondaryText,
+                  ),
               onTap: () => print('SECOND CHILD'),
               onLongPress: () => print('SECOND CHILD LONG PRESS'),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
-
 
             //add more menu item children here
           ],
@@ -342,11 +342,9 @@ class _LandlordHomePageWidgetState extends State<LandlordHomePageWidget> {
     setState(() {
       _devicesList =
           List.from(data.docs.map((doc) => Device.fromSnapshot(doc)));
-
     });
     print(_devicesList);
   }
-
 
   Future<void> refreshDevices() async {
     setState(() {
