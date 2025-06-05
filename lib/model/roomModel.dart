@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:homeapp/reusables/roomPage.dart';
 
-import '../../Services/Animations.dart';
+import '../../services/Animations.dart';
 import '../Pages/flutter_flow/HomeAppTheme.dart';
 
 class Room {

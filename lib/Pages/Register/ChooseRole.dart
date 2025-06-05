@@ -85,7 +85,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                 onTap:() async {
                   role = "homeowner";
                   addUserRole(role);
-                  Navigator.pushNamed(context, 'homeowner_main');
+                  Navigator.pushNamed(context, '/homeowner_main');
                 },
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
@@ -150,7 +150,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                   onTap:() {
                     role = "tenant";
                     addUserRole(role);
-                    Navigator.pushNamed(context, 'tenant_main');
+                    Navigator.pushNamed(context, '/tenant_main');
                   },
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
@@ -214,7 +214,7 @@ class _ChooseRoleWidgetState extends State<ChooseRoleWidget>
                   onTap:() {
                     role = "landlord";
                     addUserRole(role);
-                    Navigator.pushNamed(context, 'landlord_main');
+                    Navigator.pushNamed(context, '/landlord_main');
                   },
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),

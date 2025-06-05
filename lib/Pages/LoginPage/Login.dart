@@ -3,9 +3,12 @@ import 'dart:developer' as developer;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:homeapp/Pages/HomePages/tenant.dart';
 
-import '../../Services/authentication.dart';
+import '../../services/authentication.dart';
+import '../../providers/auth_provider.dart';
+import '../../providers/navigation_provider.dart';
 import '../HomePages/homeowner.dart';
 import '../StartingPages/startPage.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
@@ -14,20 +17,20 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:homeapp/Services/FirebaseService.dart';
+import 'package:homeapp/services/FirebaseService.dart';
 //import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPageWidget extends StatefulWidget {
+class LoginPageWidget extends ConsumerStatefulWidget {
   const LoginPageWidget({Key? key}) : super(key: key);
 
   @override
-  _LoginPageWidgetState createState() => _LoginPageWidgetState();
+  ConsumerState<LoginPageWidget> createState() => _LoginPageWidgetState();
 }
 
-class _LoginPageWidgetState extends State<LoginPageWidget> {
+class _LoginPageWidgetState extends ConsumerState<LoginPageWidget> {
   final emailAddressController = TextEditingController();
   final passwordLoginController = TextEditingController();
   final passwordConfirmedLoginController = TextEditingController();

@@ -8,15 +8,17 @@ import 'package:homeapp/Pages/FunctionalityPages/addDevicePage.dart';
 import 'package:homeapp/Pages/FunctionalityPages/addRoomWidget.dart';
 import 'package:homeapp/Pages/FunctionalityPages/door_prediction_page.dart';
 import 'package:homeapp/Pages/flutter_flow/homeAppWidgets.dart';
-import 'package:homeapp/Services/authentication.dart';
+import 'package:homeapp/services/authentication.dart';
 import 'package:homeapp/reusables/modelContainer.dart';
 import 'package:homeapp/reusables/thermostatPage.dart';
+import '../../widgets/climate_control_card.dart';
 
-import '../../Services/Animations.dart';
+import '../../services/Animations.dart';
 import '../ProfilePages/homeowner_profile.dart';
 import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:homeapp/model/Devices.dart';
 import 'package:homeapp/reusables/device_card.dart';
@@ -24,15 +26,15 @@ import 'package:homeapp/reusables/doorContainer.dart';
 import 'package:homeapp/model/roomModel.dart';
 import 'package:intl/intl.dart';
 
-class HomeownerHomePageWidget extends StatefulWidget {
+class HomeownerHomePageWidget extends ConsumerStatefulWidget {
   const HomeownerHomePageWidget({Key? key}) : super(key: key);
 
   @override
-  _HomeownerHomePageWidgetState createState() =>
+  ConsumerState<HomeownerHomePageWidget> createState() =>
       _HomeownerHomePageWidgetState();
 }
 
-class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget>
+class _HomeownerHomePageWidgetState extends ConsumerState<HomeownerHomePageWidget>
     with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final Authentication _authentication = Authentication();
@@ -541,6 +543,14 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget>
               // Rooms Section
               SliverToBoxAdapter(
                 child: _buildRoomsSection(),
+              ),
+
+              // Climate Control Card
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: ClimateControlCard(),
+                ),
               ),
 
               SliverToBoxAdapter(child: _buildThermostatSection()),

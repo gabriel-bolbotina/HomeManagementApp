@@ -4,11 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:homeapp/Pages/Register/Address.dart';
-import 'package:homeapp/Services/authentication.dart';
+import 'package:homeapp/services/authentication.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-import '../../Services/FirebaseService.dart';
+import '../../services/FirebaseService.dart';
 import '../HomePages/homeowner.dart';
 import '../NotificationPages/homeowner_notification.dart';
 import '../ProfilePages/homeowner_profile.dart';
@@ -76,8 +76,8 @@ class _HomeownerEditPageWidgetState extends State<HomeownerEditPageWidget> {
   }
 
   Future<void> fetchImage() async {
-    imageUrl = (await _authentication.getDataImage())!;
-    imageUrl = _authentication.urlPath!;
+    imageUrl = (await _authentication.getDataImage() ?? '')!;
+    //imageUrl = _authentication.urlPath!;
     print(imageUrl);
     setState(() {
       isImageAvailable = imageUrl != null && imageUrl.isNotEmpty;

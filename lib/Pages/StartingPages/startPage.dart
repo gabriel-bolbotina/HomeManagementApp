@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:homeapp/Pages/LoginPage/Login.dart';
+import 'package:homeapp/Pages/LoginPage/login_riverpod.dart';
 import 'package:homeapp/Pages/Register/Register.dart';
-import 'package:homeapp/Services/authentication.dart';
+import 'package:homeapp/services/authentication.dart';
 import 'package:rive/rive.dart';
 
 import '../flutter_flow/HomeAppTheme.dart';

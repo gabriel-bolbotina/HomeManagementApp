@@ -42,12 +42,14 @@ dependencies:
   cached_network_image: ^3.4.1
   cloud_firestore: ^5.6.0
   cupertino_icons: ^1.0.2
-  dcdg: ^4.1.0
+  #dcdg: ^4.1.0
   firebase_auth: ^5.5.3
   firebase_core: ^3.13.0
   firebase_storage:
   flutter:
     sdk: flutter
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
   flutter_animate: ^4.1.1+1
   flutter_bluetooth_serial: 0.4.0
   flutter_cache_manager: ^3.4.1
@@ -98,6 +100,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.4.7
+  riverpod_generator: ^2.3.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

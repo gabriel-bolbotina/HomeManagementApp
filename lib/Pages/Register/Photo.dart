@@ -13,7 +13,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'dart:developer';
 
-import '../../Services/FirebaseService.dart';
+import '../../services/FirebaseService.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/homeAppWidgets.dart';

@@ -6,9 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:homeapp/Pages/FunctionalityPages/addHousePage.dart';
 import 'package:homeapp/Pages/ProfilePages/landlord_profile.dart';
-import 'package:homeapp/Services/authentication.dart';
+import 'package:homeapp/services/authentication.dart';
 
-import '../../Services/Animations.dart';
+import '../../services/Animations.dart';
 import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/homeAppWidgets.dart';

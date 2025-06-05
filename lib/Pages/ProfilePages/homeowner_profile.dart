@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:homeapp/Services/authentication.dart';
+import 'package:homeapp/services/authentication.dart';
 
-import '../../Services/FirebaseService.dart';
+import '../../services/FirebaseService.dart';
 import '../EditPages/homeowner_edit.dart';
 import '../HomePages/homeowner.dart';
 import '../NotificationPages/homeowner_notification.dart';
@@ -70,7 +70,7 @@ class _HomeownerProfilePageWidgetState
                       FirebaseService service = FirebaseService();
                       await service.signOutFromGoogle();
 
-                      Navigator.pushReplacementNamed(context, 'homescreen');
+                      Navigator.pushReplacementNamed(context, '/homescreen');
                     },
                     child: const Text('OK'),
                   ),

@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:homeapp/Services/authentication.dart';
+import 'package:homeapp/services/authentication.dart';
 
-import '../../Services/FirebaseService.dart';
+import '../../services/FirebaseService.dart';
 import '../EditPages/tenant_edit.dart';
 import '../HomePages/tenant.dart';
 import '../NotificationPages/tenant_notification.dart';
@@ -69,7 +69,7 @@ class _TenantProfilePageWidgetState extends State<TenantProfilePageWidget> {
                       FirebaseService service = FirebaseService();
                       await service.signOutFromGoogle();
 
-                      Navigator.pushReplacementNamed(context, 'homescreen');
+                      Navigator.pushReplacementNamed(context, '/homescreen');
                     },
                     child: const Text('OK'),
                   ),
