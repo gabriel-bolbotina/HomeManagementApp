@@ -19,8 +19,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   await Firebase.initializeApp();
-  await dotenv.load(
-      fileName: "/Users/gabrielbolbotina/repos/homemanagementapp/.env");
+  await dotenv.load(fileName: ".env");
 
   runApp(
     const ProviderScope(
@@ -31,7 +30,7 @@ void main() async {
 
 class HomeApp extends ConsumerWidget {
   const HomeApp({Key? key}) : super(key: key);
-  
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,8 +50,10 @@ class HomeApp extends ConsumerWidget {
         '/register_screen': (context) => const RegisterPageWidget(),
         '/address_screen': (context) => const Address(fromRegister: true),
         '/homeowner_main': (context) => const HomeownerHomePageWidget(),
-        '/tenant_main': (context) => const HomeownerHomePageWidget(), // All users go to same screen
-        '/landlord_main': (context) => const HomeownerHomePageWidget(), // All users go to same screen
+        '/tenant_main': (context) =>
+            const HomeownerHomePageWidget(), // All users go to same screen
+        '/landlord_main': (context) =>
+            const HomeownerHomePageWidget(), // All users go to same screen
         '/photo_screen': (context) => const AddPhotoWidget(),
         '/address_update': (context) => const Address(
               fromRegister: false,
@@ -61,7 +62,6 @@ class HomeApp extends ConsumerWidget {
       },
     );
   }
-
 }
 
 class AppRouter extends ConsumerWidget {
