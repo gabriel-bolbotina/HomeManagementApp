@@ -25,7 +25,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>GoogleMapsAPIKey</key>
-	<string>$(Maps_API_KEY_VALUE)</string>
+	<string>$(GOOGLE_MAPS_API_KEY)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>

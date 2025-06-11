@@ -2,397 +2,113 @@ import 'dart:core';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:homeapp/Pages/FunctionalityPages/addDevicePage.dart';
 import 'package:homeapp/Pages/FunctionalityPages/addRoomWidget.dart';
-import 'package:homeapp/Services/authentification.dart';
+import 'package:homeapp/Pages/FunctionalityPages/door_prediction_page.dart';
+import 'package:homeapp/Pages/flutter_flow/homeAppWidgets.dart';
+import 'package:homeapp/services/authentication.dart';
+import 'package:homeapp/reusables/modelContainer.dart';
+import 'package:homeapp/reusables/thermostatPage.dart';
+import '../../widgets/climate_control_card.dart';
 
-import '../../Services/Animations.dart';
-import '../../Services/FirebaseService.dart';
-import '../FunctionalityPages/add_functionality.dart';
-import '../FunctionalityPages/functionality.dart';
+import '../../services/Animations.dart';
 import '../ProfilePages/homeowner_profile.dart';
 import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:homeapp/model/Devices.dart';
 import 'package:homeapp/reusables/device_card.dart';
 import 'package:homeapp/reusables/doorContainer.dart';
 import 'package:homeapp/model/roomModel.dart';
+import 'package:intl/intl.dart';
 
-class HomeownerHomePageWidget extends StatefulWidget {
+class HomeownerHomePageWidget extends ConsumerStatefulWidget {
   const HomeownerHomePageWidget({Key? key}) : super(key: key);
 
   @override
-  _HomeownerHomePageWidgetState createState() =>
+  ConsumerState<HomeownerHomePageWidget> createState() =>
       _HomeownerHomePageWidgetState();
 }
 
-class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
+class _HomeownerHomePageWidgetState extends ConsumerState<HomeownerHomePageWidget>
+    with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isRefreshing = false;
-  List<Room> _rooms = [];
-  Device _device = Device();
   final Authentication _authentication = Authentication();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  late User currentUser;
-  List<Object> _devicesList = [];
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Device _devices = Device();
-  DateTime now = DateTime.now();
-  String? date;
-  final bool _pinned = true;
-  final bool _snap = false;
-  bool _floating = false;
+
+  bool isRefreshing = false;
   bool isImageAvailable = false;
-  late String? image;
-  late String imageUrl;
   bool _hasDevices = false;
 
-  @override
-  Future<void> didChangeDependencies() async {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    getUsersDeviceList();
-    fetchImage();
-    await _authentication.getUserName();
-    await _authentication.getProfileImage();
-    date = getCurrentDate();
-    print(isImageAvailable);
-    _loadRooms();
-  }
+  List<Room> _rooms = [];
+  List<Device> _devicesList = [];
+  String? date;
+  String? greeting;
+  DateTime now = DateTime.now();
+
+  // Animation controllers for smooth transitions
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
-    fetchImage();
-    getUsersDeviceList();
-    date = getCurrentDate();
-    _loadRooms();
+    super.initState();
+    _initializeAnimations();
+    _initializeData();
   }
 
-  Future<void> fetchImage() async {
-    imageUrl = (await _authentication.getProfileImage())!;
-    print(imageUrl);
-    setState(() {
-      isImageAvailable = imageUrl != null && imageUrl.isNotEmpty;
-    });
-  }
-
-  Future addUserDetails(String firstName, String lastName, int age) async {
-    await FirebaseFirestore.instance.collection('users').add({
-      'first name': firstName,
-      'last name': lastName,
-      'age': age,
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: HomeAppTheme.of(context).primaryBackground,
-      body: RefreshIndicator(
-        onRefresh: refreshDevices,
-        child: CustomScrollView(slivers: <Widget>[
-          SliverAppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: HomeAppTheme.of(context).primaryBackground,
-              pinned: _pinned,
-              snap: _snap,
-              floating: _floating,
-              expandedHeight: size.height * 0.2,
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.parallax,
-                background: SizedBox(
-                    //crossAxisAlignment: CrossAxisAlignment.center,
-                    height: size.height * 0.2,
-                    child: Column(children: <Widget>[
-                      Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              20, 70, 0, 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              // menu icon
-                              //Image.asset(
-                              //'assets/images/iconapp.png',
-                              //height: 30,
-                              //color: Colors.grey[800],
-                              //),
-                              Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      10, 0, 0, 0),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        InkWell(
-                                          customBorder: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(100)),
-                                          onTap: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const HomeownerProfilePageWidget())), // Image tapped
-                                          splashColor: Colors
-                                              .white10, // Splash color over image
-                                          child: Ink(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              image: DecorationImage(
-                                                image: isImageAvailable
-                                                    ? NetworkImage(
-                                                        _authentication.urlPath!
-                                                            .trim())
-                                                    : Image.asset(
-                                                            'assets/images/iconapp.png')
-                                                        .image,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            width: 65,
-                                            height: 65,
-                                          ),
-                                        ),
-                                      ])),
-                              //const SizedBox(height: 10),
-                              // account icon
-                              Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 0, 0),
-                                  child: RichText(
-                                    overflow: TextOverflow.visible,
-                                    text: TextSpan(
-                                      style: TextStyle(
-                                        fontSize: 25.0,
-                                        color: HomeAppTheme.of(context)
-                                            .primaryText,
-                                      ),
-                                      children: <TextSpan>[
-                                        const TextSpan(
-                                          text: "Welcome Home, \n",
-                                          style: TextStyle(
-                                              fontFamily: 'Fira Sans',
-                                              fontWeight: FontWeight.w600),
-                                          //color: FlutterFlowTheme.of(context).primaryText),
-                                        ),
-                                        TextSpan(
-                                            text:
-                                                _authentication.userName ?? "",
-                                            style: const TextStyle(
-                                                fontFamily: 'Fira Sans',
-                                                fontWeight: FontWeight.w600)),
-                                        const TextSpan(
-                                            text: " \n",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold)),
-                                        TextSpan(
-                                            text: "$date",
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: 'Fira Sans',
-                                              fontWeight: FontWeight.w600,
-                                              //fontStyle: FontStyle.italic)
-                                            )),
-                                      ],
-                                    ),
-                                  )),
-                            ],
-                          ))
-                    ])),
-              )),
-          SliverToBoxAdapter(
-            child: RoomNamesWidget(rooms: _rooms),
-          ),
-          const SliverToBoxAdapter(
-              child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                  child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: DoorStatusContainer(
-                        isDoorOpen: true,
-                      )))),
-          const SliverToBoxAdapter(
-              child: SizedBox(
-            height: 20,
-          )),
-          SliverToBoxAdapter(
-              child: SizedBox(
-                  height: 20,
-                  child: Center(
-                      child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
-                    child: RichText(
-                      overflow: TextOverflow.visible,
-                      text: const TextSpan(
-                        text: "Your Devices",
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black38,
-                        ),
-                      ),
-                    ),
-                  )))),
-          const SliverToBoxAdapter(
-              child: SizedBox(
-            height: 10,
-          )),
-          SliverToBoxAdapter(
-              child: Visibility(
-            visible: !_hasDevices,
-            child: SizedBox(
-                height: 30,
-                child: Center(
-                    child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 30),
-                  child: RichText(
-                    overflow: TextOverflow.visible,
-                    text: const TextSpan(
-                      text: "You have no devices yet, please add some",
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black38,
-                      ),
-                    ),
-                  ),
-                ))),
-          )),
-          SliverGrid(
-            delegate:
-                SliverChildBuilderDelegate(childCount: _devicesList.length,
-                    (BuildContext context, int index) {
-              if (_hasDevices == true) {
-                return DeviceCard(_devicesList[index] as Device);
-              } else {
-                return Container(
-                  color: Colors.transparent,
-                );
-              }
-            }),
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 300,
-                childAspectRatio: 2 / 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 20),
-          )
-        ]),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 10),
-        child: SpeedDial(
-          direction: SpeedDialDirection.up,
-          icon: Icons.add, //icon on Floating action button
-          activeIcon: Icons.close, //icon when menu is expanded on button
-          backgroundColor: const Color.fromARGB(
-              255, 253, 238, 186), //background color of button
-          foregroundColor: Colors.white, //font color, icon color in button
-          activeBackgroundColor: HomeAppTheme.of(context)
-              .primaryColor, //background color when menu is expanded
-          activeForegroundColor: Colors.white,
-          visible: true,
-          closeManually: false,
-          curve: Curves.easeInExpo,
-          overlayColor: Colors.white,
-          overlayOpacity: 0.8, //background layer opacity
-          onOpen: () => BackdropFilter(
-              filter: ImageFilter.blur(
-                  sigmaX: 5, sigmaY: 5)), // action when menu opens
-          onClose: () => print('DIAL CLOSED'),
-          childPadding: const EdgeInsets.symmetric(vertical: 0),
-          spacing: 15,
-          spaceBetweenChildren: 15, //action when menu closes
-
-          elevation: 8.0, //shadow elevation of button
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ), //shape of button
-
-          children: [
-            SpeedDialChild(
-              //speed dial child
-              child: Icon(CupertinoIcons.add_circled_solid),
-              backgroundColor: HomeAppTheme.of(context).secondaryColor,
-              foregroundColor: Colors.white,
-              label: 'Add a smart device',
-              labelBackgroundColor: Colors.white,
-
-              labelStyle: HomeAppTheme.of(context).subtitle2.override(
-                    fontFamily: 'Poppins',
-                    color: HomeAppTheme.of(context).secondaryText,
-                  ),
-              onTap: () => Navigator.push(
-                  context,
-                  Animations(
-                    page: const AddDevicePageWidget(),
-                    animationType: RouteAnimationType.slideFromBottom,
-                  )),
-
-              onLongPress: () => print('FIRST CHILD LONG PRESS'),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-            ),
-            SpeedDialChild(
-              child: Icon(CupertinoIcons.app),
-              backgroundColor: HomeAppTheme.of(context).alternate,
-              foregroundColor: Colors.white,
-              label: 'Add a room or zone',
-              labelStyle: HomeAppTheme.of(context).subtitle2.override(
-                    fontFamily: 'Poppins',
-                    color: HomeAppTheme.of(context).secondaryText,
-                  ),
-              onTap: () => Navigator.push(
-                  context,
-                  Animations(
-                    page: const AddRoomPageWidget(),
-                    animationType: RouteAnimationType.slideFromBottom,
-                  )),
-              onLongPress: () => print('SECOND CHILD LONG PRESS'),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-            ),
-
-            //add more menu item children here
-          ],
-        ),
-      ),
+  void _initializeAnimations() {
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
     );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut),
+    );
+    _fadeController.forward();
   }
 
-  void _addDevice() {
-    //_device.serialNumber =
-  }
-
-  void getCurrentUser() async {
+  Future<void> _initializeData() async {
     try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        currentUser = user;
-        print(currentUser.email);
-      }
+      // Get user data
+      final userData = await _authentication.getUserData();
+      if (userData == null) return;
+
+      // Get profile image and user name
+      final imageUrl = await _authentication.getProfileImage();
+      final userName = await _authentication.getUserName();
+
+      // Get rooms and devices
+      await Future.wait([
+        _loadRooms(userData['uid']),
+        _loadDevices(userData['uid']),
+      ]);
+
+      setState(() {
+        isImageAvailable = imageUrl != null && imageUrl.isNotEmpty;
+        date = DateFormat.yMMMMd('en_US').format(now);
+        greeting = _getTimeBasedGreeting();
+      });
     } catch (e) {
-      print(e);
+      print('Error initializing data: $e');
     }
   }
 
-  // Method to load rooms (can be from any source)
-  Future<void> _loadRooms() async {
-    // Simulate fetching from a data source (e.g., Firebase, local storage)
-    // For now, we'll use a static list
-    getCurrentUser();
-    var uid = currentUser.uid;
-    List<Room> loadedRooms = [];
+  String _getTimeBasedGreeting() {
+    int hour = now.hour;
+    if (hour < 12) {
+      return "Good Morning";
+    } else if (hour < 17) {
+      return "Good Afternoon";
+    } else {
+      return "Good Evening";
+    }
+  }
+
+  Future<void> _loadRooms(String uid) async {
     try {
       var data = await FirebaseFirestore.instance
           .collection("users")
@@ -401,69 +117,501 @@ class _HomeownerHomePageWidgetState extends State<HomeownerHomePageWidget> {
           .get();
 
       if (data.size > 0) {
-        loadedRooms = data.docs.map((doc) {
-          return Room(
-              name: doc['name'], color: HomeAppTheme.of(context).primaryColor);
-        }).toList();
+        setState(() {
+          _rooms = data.docs.map((doc) {
+            return Room(
+              name: doc['name'],
+              color: HomeAppTheme.of(context).primaryColor,
+            );
+          }).toList();
+        });
       }
     } catch (e) {
-      print("Error fetching rooms from Firebase: $e");
-      // Handle error (e.g., show an error message)
+      print("Error fetching rooms: $e");
     }
-    setState(() {
-      _rooms = loadedRooms;
-    });
+  }
+
+  Future<void> _loadDevices(String uid) async {
+    try {
+      var data = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .collection("devices")
+          .orderBy('device name', descending: true)
+          .get();
+
+      setState(() {
+        _devicesList =
+            data.docs.map((doc) => Device.fromSnapshot(doc)).toList();
+        _hasDevices = _devicesList.isNotEmpty;
+      });
+    } catch (e) {
+      print("Error fetching devices: $e");
+      _devicesList = [];
+      _hasDevices = false;
+    }
+  }
+
+  Future<void> refreshDevices() async {
+    setState(() => isRefreshing = true);
+
+    try {
+      final userData = await _authentication.getUserData();
+      if (userData != null) {
+        await _loadDevices(userData['uid']);
+      }
+    } finally {
+      setState(() => isRefreshing = false);
+    }
+  }
+
+  Widget _buildProfileSection() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: Row(
+        children: [
+          // Profile Image with enhanced styling
+          Hero(
+            tag: 'profile_image',
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: InkWell(
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeownerProfilePageWidget(),
+                  ),
+                ),
+                child: Container(
+                  width: 75,
+                  height: 75,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: HomeAppTheme.of(context).primaryColor,
+                      width: 2,
+                    ),
+                    image: DecorationImage(
+                      image: isImageAvailable
+                          ? NetworkImage(_authentication.urlPath!.trim())
+                          : const AssetImage('assets/images/iconapp.png')
+                              as ImageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 20),
+
+          // Welcome Text with improved typography
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  greeting ?? "Welcome",
+                  style: HomeAppTheme.of(context).subtitle1.override(
+                        fontFamily: 'Fira Sans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: HomeAppTheme.of(context).secondaryText,
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  _authentication.userName ?? "User",
+                  style: HomeAppTheme.of(context).title2.override(
+                        fontFamily: 'Fira Sans',
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: HomeAppTheme.of(context).primaryText,
+                      ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color:
+                        HomeAppTheme.of(context).primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    date ?? "",
+                    style: HomeAppTheme.of(context).bodyText2.override(
+                          fontFamily: 'Fira Sans',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: HomeAppTheme.of(context).secondaryText,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickActionsSection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Quick Actions",
+            style: HomeAppTheme.of(context).subtitle1.override(
+                  fontFamily: 'Fira Sans',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: HomeAppTheme.of(context).primaryText,
+                ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: DoorStatusContainer(
+                  isDoorOpen: true,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DoorPredictionPageWidget(),
+                      ),
+                    );
+                  },
+                  child: const PredictionContainer(),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRoomsSection() {
+    if (_rooms.isEmpty) return const SizedBox.shrink();
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Rooms",
+            style: HomeAppTheme.of(context).subtitle1.override(
+                  fontFamily: 'Fira Sans',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: HomeAppTheme.of(context).primaryText,
+                ),
+          ),
+          const SizedBox(height: 12),
+          RoomNamesWidget(rooms: _rooms),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDevicesSection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Your Devices",
+                style: HomeAppTheme.of(context).subtitle1.override(
+                      fontFamily: 'Fira Sans',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: HomeAppTheme.of(context).primaryText,
+                    ),
+              ),
+              if (_hasDevices)
+                Text(
+                  "${_devicesList.length} device${_devicesList.length != 1 ? 's' : ''}",
+                  style: HomeAppTheme.of(context).bodyText2.override(
+                        fontFamily: 'Fira Sans',
+                        fontSize: 14,
+                        color: HomeAppTheme.of(context).secondaryText,
+                      ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          if (!_hasDevices)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: HomeAppTheme.of(context).secondaryBackground,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: HomeAppTheme.of(context).alternate,
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    CupertinoIcons.device_phone_portrait,
+                    size: 48,
+                    color: HomeAppTheme.of(context).secondaryText,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "No devices yet",
+                    style: HomeAppTheme.of(context).subtitle2.override(
+                          fontFamily: 'Fira Sans',
+                          fontWeight: FontWeight.w600,
+                          color: HomeAppTheme.of(context).secondaryText,
+                        ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Add your first smart device to get started",
+                    textAlign: TextAlign.center,
+                    style: HomeAppTheme.of(context).bodyText2.override(
+                          fontFamily: 'Fira Sans',
+                          color: HomeAppTheme.of(context).secondaryText,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEnhancedSpeedDial() {
+    return SpeedDial(
+      direction: SpeedDialDirection.up,
+      icon: Icons.add,
+      activeIcon: Icons.close,
+      backgroundColor: HomeAppTheme.of(context).primaryColor,
+      foregroundColor: Colors.white,
+      activeBackgroundColor: HomeAppTheme.of(context).secondaryBackground,
+      activeForegroundColor: Colors.white,
+      visible: true,
+      closeManually: false,
+      curve: Curves.easeOutCubic,
+      //overlayColor: Colors.black,
+      elevation: 8.0,
+      onOpen: () => Positioned.fill(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+          child: Container(
+            color:
+                Colors.black.withValues(alpha: 0.2), // Semi-transparent overlay
+          ),
+        ),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      childPadding: const EdgeInsets.symmetric(vertical: 8),
+      spacing: 15,
+      spaceBetweenChildren: 15,
+      children: [
+        SpeedDialChild(
+          child: const Icon(CupertinoIcons.add_circled_solid),
+          backgroundColor: HomeAppTheme.of(context).secondaryColor,
+          foregroundColor: Colors.white,
+          label: 'Add Smart Device',
+          labelBackgroundColor: Colors.white,
+          labelStyle: HomeAppTheme.of(context).subtitle2.override(
+                fontFamily: 'Fira Sans',
+                color: HomeAppTheme.of(context).secondaryText,
+                fontWeight: FontWeight.w500,
+              ),
+          onTap: () => Navigator.push(
+            context,
+            Animations(
+              page: const AddDevicePageWidget(),
+              animationType: RouteAnimationType.slideFromBottom,
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+        SpeedDialChild(
+          child: const Icon(CupertinoIcons.app),
+          backgroundColor: HomeAppTheme.of(context).alternate,
+          foregroundColor: Colors.white,
+          label: 'Add Room',
+          labelBackgroundColor: Colors.white,
+          labelStyle: HomeAppTheme.of(context).subtitle2.override(
+                fontFamily: 'Fira Sans',
+                color: HomeAppTheme.of(context).secondaryText,
+                fontWeight: FontWeight.w500,
+              ),
+          onTap: () => Navigator.push(
+            context,
+            Animations(
+              page: const AddRoomPageWidget(),
+              animationType: RouteAnimationType.slideFromBottom,
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: HomeAppTheme.of(context).primaryBackground,
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: RefreshIndicator(
+          onRefresh: refreshDevices,
+          color: HomeAppTheme.of(context).primaryColor,
+          backgroundColor: Colors.white,
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: <Widget>[
+              // Enhanced App Bar
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                backgroundColor: HomeAppTheme.of(context).primaryBackground,
+                pinned: true,
+                snap: false,
+                floating: false,
+                expandedHeight: 160,
+                elevation: 0,
+                flexibleSpace: FlexibleSpaceBar(
+                  collapseMode: CollapseMode.parallax,
+                  background: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          HomeAppTheme.of(context).primaryBackground,
+                          HomeAppTheme.of(context)
+                              .primaryBackground
+                              .withOpacity(0.8),
+                        ],
+                      ),
+                    ),
+                    child: SafeArea(
+                      child: _buildProfileSection(),
+                    ),
+                  ),
+                ),
+              ),
+
+              // Quick Actions Section
+              SliverToBoxAdapter(
+                child: _buildQuickActionsSection(),
+              ),
+
+              // Rooms Section
+              SliverToBoxAdapter(
+                child: _buildRoomsSection(),
+              ),
+
+              // Climate Control Card
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: ClimateControlCard(),
+                ),
+              ),
+
+              SliverToBoxAdapter(child: _buildThermostatSection()),
+
+              // Devices Section Header
+              SliverToBoxAdapter(
+                child: _buildDevicesSection(),
+              ),
+
+              // Devices Grid
+              if (_hasDevices)
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: SliverGrid(
+                    delegate: SliverChildBuilderDelegate(
+                      childCount: _devicesList.length,
+                      (BuildContext context, int index) {
+                        return AnimatedContainer(
+                          duration: Duration(milliseconds: 300 + (index * 100)),
+                          curve: Curves.easeOutCubic,
+                          child: DeviceCard(_devicesList[index]),
+                        );
+                      },
+                    ),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.0,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                  ),
+                ),
+
+              // Bottom padding for FAB
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 100),
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 16, right: 8),
+        child: _buildEnhancedSpeedDial(),
+      ),
+    );
+  }
+
+  Widget _buildThermostatSection() {
+    return const ThermostatWidget();
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
   }
 
   String getCurrentDate() {
     String formatter = DateFormat.yMMMMd('en_US').format(now);
     return formatter;
-  }
-
-  Future getUsersDeviceList() async {
-    getCurrentUser();
-    var uid = currentUser.uid;
-    var data = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(uid)
-        .collection("devices")
-        .orderBy('device name', descending: true)
-        .get();
-
-    if (data.size < 0) {
-      setState(() {
-        // Update your state variable accordingly
-        _devicesList = [];
-        _hasDevices = false;
-      });
-    } else {
-      setState(() {
-        _devicesList =
-            List.from(data.docs.map((doc) => Device.fromSnapshot(doc)));
-        _hasDevices = true;
-      });
-    }
-    print(_devicesList);
-  }
-
-  Future<void> refreshDevices() async {
-    setState(() {
-      isRefreshing = true;
-    });
-
-    await getUsersDeviceList();
-
-    setState(() {
-      isRefreshing = false;
-    });
-  }
-
-  bool isUrlValid(String url) {
-    RegExp urlRegex = RegExp(
-      r"^(http(s)?://)?([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?$",
-      caseSensitive: false,
-      multiLine: false,
-    );
-    return urlRegex.hasMatch(url);
   }
 }

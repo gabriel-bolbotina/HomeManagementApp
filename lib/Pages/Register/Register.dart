@@ -231,7 +231,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
             duration: Duration(seconds: 5),
           ),
         );
-        Navigator.pushReplacementNamed(context, 'address_screen');
+        Navigator.pushReplacementNamed(context, '/address_screen');
 
         setState(() {
           isloading = false;
@@ -293,7 +293,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                 color: CupertinoColors.systemGrey,
               ),
               onPressed: () =>
-                  {Navigator.pushReplacementNamed(context, 'homescreen')},
+                  {Navigator.pushReplacementNamed(context, '/homescreen')},
             ),
             backgroundColor: HomeAppTheme.of(context).primaryBackground,
             automaticallyImplyLeading: false,
@@ -321,7 +321,7 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
                           ),
                           onPressed: () async {
                             Navigator.pushReplacementNamed(
-                                context, 'homescreen');
+                                context, '/homescreen');
                           },
                         ),
                       ),

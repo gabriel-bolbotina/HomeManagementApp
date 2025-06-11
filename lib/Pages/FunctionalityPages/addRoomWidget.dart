@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'dart:io';
 
-import '../../Services/Animations.dart';
+import '../../services/Animations.dart';
 import '../../model/Room.dart';
 import '../../model/sampleDevice.dart';
 import '../HomePages/homeowner.dart';

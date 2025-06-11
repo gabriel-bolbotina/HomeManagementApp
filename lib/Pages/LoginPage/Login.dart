@@ -1,10 +1,14 @@
 import 'dart:io';
+import 'dart:developer' as developer;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:homeapp/Pages/HomePages/tenant.dart';
 
-import '../../Services/authentification.dart';
+import '../../services/authentication.dart';
+import '../../providers/auth_provider.dart';
+import '../../providers/navigation_provider.dart';
 import '../HomePages/homeowner.dart';
 import '../StartingPages/startPage.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
@@ -13,20 +17,20 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/homeAppWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:homeapp/Services/FirebaseService.dart';
+import 'package:homeapp/services/FirebaseService.dart';
 //import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPageWidget extends StatefulWidget {
+class LoginPageWidget extends ConsumerStatefulWidget {
   const LoginPageWidget({Key? key}) : super(key: key);
 
   @override
-  _LoginPageWidgetState createState() => _LoginPageWidgetState();
+  ConsumerState<LoginPageWidget> createState() => _LoginPageWidgetState();
 }
 
-class _LoginPageWidgetState extends State<LoginPageWidget> {
+class _LoginPageWidgetState extends ConsumerState<LoginPageWidget> {
   final emailAddressController = TextEditingController();
   final passwordLoginController = TextEditingController();
   final passwordConfirmedLoginController = TextEditingController();
@@ -41,27 +45,59 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   late User currentUser;
 
   Future Navigation() async {
-    getCurrentUser();
+    try {
+      developer.log('Starting navigation for user', name: 'LoginPage.Navigation');
+      getCurrentUser();
 
-    var userRef =
-        FirebaseFirestore.instance.collection("users").doc(currentUser.uid);
-    DocumentSnapshot doc = await userRef.get();
-    final data = doc.data() as Map<String, dynamic>;
+      var userRef =
+          FirebaseFirestore.instance.collection("users").doc(currentUser.uid);
+      DocumentSnapshot doc = await userRef.get();
+      
+      if (!doc.exists) {
+        developer.log('User document does not exist for uid: ${currentUser.uid}', 
+            name: 'LoginPage.Navigation', level: 1000);
+        _showErrorDialog('User profile not found. Please contact support.');
+        return;
+      }
+      
+      final data = doc.data() as Map<String, dynamic>?;
+      if (data == null) {
+        developer.log('User document data is null for uid: ${currentUser.uid}', 
+            name: 'LoginPage.Navigation', level: 1000);
+        _showErrorDialog('Invalid user profile data. Please contact support.');
+        return;
+      }
 
-    if (data["address"] == '') {
-      Navigator.pushNamed(context, "address_screen");
-    } else if (data["address"] != '' && data["role"] == '') {
-      Navigator.pushNamed(context, "role_screen");
-    }
+      developer.log('User role: ${data["role"]}, address: ${data["address"]}', 
+          name: 'LoginPage.Navigation');
 
-    if (data["role"] == "homeowner") {
-      Navigator.pushNamed(context, "homeowner_main");
-    }
-    if (data["role"] == "tenant") {
-      Navigator.pushNamed(context, "tenant_main");
-    }
-    if (data["role"] == "landlord") {
-      Navigator.pushNamed(context, "landlord_main");
+      if (data["address"] == '') {
+        developer.log('Navigating to address screen', name: 'LoginPage.Navigation');
+        Navigator.pushNamed(context, "address_screen");
+      } else if (data["address"] != '' && data["role"] == '') {
+        developer.log('Navigating to role screen', name: 'LoginPage.Navigation');
+        Navigator.pushNamed(context, "role_screen");
+      }
+
+      if (data["role"] == "homeowner") {
+        developer.log('Navigating to homeowner main', name: 'LoginPage.Navigation');
+        Navigator.pushNamed(context, "homeowner_main");
+      }
+      if (data["role"] == "tenant") {
+        developer.log('Navigating to tenant main', name: 'LoginPage.Navigation');
+        Navigator.pushNamed(context, "tenant_main");
+      }
+      if (data["role"] == "landlord") {
+        developer.log('Navigating to landlord main', name: 'LoginPage.Navigation');
+        Navigator.pushNamed(context, "landlord_main");
+      }
+    } catch (e, stackTrace) {
+      developer.log('Navigation failed', 
+          name: 'LoginPage.Navigation', 
+          error: e, 
+          stackTrace: stackTrace,
+          level: 1000);
+      _showErrorDialog('Navigation failed. Please try again.');
     }
   }
 
@@ -69,19 +105,63 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     setState(() {
       isloading = true;
     });
+    
+    developer.log('Starting Google Sign In', name: 'LoginPage.googleSignIn');
     FirebaseService service = new FirebaseService();
+    
     try {
       await service.signInwithGoogle();
+      developer.log('Google Sign In successful', name: 'LoginPage.googleSignIn');
       Navigation();
-    } catch (e) {
+    } catch (e, stackTrace) {
+      developer.log('Google Sign In failed', 
+          name: 'LoginPage.googleSignIn', 
+          error: e, 
+          stackTrace: stackTrace,
+          level: 1000);
+          
+      String errorMessage = 'Google Sign In failed. Please try again.';
+      
       if (e is FirebaseAuthException) {
-        showMessage(e.message!);
+        switch (e.code) {
+          case 'account-exists-with-different-credential':
+            errorMessage = 'An account already exists with a different sign-in method.';
+            break;
+          case 'invalid-credential':
+            errorMessage = 'Invalid Google credentials. Please try again.';
+            break;
+          case 'operation-not-allowed':
+            errorMessage = 'Google Sign In is not enabled. Please contact support.';
+            break;
+          case 'user-disabled':
+            errorMessage = 'This account has been disabled. Please contact support.';
+            break;
+          case 'user-not-found':
+            errorMessage = 'No account found. Please create an account first.';
+            break;
+          case 'wrong-password':
+            errorMessage = 'Incorrect password. Please try again.';
+            break;
+          case 'network-request-failed':
+            errorMessage = 'Network error. Please check your connection and try again.';
+            break;
+          default:
+            errorMessage = e.message ?? 'Google Sign In failed. Please try again.';
+        }
+        developer.log('Firebase Auth Exception: ${e.code} - ${e.message}', 
+            name: 'LoginPage.googleSignIn', level: 1000);
+      } else if (e is PlatformException) {
+        errorMessage = 'Platform error: ${e.message ?? "Unknown platform error"}';
+        developer.log('Platform Exception: ${e.code} - ${e.message}', 
+            name: 'LoginPage.googleSignIn', level: 1000);
       }
+      
+      _showErrorDialog(errorMessage);
+    } finally {
+      setState(() {
+        isloading = false;
+      });
     }
-
-    setState(() {
-      isloading = false;
-    });
   }
 
   String? getFirstName() {
@@ -105,10 +185,18 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       final user = _auth.currentUser;
       if (user != null) {
         currentUser = user;
-        print(currentUser.uid);
+        developer.log('Current user retrieved: ${currentUser.uid}', 
+            name: 'LoginPage.getCurrentUser');
+      } else {
+        developer.log('No current user found', 
+            name: 'LoginPage.getCurrentUser', level: 1000);
       }
-    } catch (e) {
-      print(e);
+    } catch (e, stackTrace) {
+      developer.log('Failed to get current user', 
+          name: 'LoginPage.getCurrentUser', 
+          error: e, 
+          stackTrace: stackTrace,
+          level: 1000);
     }
   }
 
@@ -133,32 +221,92 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   }
 
   Future signIn() async {
+    if (!_validateForm()) {
+      return;
+    }
+    
+    developer.log('Starting email/password sign in', name: 'LoginPage.signIn');
+    
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailAddressController.text.trim(),
           password: passwordLoginController.text.trim());
+      
+      developer.log('Email/password sign in successful for user: ${credential.user?.uid}', 
+          name: 'LoginPage.signIn');
       Navigation();
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-        errorMessage("Incorrect credentials!") ?? false;
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+    } on FirebaseAuthException catch (e, stackTrace) {
+      developer.log('Firebase Auth Exception during sign in', 
+          name: 'LoginPage.signIn', 
+          error: e, 
+          stackTrace: stackTrace,
+          level: 1000);
+          
+      String errorMessage = 'Sign in failed. Please try again.';
+      
+      switch (e.code) {
+        case 'user-not-found':
+          errorMessage = 'No account found with this email address.';
+          break;
+        case 'wrong-password':
+          errorMessage = 'Incorrect password. Please try again.';
+          break;
+        case 'invalid-email':
+          errorMessage = 'Invalid email address format.';
+          break;
+        case 'user-disabled':
+          errorMessage = 'This account has been disabled. Please contact support.';
+          break;
+        case 'too-many-requests':
+          errorMessage = 'Too many failed attempts. Please try again later.';
+          break;
+        case 'network-request-failed':
+          errorMessage = 'Network error. Please check your connection and try again.';
+          break;
+        case 'invalid-credential':
+          errorMessage = 'Invalid credentials. Please check your email and password.';
+          break;
+        default:
+          errorMessage = e.message ?? 'Sign in failed. Please try again.';
       }
+      
+      _showErrorDialog(errorMessage);
+    } catch (e, stackTrace) {
+      developer.log('Unexpected error during sign in', 
+          name: 'LoginPage.signIn', 
+          error: e, 
+          stackTrace: stackTrace,
+          level: 1000);
+      _showErrorDialog('An unexpected error occurred. Please try again.');
     }
   }
 
   Future addUserDetails(String uid, String? firstName, String? lastName) async {
-    await FirebaseFirestore.instance.collection('users').doc(uid).set({
-      'uid': uid,
-      'first name': firstName ?? "",
-      'last name': lastName,
-      'age': "",
-      'role': 'o',
-      'address': '',
-      'zip code': '',
-      'uploadedImage': '',
-    });
+    try {
+      developer.log('Adding user details for uid: $uid', 
+          name: 'LoginPage.addUserDetails');
+          
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'uid': uid,
+        'first name': firstName ?? "",
+        'last name': lastName,
+        'age': "",
+        'role': 'o',
+        'address': '',
+        'zip code': '',
+        'uploadedImage': '',
+      });
+      
+      developer.log('User details added successfully for uid: $uid', 
+          name: 'LoginPage.addUserDetails');
+    } catch (e, stackTrace) {
+      developer.log('Failed to add user details for uid: $uid', 
+          name: 'LoginPage.addUserDetails', 
+          error: e, 
+          stackTrace: stackTrace,
+          level: 1000);
+      rethrow;
+    }
   }
 
   Route _createRoute() {
@@ -280,14 +428,13 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
                             child: Text(
                               'Access your account by logging in below.',
-                              style: HomeAppTheme.of(context)
-                                  .subtitle2
-                                  .override(
-                                    fontFamily: 'Outfit',
-                                    color: Color(0xFF57636C),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                  ),
+                              style:
+                                  HomeAppTheme.of(context).subtitle2.override(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF57636C),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                             ),
                           ),
                         ),
@@ -484,9 +631,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                         width: 270,
                         height: 50,
                         color: HomeAppTheme.of(context).primaryColor,
-                        textStyle: HomeAppTheme.of(context)
-                            .subtitle2
-                            .override(
+                        textStyle: HomeAppTheme.of(context).subtitle2.override(
                               fontFamily: 'Poppins',
                               color: HomeAppTheme.of(context).primaryText,
                               fontSize: 16,
@@ -534,6 +679,75 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   }
 
   void showMessage(String s) {
-    print(s);
+    developer.log('Show message: $s', name: 'LoginPage.showMessage');
+  }
+  
+  bool _validateForm() {
+    final email = emailAddressController.text.trim();
+    final password = passwordLoginController.text.trim();
+    
+    if (email.isEmpty) {
+      _showErrorDialog('Please enter your email address.');
+      return false;
+    }
+    
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)) {
+      _showErrorDialog('Please enter a valid email address.');
+      return false;
+    }
+    
+    if (password.isEmpty) {
+      _showErrorDialog('Please enter your password.');
+      return false;
+    }
+    
+    if (password.length < 6) {
+      _showErrorDialog('Password must be at least 6 characters long.');
+      return false;
+    }
+    
+    return true;
+  }
+  
+  void _showErrorDialog(String message) {
+    developer.log('Showing error dialog: $message', 
+        name: 'LoginPage._showErrorDialog');
+        
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Error',
+          style: TextStyle(
+            color: Colors.red[700],
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        content: Text(
+          message,
+          style: TextStyle(
+            color: Colors.grey[800],
+            fontSize: 16,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'OK',
+              style: TextStyle(
+                color: HomeAppTheme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

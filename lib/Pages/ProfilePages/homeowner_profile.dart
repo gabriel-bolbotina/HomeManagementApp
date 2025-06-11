@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:homeapp/Services/authentification.dart';
+import 'package:homeapp/services/authentication.dart';
 
-import '../../Services/FirebaseService.dart';
+import '../../services/FirebaseService.dart';
 import '../EditPages/homeowner_edit.dart';
 import '../HomePages/homeowner.dart';
 import '../NotificationPages/homeowner_notification.dart';
@@ -36,8 +36,8 @@ class _HomeownerProfilePageWidgetState
   Future<void> didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     await _authentication.getProfileImage();
-
   }
+
   @override
   void initState() {
     fetchImage();
@@ -51,54 +51,51 @@ class _HomeownerProfilePageWidgetState
     });
   }
 
-
   Future signOut() async {
     return (await showDialog(
         context: context,
-        builder: (context) =>
-        AlertDialog(
-            title: const Text('Are you sure you want to exit the app?',
-              style: TextStyle(color: CupertinoColors.systemGrey,
-                fontFamily: 'Lexend Deca',
+        builder: (context) => AlertDialog(
+                title: const Text(
+                  'Are you sure you want to exit the app?',
+                  style: TextStyle(
+                    color: CupertinoColors.systemGrey,
+                    fontFamily: 'Lexend Deca',
+                  ),
+                  selectionColor: CupertinoColors.systemGrey,
+                ),
+                backgroundColor: Colors.white,
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () async {
+                      FirebaseService service = FirebaseService();
+                      await service.signOutFromGoogle();
 
-              ),
-
-              selectionColor: CupertinoColors.systemGrey,
-            ),
-            backgroundColor: Colors.white,
-            actions: <Widget>[
-              TextButton(
-                onPressed: () async {
-                  FirebaseService service = FirebaseService();
-                  await service.signOutFromGoogle();
-
-                  Navigator.pushReplacementNamed(context, 'homescreen');
-                },
-                child: const Text('OK'),
-              ),
-            ]
-        )
-    )
-    );
+                      Navigator.pushReplacementNamed(context, '/homescreen');
+                    },
+                    child: const Text('OK'),
+                  ),
+                ])));
   }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(      key: scaffoldKey,
-      backgroundColor: HomeAppTheme
-          .of(context)
-          .primaryBackground,
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: HomeAppTheme.of(context).primaryBackground,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: HomeAppTheme
-              .of(context)
-              .primaryBackground,
+          backgroundColor: HomeAppTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          leading:IconButton(
-            icon: const Icon(Icons.arrow_back,
-              color: CupertinoColors.systemGrey,),
-            onPressed: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomeownerHomePageWidget())),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: CupertinoColors.systemGrey,
+            ),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const HomeownerHomePageWidget())),
           ),
           centerTitle: false,
           elevation: 0,
@@ -118,8 +115,11 @@ class _HomeownerProfilePageWidgetState
               ),
               alignment: Alignment.topRight,
               child: InkWell(
-                onTap: () =>Navigator.push(context,
-                    new MaterialPageRoute(builder: (context) => HomeownerHomePageWidget())), // Image tapped
+                onTap: () => Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) =>
+                            HomeownerHomePageWidget())), // Image tapped
                 splashColor: Colors.white10, // Splash color over image
                 child: Ink.image(
                   fit: BoxFit.cover, // Fixes border issues
@@ -129,7 +129,7 @@ class _HomeownerProfilePageWidgetState
                       ? NetworkImage(_authentication.urlPath!.trim())
                       : Image.asset('assets/images/iconapp.png').image,
                 ),
-          ),
+              ),
             ),
           ),
           Padding(
@@ -156,7 +156,8 @@ class _HomeownerProfilePageWidgetState
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,11 +167,16 @@ class _HomeownerProfilePageWidgetState
                             style: HomeAppTheme.of(context).subtitle2,
                           ),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios,
+                            icon: const Icon(
+                              Icons.arrow_forward_ios,
                               color: CupertinoColors.systemGrey,
-                              size:  20,),
-                            onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const HomeownerEditPageWidget())),
+                              size: 20,
+                            ),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const HomeownerEditPageWidget())),
                           ),
                         ],
                       ),
@@ -204,7 +210,8 @@ class _HomeownerProfilePageWidgetState
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -214,11 +221,16 @@ class _HomeownerProfilePageWidgetState
                             style: HomeAppTheme.of(context).subtitle2,
                           ),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios,
+                            icon: const Icon(
+                              Icons.arrow_forward_ios,
                               color: CupertinoColors.systemGrey,
-                              size:  20,),
-                            onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const HomeownerNotificationSettingsWidget())),
+                              size: 20,
+                            ),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const HomeownerNotificationSettingsWidget())),
                           ),
                         ],
                       ),
@@ -228,7 +240,6 @@ class _HomeownerProfilePageWidgetState
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
             child: Row(
@@ -253,7 +264,8 @@ class _HomeownerProfilePageWidgetState
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -263,11 +275,16 @@ class _HomeownerProfilePageWidgetState
                             style: HomeAppTheme.of(context).subtitle2,
                           ),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios,
+                            icon: const Icon(
+                              Icons.arrow_forward_ios,
                               color: CupertinoColors.systemGrey,
-                              size:  20,),
-                            onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const HomeownerNotificationSettingsWidget())),
+                              size: 20,
+                            ),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const HomeownerNotificationSettingsWidget())),
                           ),
                         ],
                       ),
@@ -283,16 +300,15 @@ class _HomeownerProfilePageWidgetState
               padding: const EdgeInsetsDirectional.fromSTEB(0, 280, 0, 0),
               child: HomeAppButtonWidget(
                 onPressed: () => signOut(),
-
                 text: 'Log Out',
                 options: HomeAppButtonOptions(
                   width: 110,
                   height: 50,
                   color: const Color.fromARGB(255, 253, 238, 186),
                   textStyle: HomeAppTheme.of(context).subtitle1.override(
-                    fontFamily: 'Poppins',
-                    color: Colors.black54,
-                  ),
+                        fontFamily: 'Poppins',
+                        color: Colors.black54,
+                      ),
                   elevation: 3,
                   borderSide: const BorderSide(
                     color: Colors.transparent,
@@ -307,6 +323,7 @@ class _HomeownerProfilePageWidgetState
       ),
     );
   }
+
   void getCurrentUser() async {
     try {
       final user = _auth.currentUser;

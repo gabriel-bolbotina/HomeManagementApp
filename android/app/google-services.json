@@ -29,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDQS0_LlpUH94J92IquNtGBMeYoEoMTx3U"
+          "current_key": "AIzaSyD2eRBMB1wTDcE3KeN8H6qZ8MNFSqTCoI8"
         }
       ],
       "services": {
@@ -40,10 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "961585638656-ufsm2qvhmc8md5260i7pa1bvgp2sp8gb.apps.googleusercontent.com",
+              "client_id": "961585638656-d5ee0lhdemd6l48o6h5i0kuentl6sfsa.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.homeapp.homeapp"
+                "bundle_id": "com.homeautomationapp.homeapp"
               }
             }
           ]

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../Services/FirebaseService.dart';
+import '../../services/FirebaseService.dart';
 import '../EditPages/landlord_edit.dart';
 import '../HomePages/landlord.dart';
 import '../NotificationPages/landlord_notification.dart';
@@ -43,7 +43,7 @@ class _LandlordProfilePageWidgetState
                   FirebaseService service = FirebaseService();
                   await service.signOutFromGoogle();
 
-                  Navigator.pushReplacementNamed(context, 'homescreen');
+                  Navigator.pushReplacementNamed(context, '/homescreen');
                 },
                 child: const Text('OK'),
               ),

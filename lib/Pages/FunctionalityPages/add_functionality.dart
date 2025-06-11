@@ -14,8 +14,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'dart:developer';
 
-import '../../Services/Animations.dart';
-import '../../Services/FirebaseService.dart';
+import '../../services/Animations.dart';
+import '../../services/FirebaseService.dart';
 import '../../model/sampleDevice.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/HomeAppTheme.dart';

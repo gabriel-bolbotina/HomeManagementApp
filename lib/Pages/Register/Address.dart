@@ -154,7 +154,7 @@ class _Address extends State<Address> {
                   color: CupertinoColors.systemGrey,
                 ),
                 onPressed: () =>
-                {Navigator.pushReplacementNamed(context, 'homescreen')},
+                {Navigator.pushReplacementNamed(context, '/homescreen')},
               ),
               backgroundColor: HomeAppTheme
                   .of(context)
@@ -186,7 +186,7 @@ class _Address extends State<Address> {
                             ),
                             onPressed: () async {
                               Navigator.pushReplacementNamed(
-                                  context, 'homescreen');
+                                  context, '/homescreen');
                             },
                           ),
                         ),
@@ -844,7 +844,7 @@ class _Address extends State<Address> {
                   color: CupertinoColors.systemGrey,
                 ),
                 onPressed: () =>
-                {Navigator.pushReplacementNamed(context, 'homescreen')},
+                {Navigator.pushReplacementNamed(context, '/homescreen')},
               ),
               backgroundColor: HomeAppTheme
                   .of(context)
@@ -876,7 +876,7 @@ class _Address extends State<Address> {
                             ),
                             onPressed: () async {
                               Navigator.pushReplacementNamed(
-                                  context, 'homescreen');
+                                  context, '/homescreen');
                             },
                           ),
                         ),

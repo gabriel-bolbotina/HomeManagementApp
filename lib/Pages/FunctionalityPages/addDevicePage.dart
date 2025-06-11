@@ -7,12 +7,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:rive/rive.dart';
-import '../../Services/Animations.dart';
+import '../../services/Animations.dart';
 import '../flutter_flow/HomeAppTheme.dart';
 
 import 'dart:developer';
 
-import '../../Services/FirebaseService.dart';
+import '../../services/FirebaseService.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/HomeAppTheme.dart';
 import '../flutter_flow/homeAppWidgets.dart';
@@ -48,60 +48,59 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: HomeAppTheme.of(context).primaryBackground,
-        /*appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-            automaticallyImplyLeading: false,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: CupertinoColors.systemGrey,
-              ),
-              onPressed: () => Navigator.pop(context),
+        body: Stack(children: [
+          const Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+              child: RiveAnimation.asset('assets/images/new_file.riv')),
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+            child: Container(
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
             ),
-            centerTitle: false,
-            elevation: 0,
           ),
-        ),*/
-        body: Stack(
-            children: [
-               const Padding(
-                 padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                   child: RiveAnimation.asset('assets/images/new_file.riv')),
-
-
-
-                BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-                  child: Container(
-                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)),
-                  ),
-                ),
-
-          SizedBox( height: 100),
+          SizedBox(height: 100),
           Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(40, 240, 40, 0),
               child: AnimatedTextKit(
                 animatedTexts: [
                   TyperAnimatedText("Add your Smart object right away!",
-                      textStyle:  TextStyle(
+                      textStyle: TextStyle(
                           fontSize: 25.0,
                           fontFamily: 'Fira Sans',
                           color: Colors.black54,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.italic)),
-                  TyperAnimatedText("Your smart device will be set up in a few moments \n"
+                  TyperAnimatedText(
+                      "Your smart device will be set up in a few moments \n"
                       "\nPress Add button to continue!",
-                      textStyle:  TextStyle(
+                      textStyle: TextStyle(
                           fontSize: 25.0,
                           fontFamily: 'Fira Sans',
-                          color:  Colors.black54,
+                          color: Colors.black54,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.italic)),
-
                 ],
               )),
+          Positioned(
+            top: MediaQuery.of(context).padding.top +
+                10, // Account for status bar
+            left: 10,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white
+                    .withOpacity(0.3), // Optional: semi-transparent background
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: CupertinoColors.systemGrey,
+                  size: 28,
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ),
         ]),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Padding(
@@ -110,10 +109,8 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
               onPressed: () => Navigator.push(
                   context,
                   Animations(
-                    page:
-                    AddQRFunctionalityTPageWidget(),
-                    animationType: RouteAnimationType
-                        .slideFromBottom,
+                    page: AddQRFunctionalityTPageWidget(),
+                    animationType: RouteAnimationType.slideFromBottom,
                   )),
               text: '+ Add',
               options: HomeAppButtonOptions(

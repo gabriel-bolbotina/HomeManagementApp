@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:homeapp/Services/authentification.dart';
+import 'package:homeapp/services/authentication.dart';
 
-import '../../Services/FirebaseService.dart';
+import '../../services/FirebaseService.dart';
 import '../EditPages/tenant_edit.dart';
 import '../HomePages/tenant.dart';
 import '../NotificationPages/tenant_notification.dart';
@@ -22,8 +22,7 @@ class TenantProfilePageWidget extends StatefulWidget {
       _TenantProfilePageWidgetState();
 }
 
-class _TenantProfilePageWidgetState
-    extends State<TenantProfilePageWidget> {
+class _TenantProfilePageWidgetState extends State<TenantProfilePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   FirebaseAuth _auth = FirebaseAuth.instance;
   late User currentUser;
@@ -36,8 +35,8 @@ class _TenantProfilePageWidgetState
   Future<void> didChangeDependencies() async {
     // TODO: implement didChangeDependencies
     await _authentication.getProfileImage();
-
   }
+
   @override
   void initState() {
     fetchImage();
@@ -51,18 +50,16 @@ class _TenantProfilePageWidgetState
     });
   }
 
-
   Future signOut() async {
     return (await showDialog(
         context: context,
-        builder: (context) =>
-            AlertDialog(
-                title: const Text('Are you sure you want to exit the app?',
-                  style: TextStyle(color: CupertinoColors.systemGrey,
+        builder: (context) => AlertDialog(
+                title: const Text(
+                  'Are you sure you want to exit the app?',
+                  style: TextStyle(
+                    color: CupertinoColors.systemGrey,
                     fontFamily: 'Lexend Deca',
-
                   ),
-
                   selectionColor: CupertinoColors.systemGrey,
                 ),
                 backgroundColor: Colors.white,
@@ -72,33 +69,32 @@ class _TenantProfilePageWidgetState
                       FirebaseService service = FirebaseService();
                       await service.signOutFromGoogle();
 
-                      Navigator.pushReplacementNamed(context, 'homescreen');
+                      Navigator.pushReplacementNamed(context, '/homescreen');
                     },
                     child: const Text('OK'),
                   ),
-                ]
-            )
-    )
-    );
+                ])));
   }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(      key: scaffoldKey,
-      backgroundColor: HomeAppTheme
-          .of(context)
-          .primaryBackground,
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: HomeAppTheme.of(context).primaryBackground,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-          backgroundColor: HomeAppTheme
-              .of(context)
-              .primaryBackground,
+          backgroundColor: HomeAppTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          leading:IconButton(
-            icon: const Icon(Icons.arrow_back,
-              color: CupertinoColors.systemGrey,),
-            onPressed: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const TenantHomePageWidget())),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: CupertinoColors.systemGrey,
+            ),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const TenantHomePageWidget())),
           ),
           centerTitle: false,
           elevation: 0,
@@ -118,8 +114,11 @@ class _TenantProfilePageWidgetState
               ),
               alignment: Alignment.topRight,
               child: InkWell(
-                onTap: () =>Navigator.push(context,
-                    new MaterialPageRoute(builder: (context) => TenantHomePageWidget())), // Image tapped
+                onTap: () => Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) =>
+                            TenantHomePageWidget())), // Image tapped
                 splashColor: Colors.white10, // Splash color over image
                 child: Ink.image(
                   fit: BoxFit.cover, // Fixes border issues
@@ -156,7 +155,8 @@ class _TenantProfilePageWidgetState
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -166,11 +166,16 @@ class _TenantProfilePageWidgetState
                             style: HomeAppTheme.of(context).subtitle2,
                           ),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios,
+                            icon: const Icon(
+                              Icons.arrow_forward_ios,
                               color: CupertinoColors.systemGrey,
-                              size:  20,),
-                            onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const TenantEditPageWidget())),
+                              size: 20,
+                            ),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TenantEditPageWidget())),
                           ),
                         ],
                       ),
@@ -204,7 +209,8 @@ class _TenantProfilePageWidgetState
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -214,11 +220,16 @@ class _TenantProfilePageWidgetState
                             style: HomeAppTheme.of(context).subtitle2,
                           ),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios,
+                            icon: const Icon(
+                              Icons.arrow_forward_ios,
                               color: CupertinoColors.systemGrey,
-                              size:  20,),
-                            onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const TenantNotificationSettingsWidget())),
+                              size: 20,
+                            ),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TenantNotificationSettingsWidget())),
                           ),
                         ],
                       ),
@@ -228,7 +239,6 @@ class _TenantProfilePageWidgetState
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
             child: Row(
@@ -253,7 +263,8 @@ class _TenantProfilePageWidgetState
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(16, 0, 4, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -263,11 +274,16 @@ class _TenantProfilePageWidgetState
                             style: HomeAppTheme.of(context).subtitle2,
                           ),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios,
+                            icon: const Icon(
+                              Icons.arrow_forward_ios,
                               color: CupertinoColors.systemGrey,
-                              size:  20,),
-                            onPressed: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const TenantNotificationSettingsWidget())),
+                              size: 20,
+                            ),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TenantNotificationSettingsWidget())),
                           ),
                         ],
                       ),
@@ -283,16 +299,15 @@ class _TenantProfilePageWidgetState
               padding: const EdgeInsetsDirectional.fromSTEB(0, 280, 0, 0),
               child: HomeAppButtonWidget(
                 onPressed: () => signOut(),
-
                 text: 'Log Out',
                 options: HomeAppButtonOptions(
                   width: 110,
                   height: 50,
                   color: const Color.fromARGB(255, 253, 238, 186),
                   textStyle: HomeAppTheme.of(context).subtitle1.override(
-                    fontFamily: 'Poppins',
-                    color: Colors.black54,
-                  ),
+                        fontFamily: 'Poppins',
+                        color: Colors.black54,
+                      ),
                   elevation: 3,
                   borderSide: const BorderSide(
                     color: Colors.transparent,
@@ -307,6 +322,7 @@ class _TenantProfilePageWidgetState
       ),
     );
   }
+
   void getCurrentUser() async {
     try {
       final user = _auth.currentUser;

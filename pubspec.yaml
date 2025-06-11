@@ -35,56 +35,57 @@ flutter_icons:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animated_text_kit: ^4.2.2
+  app_links: ^6.3.3
+  auto_size_text: 3.0.0
+  back_button_interceptor:
+  cached_network_image: ^3.4.1
+  cloud_firestore: ^5.6.0
+  cupertino_icons: ^1.0.2
+  #dcdg: ^4.1.0
+  firebase_auth: ^5.5.3
+  firebase_core: ^3.13.0
+  firebase_storage:
   flutter:
     sdk: flutter
-
-  auto_size_text: 3.0.0
-  cached_network_image: ^3.4.1
+  flutter_riverpod: ^2.4.9
+  riverpod_annotation: ^2.3.3
   flutter_animate: ^4.1.1+1
+  flutter_bluetooth_serial: 0.4.0
   flutter_cache_manager: ^3.4.1
+  flutter_dotenv: ^5.2.1
+  flutter_google_places_hoc081098: ^2.0.0
+  flutter_hue: ^1.2.0
+  flutter_launcher_icons: ^0.9.2
+  flutter_local_notifications: ^19.2.0
+  flutter_local_notifications_linux: ^6.0.0
+  flutter_plugin_android_lifecycle: ^2.0.19
+  flutter_signin_button: ^2.0.0
+  flutter_speed_dial: ^7.0.0
   font_awesome_flutter: ^9.0.0
   from_css_color: 2.0.0
-  google_fonts: ^4.0.4
-  scoped_model: ^2.0.0-nullsafety.0
-  qr_flutter: ^4.1.0
-  mobile_scanner: ^7.0.0
-  intl: 0.17.0
-  json_path: ^0.7.5
-  page_transition: 2.0.4
-  shared_preferences:  ^2.5.3
-  sqflite: ^2.3.3+1
-  timeago: 3.2.2
-  url_launcher: ^6.3.1
-  animated_text_kit: ^4.2.2
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  firebase_core: ^3.13.0
-  flutter_bluetooth_serial: 0.4.0
-  firebase_storage:
-  firebase_auth: ^5.5.3
-  cloud_firestore:  ^5.6.0
-  google_sign_in: ^6.3.0
-  flutter_signin_button: ^2.0.0
-  back_button_interceptor:
-  google_maps_flutter: ^2.12.2
-  flutter_plugin_android_lifecycle: ^2.0.19
-  flutter_google_places_hoc081098: ^2.0.0
-  google_api_headers: ^4.4.5
-  #google_maps_webservice: ^0.0.20-nullsafety.5
   geocoding: ^3.0.0
-  flutter_speed_dial: ^7.0.0
   geolocator: ^14.0.0
-  rive: ^0.11.1
-  flutter_hue: ^1.2.0
-  app_links: ^6.3.3
+  google_api_headers: ^4.4.5
+  google_fonts: ^4.0.4
+  google_maps_flutter: ^2.12.2
+  google_sign_in: ^6.3.0
   http: ^1.2.1
   image_picker: ^1.1.2
+  intl: 0.17.0
+  json_path: ^0.7.5
+  mobile_scanner: ^7.0.0
+  page_transition: 2.0.4
   path:
-  dcdg: ^4.1.0
-  flutter_local_notifications: ^19.2.0
-  flutter_launcher_icons: ^0.9.2
-  flutter_local_notifications_linux: ^6.0.0
+  qr_flutter: ^4.1.0
+  rive: ^0.11.1
+  scoped_model: ^2.0.0-nullsafety.0
+  shared_preferences: ^2.5.3
+  sqflite: ^2.3.3+1
+  timeago: 3.2.2
+  tflite_flutter: ^0.11.0
+  url_launcher: ^6.3.1
+  weather: ^3.2.1
 
 
 
@@ -99,6 +100,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.4.7
+  riverpod_generator: ^2.3.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -126,6 +129,8 @@ flutter:
     - assets/images/background_2.jpeg
     - assets/images/new_file.riv
     - assets/icon/homeAppIcon.png
+    - assets/models/door_lock_model.tflite
+    - .env
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
