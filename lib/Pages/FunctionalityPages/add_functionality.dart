@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,17 +23,18 @@ import 'package:flutter/material.dart';
 
 import 'package:homeapp/model/Devices.dart';
 
-
 class AddFunctionalityTPageWidget extends StatefulWidget {
   final int _serialNumber;
 
-  AddFunctionalityTPageWidget(this._serialNumber,  {super.key});
+  AddFunctionalityTPageWidget(this._serialNumber, {super.key});
 
   @override
-  _AddFunctionalityTPageWidgetState createState() => _AddFunctionalityTPageWidgetState();
+  _AddFunctionalityTPageWidgetState createState() =>
+      _AddFunctionalityTPageWidgetState();
 }
 
-class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidget>{
+class _AddFunctionalityTPageWidgetState
+    extends State<AddFunctionalityTPageWidget> {
   final TextEditingController deviceNameController = TextEditingController();
   final TextEditingController serialNumberController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
@@ -62,7 +62,6 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
     });
   }
 
-
   Future imgFromCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
 
@@ -89,15 +88,17 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
       final taskSnapshot = await uploadTask;
 
       final _fileURL = await taskSnapshot.ref.getDownloadURL();
-      await FirebaseFirestore.instance.collection("users").doc(currentUser.uid).collection("devices").doc(_device.deviceName).update(
-        {
-          'uploadedImage' : _fileURL
-        }
-      );
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(currentUser.uid)
+          .collection("devices")
+          .doc(_device.deviceName)
+          .update({'uploadedImage': _fileURL});
     } catch (e) {
       print('error occured');
     }
   }
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
@@ -105,6 +106,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
     getCurrentUser();
     getUserDevice();
   }
+
   void getCurrentUser() async {
     try {
       final user = _auth.currentUser;
@@ -117,16 +119,21 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
     }
   }
 
-  Future addUserDetails(String deviceName,
-      int serialNumber, String type, String brand) async {
+  Future addUserDetails(
+      String deviceName, int serialNumber, String type, String brand) async {
     getCurrentUser();
-    await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).collection("devices").doc(deviceName).set({
-      'device name' : deviceName,
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser.uid)
+        .collection("devices")
+        .doc(deviceName)
+        .set({
+      'device name': deviceName,
       'serial number': serialNumber,
       'type': type,
       'brand': brand,
       'uploadedImage': '',
-      'timestamp' : FieldValue.serverTimestamp()
+      'timestamp': FieldValue.serverTimestamp()
     });
   }
 
@@ -169,21 +176,20 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
           ),
         ),
         body: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 32,
-                ),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      _showPicker(context);
-                    },
-                    child: CircleAvatar(
-                      radius: 55,
-                      backgroundColor: Colors.white,
-                      child: _photo != null
-                          ? ClipRRect(
+            child: Column(children: [
+          SizedBox(
+            height: 32,
+          ),
+          Center(
+            child: GestureDetector(
+              onTap: () {
+                _showPicker(context);
+              },
+              child: CircleAvatar(
+                radius: 55,
+                backgroundColor: Colors.white,
+                child: _photo != null
+                    ? ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: Image.file(
                           _photo!,
@@ -192,7 +198,7 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                           fit: BoxFit.fitHeight,
                         ),
                       )
-                          : Container(
+                    : Container(
                         decoration: BoxDecoration(
                             color: Colors.grey[200],
                             borderRadius: BorderRadius.circular(50)),
@@ -203,10 +209,10 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                           color: Colors.grey[800],
                         ),
                       ),
-                    ),
-                  ),
-                ),
-            Padding(
+              ),
+            ),
+          ),
+          Padding(
               padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
               child: Container(
                 constraints: BoxConstraints(
@@ -214,422 +220,338 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
                   maxHeight: 100,
                 ),
                 child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: ImageAssets.imageList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    String imagePath = ImageAssets.imageList[index];
-                    return GestureDetector(
-                      onTap: () {
-                        // Handle the tap event for the first image
-                        // You can perform any action, such as setting the selected image or opening a dialog
-                      },
-                      child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Image.asset(
-                            imagePath,
-                            width: 100.0,
-                            height: 100.0,
-                          )
-
-
-                        // Add more Image widgets for additional ima
-                      ),
-                    );
-                  }
-                      ),
-              )
-                    ),
-
-            Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: HomeAppTheme
-                          .of(context)
-                          .secondaryBackground,
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 5,
-                          color: Color(0x4D101213),
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextFormField(
-                      controller: deviceNameController,
-                      validator: (value) =>
-                      (value!.isEmpty)
-                          ? '$_auth.'
-                          : null,
-
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: _device.deviceName,
-                        labelStyle: HomeAppTheme
-                            .of(context)
-                            .bodyText2,
-                        hintText: 'Enter device name...',
-                        hintStyle: HomeAppTheme
-                            .of(context)
-                            .bodyText1
-                            .override(
-                          fontFamily: 'Lexend Deca',
-                          color: HomeAppTheme
-                              .of(context)
-                              .secondaryText,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        filled: true,
-                        fillColor: HomeAppTheme
-                            .of(context)
-                            .secondaryBackground,
-                        contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
-                      ),
-                      style: HomeAppTheme
-                          .of(context)
-                          .bodyText1,
-                      maxLines: 1,
-                    ),
-                  ),
-
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: HomeAppTheme
-                          .of(context)
-                          .secondaryBackground,
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 5,
-                          color: Color(0x4D101213),
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextFormField(
-                      controller: serialNumberController,
-                      validator: (value) =>
-                      (value!.isEmpty)
-                          ? ''
-                          : null,
-
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: _device.serialNumber.toString(),
-                        labelStyle: HomeAppTheme
-                            .of(context)
-                            .bodyText2,
-                        hintText: 'Enter device serial number...',
-                        hintStyle: HomeAppTheme
-                            .of(context)
-                            .bodyText1
-                            .override(
-                          fontFamily: 'Lexend Deca',
-                          color: HomeAppTheme
-                              .of(context)
-                              .secondaryText,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        filled: true,
-                        fillColor: HomeAppTheme
-                            .of(context)
-                            .secondaryBackground,
-                        contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
-                      ),
-                      style: HomeAppTheme
-                          .of(context)
-                          .bodyText1,
-                      maxLines: 1,
-                    ),
-                  ),
-
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: HomeAppTheme
-                          .of(context)
-                          .secondaryBackground,
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 5,
-                          color: Color(0x4D101213),
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextFormField(
-                      controller: typeController,
-                      validator: (value) =>
-                      (value!.isEmpty)
-                          ? 'Please enter device type'
-                          : null,
-
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: _device.type,
-                        labelStyle: HomeAppTheme
-                            .of(context)
-                            .bodyText2,
-                        hintText: 'Enter device type...',
-                        hintStyle: HomeAppTheme
-                            .of(context)
-                            .bodyText1
-                            .override(
-                          fontFamily: 'Lexend Deca',
-                          color: HomeAppTheme
-                              .of(context)
-                              .secondaryText,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        filled: true,
-                        fillColor: HomeAppTheme
-                            .of(context)
-                            .secondaryBackground,
-                        contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
-                      ),
-                      style: HomeAppTheme
-                          .of(context)
-                          .bodyText1,
-                      maxLines: 1,
-                    ),
-                  ),
-
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: HomeAppTheme
-                          .of(context)
-                          .secondaryBackground,
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 5,
-                          color: Color(0x4D101213),
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextFormField(
-                      controller: brandController,
-                      validator: (value) =>
-                      (value!.isEmpty)
-                          ? 'Please enter device brand'
-                          : null,
-
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        labelText: _device.brand,
-                        labelStyle: HomeAppTheme
-                            .of(context)
-                            .bodyText2,
-                        hintText: 'Enter device brand...',
-                        hintStyle: HomeAppTheme
-                            .of(context)
-                            .bodyText1
-                            .override(
-                          fontFamily: 'Lexend Deca',
-                          color: HomeAppTheme
-                              .of(context)
-                              .secondaryText,
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0x00000000),
-                            width: 0,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        filled: true,
-                        fillColor: HomeAppTheme
-                            .of(context)
-                            .secondaryBackground,
-                        contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
-                      ),
-                      style: HomeAppTheme
-                          .of(context)
-                          .bodyText1,
-                      maxLines: 1,
-                    ),
-                  ),
-
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      HomeAppButtonWidget(
-                        onPressed: () async {
-
-                            uploadFile();
-                            Navigator.push(
-                                context,
-                                Animations(
-                                  page:
-                                  HomeownerHomePageWidget(),
-                                  animationType: RouteAnimationType
-                                      .slideFromBottom,
-                                ));
-
-
-
-
+                    scrollDirection: Axis.horizontal,
+                    itemCount: ImageAssets.imageList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      String imagePath = ImageAssets.imageList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          // Handle the tap event for the first image
+                          // You can perform any action, such as setting the selected image or opening a dialog
                         },
-                        text: 'Save Changes',
-                        options: HomeAppButtonOptions(
-                          width: 130,
-                          height: 40,
-                          color: HomeAppTheme.of(context).primaryBtnText,
-                          textStyle: HomeAppTheme.of(context).bodyText1,
-                          elevation: 1,
-                          borderSide: const BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
-                          ),
-                          borderRadius: 20,
-                        ),
+                        child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              imagePath,
+                              width: 100.0,
+                              height: 100.0,
+                            )
+
+                            // Add more Image widgets for additional ima
+                            ),
+                      );
+                    }),
+              )),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
+            child: Container(
+              width: double.infinity,
+              height: 60,
+              decoration: BoxDecoration(
+                color: HomeAppTheme.of(context).secondaryBackground,
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 5,
+                    color: Color(0x4D101213),
+                    offset: Offset(0, 2),
+                  )
+                ],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: TextFormField(
+                controller: deviceNameController,
+                validator: (value) => (value!.isEmpty) ? '$_auth.' : null,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: _device.deviceName,
+                  labelStyle: HomeAppTheme.of(context).bodyText2,
+                  hintText: 'Enter device name...',
+                  hintStyle: HomeAppTheme.of(context).bodyText1.override(
+                        fontFamily: 'Lexend Deca',
+                        color: HomeAppTheme.of(context).secondaryText,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
                       ),
-                    ],
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: HomeAppTheme.of(context).secondaryBackground,
+                  contentPadding:
+                      EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                ),
+                style: HomeAppTheme.of(context).bodyText1,
+                maxLines: 1,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
+            child: Container(
+              width: double.infinity,
+              height: 60,
+              decoration: BoxDecoration(
+                color: HomeAppTheme.of(context).secondaryBackground,
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 5,
+                    color: Color(0x4D101213),
+                    offset: Offset(0, 2),
+                  )
+                ],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: TextFormField(
+                controller: serialNumberController,
+                validator: (value) => (value!.isEmpty) ? '' : null,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: _device.serialNumber.toString(),
+                  labelStyle: HomeAppTheme.of(context).bodyText2,
+                  hintText: 'Enter device serial number...',
+                  hintStyle: HomeAppTheme.of(context).bodyText1.override(
+                        fontFamily: 'Lexend Deca',
+                        color: HomeAppTheme.of(context).secondaryText,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: HomeAppTheme.of(context).secondaryBackground,
+                  contentPadding:
+                      EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                ),
+                style: HomeAppTheme.of(context).bodyText1,
+                maxLines: 1,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
+            child: Container(
+              width: double.infinity,
+              height: 60,
+              decoration: BoxDecoration(
+                color: HomeAppTheme.of(context).secondaryBackground,
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 5,
+                    color: Color(0x4D101213),
+                    offset: Offset(0, 2),
+                  )
+                ],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: TextFormField(
+                controller: typeController,
+                validator: (value) =>
+                    (value!.isEmpty) ? 'Please enter device type' : null,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: _device.type,
+                  labelStyle: HomeAppTheme.of(context).bodyText2,
+                  hintText: 'Enter device type...',
+                  hintStyle: HomeAppTheme.of(context).bodyText1.override(
+                        fontFamily: 'Lexend Deca',
+                        color: HomeAppTheme.of(context).secondaryText,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: HomeAppTheme.of(context).secondaryBackground,
+                  contentPadding:
+                      EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                ),
+                style: HomeAppTheme.of(context).bodyText1,
+                maxLines: 1,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(24, 14, 24, 0),
+            child: Container(
+              width: double.infinity,
+              height: 60,
+              decoration: BoxDecoration(
+                color: HomeAppTheme.of(context).secondaryBackground,
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 5,
+                    color: Color(0x4D101213),
+                    offset: Offset(0, 2),
+                  )
+                ],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: TextFormField(
+                controller: brandController,
+                validator: (value) =>
+                    (value!.isEmpty) ? 'Please enter device brand' : null,
+                obscureText: false,
+                decoration: InputDecoration(
+                  labelText: _device.brand,
+                  labelStyle: HomeAppTheme.of(context).bodyText2,
+                  hintText: 'Enter device brand...',
+                  hintStyle: HomeAppTheme.of(context).bodyText1.override(
+                        fontFamily: 'Lexend Deca',
+                        color: HomeAppTheme.of(context).secondaryText,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color(0x00000000),
+                      width: 0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: HomeAppTheme.of(context).secondaryBackground,
+                  contentPadding:
+                      EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+                ),
+                style: HomeAppTheme.of(context).bodyText1,
+                maxLines: 1,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                HomeAppButtonWidget(
+                  onPressed: () async {
+                    uploadFile();
+                    Navigator.push(
+                        context,
+                        Animations(
+                          page: HomeownerHomePageWidget(),
+                          animationType: RouteAnimationType.slideFromBottom,
+                        ));
+                  },
+                  text: 'Save Changes',
+                  options: HomeAppButtonOptions(
+                    width: 130,
+                    height: 40,
+                    color: HomeAppTheme.of(context).primaryBtnText,
+                    textStyle: HomeAppTheme.of(context).bodyText1,
+                    elevation: 1,
+                    borderSide: const BorderSide(
+                      color: Colors.transparent,
+                      width: 1,
+                    ),
+                    borderRadius: 20,
                   ),
                 ),
-
-                ]
-                )
-
-        ));
+              ],
+            ),
+          ),
+        ])));
   }
+
   void _showPicker(context) {
     showModalBottomSheet(
         context: context,
@@ -657,7 +579,4 @@ class _AddFunctionalityTPageWidgetState  extends State<AddFunctionalityTPageWidg
           );
         });
   }
-
-
-
 }

@@ -1,30 +1,58 @@
-// This is a basic Flutter widget test.
+// Home Management App Widget Tests
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// This file contains basic widget tests for the Home Management App.
+// The app implements a role-based authentication system with three user types:
+// homeowner, tenant, and landlord.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:homeapp/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget( HomeApp());
+  group('Home Management App Tests', () {
+    testWidgets('App should build and display initial widget', (WidgetTester tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(HomeApp());
+      await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      // Verify that the app builds successfully
+      expect(find.byType(ProviderScope), findsOneWidget);
+      expect(find.byType(MaterialApp), findsOneWidget);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    testWidgets('App should have proper material app configuration', (WidgetTester tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(HomeApp());
+      await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // Find the MaterialApp widget
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      
+      // Verify basic app configuration
+      expect(materialApp.title, equals('HomeApp'));
+      expect(materialApp.debugShowCheckedModeBanner, isFalse);
+    });
+
+    testWidgets('App should handle initial routing', (WidgetTester tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(HomeApp());
+      
+      // Allow for potential async operations to complete
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // The app should display some kind of scaffold or material component
+      expect(find.byType(Scaffold), findsAtLeastNWidgets(1));
+    });
+
+    testWidgets('App should use Riverpod for state management', (WidgetTester tester) async {
+      // Build our app and trigger a frame.
+      await tester.pumpWidget(HomeApp());
+      await tester.pumpAndSettle();
+
+      // Verify that ProviderScope is present (indicates Riverpod integration)
+      expect(find.byType(ProviderScope), findsOneWidget);
+    });
   });
 }
