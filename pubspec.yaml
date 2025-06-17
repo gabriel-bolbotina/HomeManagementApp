@@ -130,6 +130,7 @@ flutter:
     - assets/images/new_file.riv
     - assets/icon/homeAppIcon.png
     - assets/models/door_lock_model.tflite
+    - assets/models/thermostat_model.tflite
     - .env
   #   - images/a_dot_ham.jpeg
 

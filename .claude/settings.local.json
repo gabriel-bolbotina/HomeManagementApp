@@ -4,7 +4,9 @@
       "Bash(flutter analyze:*)",
       "Bash(flutter build:*)",
       "Bash(cp:*)",
-      "Bash(true)"
+      "Bash(true)",
+      "Bash(flutter test:*)",
+      "Bash(flutter packages pub run build_runner build:*)"
     ],
     "deny": []
   }

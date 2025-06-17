@@ -76,7 +76,7 @@ final thermostatRecommendationProvider =
 // ignore: unused_element
 typedef ThermostatRecommendationRef
     = AutoDisposeProviderRef<ThermostatRecommendation?>;
-String _$weatherServiceHash() => r'31862d343e40a6f965d6fd1d966ed82d015c24ae';
+String _$weatherServiceHash() => r'8fa31c011f19b8fcaf1404dc66da6faf8ae4d8c0';
 
 /// See also [WeatherService].
 @ProviderFor(WeatherService)

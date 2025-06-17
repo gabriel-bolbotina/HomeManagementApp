@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../services/weather_service.dart';
-import '../../services/thermostat_service.dart';
+import '../../Services/weather_service.dart';
+import '../../Services/thermostat_service.dart';
+import '../../Services/ml_prediction_service.dart';
 import '../../providers/climate_control_provider.dart';
 import '../flutter_flow/HomeAppTheme.dart';
 
@@ -60,6 +61,39 @@ class _ClimateControlPageState extends ConsumerState<ClimateControlPage>
         elevation: 0,
         actions: [
           IconButton(
+            icon: const Icon(Icons.science),
+            onPressed: () {
+              _showModelTestDialog();
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () async {
+              final modelInfo = await ref.read(mlModelInfoProvider.future);
+              if (context.mounted) {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('ML Model Debug Info'),
+                    content: SingleChildScrollView(
+                      child: Text(
+                        modelInfo.entries
+                            .map((e) => '${e.key}: ${e.value}')
+                            .join('\n'),
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
               ref.read(weatherServiceProvider.notifier).refreshWeather();
@@ -88,6 +122,12 @@ class _ClimateControlPageState extends ConsumerState<ClimateControlPage>
               // Thermostat Control Card
               _buildThermostatCard(thermostatState),
               const SizedBox(height: 16),
+
+              // ML Prediction Card (only show when auto mode is enabled)
+              if (thermostatState.settings.mode == ThermostatMode.auto)
+                _buildMlPredictionCard(),
+              if (thermostatState.settings.mode == ThermostatMode.auto)
+                const SizedBox(height: 16),
 
               // Climate Control Settings
               _buildClimateControlCard(climateControlState),
@@ -457,6 +497,49 @@ class _ClimateControlPageState extends ConsumerState<ClimateControlPage>
                 }).toList(),
               ),
               const SizedBox(height: 16),
+              // ML Prediction Button for Auto Mode
+              if (thermostatState.settings.mode == ThermostatMode.auto)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      final weather = ref.read(currentWeatherProvider);
+                      await ref
+                          .read(mlPredictionServiceProvider.notifier)
+                          .predictOptimalTemperature(
+                            roomName: 'Main Thermostat',
+                            currentTemperature:
+                                thermostatState.currentTemperature,
+                            outsideTemperature: weather?.temperature,
+                            humidity: weather?.humidity.toDouble(),
+                            pressure: weather?.pressure.toDouble(),
+                          );
+
+                      // Auto-apply the prediction if confidence is high
+                      final prediction =
+                          ref.read(currentThermostatPredictionProvider);
+                      if (prediction != null && prediction.confidence > 0.7) {
+                        await ref
+                            .read(thermostatServiceProvider.notifier)
+                            .setTargetTemperature(
+                                prediction.predictedTemperature);
+                      }
+                    },
+                    icon: const Icon(Icons.psychology, size: 18),
+                    label: const Text('Get ML Temperature Prediction'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple.withValues(alpha: 0.1),
+                      foregroundColor: Colors.purple,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        side: BorderSide(
+                            color: Colors.purple.withValues(alpha: 0.3)),
+                      ),
+                    ),
+                  ),
+                ),
               // Status
               Row(
                 children: [
@@ -737,6 +820,228 @@ class _ClimateControlPageState extends ConsumerState<ClimateControlPage>
     );
   }
 
+  Widget _buildMlPredictionCard() {
+    final prediction = ref.watch(currentThermostatPredictionProvider);
+    final weather = ref.watch(currentWeatherProvider);
+
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.psychology, color: Colors.purple, size: 24),
+                const SizedBox(width: 8),
+                Text(
+                  'ML Temperature Prediction',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            if (prediction == null) ...[
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey[300]!),
+                ),
+                child: Column(
+                  children: [
+                    const Icon(Icons.auto_awesome,
+                        size: 48, color: Colors.purple),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Auto Mode Active',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Temperature will be predicted using ML model based on:\n• Time patterns\n• Weather conditions\n• Historical preferences\n\nThis temperature is predicted using a ML model.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await ref
+                            .read(mlPredictionServiceProvider.notifier)
+                            .predictOptimalTemperature(
+                              roomName: 'Main Thermostat',
+                              currentTemperature: ref
+                                  .read(thermostatServiceProvider)
+                                  .currentTemperature,
+                              outsideTemperature: weather?.temperature,
+                              humidity: weather?.humidity.toDouble(),
+                              pressure: weather?.pressure.toDouble(),
+                            );
+                      },
+                      child: const Text('Get Prediction'),
+                    ),
+                  ],
+                ),
+              ),
+            ] else ...[
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.purple.withValues(alpha: 0.1),
+                      Colors.blue.withValues(alpha: 0.1),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  border:
+                      Border.all(color: Colors.purple.withValues(alpha: 0.3)),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.psychology,
+                            color: Colors.purple, size: 20),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'ML Predicted Temperature',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.purple,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      '${prediction.predictedTemperature.toStringAsFixed(1)}°C',
+                      style: const TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purple,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: _getConfidenceColor(prediction.confidence),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'Confidence: ${(prediction.confidence * 100).toStringAsFixed(0)}%',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'ML Analysis:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.purple,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            ref
+                                .read(mlPredictionServiceProvider.notifier)
+                                .getPredictionExplanation(prediction),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              await ref
+                                  .read(thermostatServiceProvider.notifier)
+                                  .setTargetTemperature(
+                                      prediction.predictedTemperature);
+                            },
+                            icon: const Icon(Icons.check, size: 16),
+                            label: const Text('Apply Prediction'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              await ref
+                                  .read(mlPredictionServiceProvider.notifier)
+                                  .predictOptimalTemperature(
+                                    roomName: 'Main Thermostat',
+                                    currentTemperature: ref
+                                        .read(thermostatServiceProvider)
+                                        .currentTemperature,
+                                    outsideTemperature: weather?.temperature,
+                                    humidity: weather?.humidity.toDouble(),
+                                    pressure: weather?.pressure.toDouble(),
+                                  );
+                            },
+                            icon: const Icon(Icons.refresh, size: 16),
+                            label: const Text('Re-predict'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.purple,
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Color _getConfidenceColor(double confidence) {
+    if (confidence > 0.8) return Colors.green;
+    if (confidence > 0.6) return Colors.orange;
+    return Colors.red;
+  }
+
   Color _getThermostatRecommendationColor(
       ThermostatRecommendation recommendation) {
     switch (recommendation) {
@@ -793,5 +1098,342 @@ class _ClimateControlPageState extends ConsumerState<ClimateControlPage>
       case ThermostatStatus.idle:
         return Icons.pause_circle;
     }
+  }
+  
+  void _showModelTestDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.8,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'ML Model Tester',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ModelTestWidget(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ModelTestWidget extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<ModelTestWidget> createState() => _ModelTestWidgetState();
+}
+
+class _ModelTestWidgetState extends ConsumerState<ModelTestWidget> {
+  final _hourController = TextEditingController(text: '14');
+  final _minuteController = TextEditingController(text: '30');
+  final _dayController = TextEditingController(text: '2');
+  final _tempController = TextEditingController(text: '22');
+  final _humidityController = TextEditingController(text: '50');
+  final _pressureController = TextEditingController(text: '1013');
+  
+  Map<String, dynamic>? _testResult;
+  bool _isLoading = false;
+  
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Test Model with Custom Values',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Input fields
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _hourController,
+                  decoration: const InputDecoration(
+                    labelText: 'Hour (0-23)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  controller: _minuteController,
+                  decoration: const InputDecoration(
+                    labelText: 'Minute (0-59)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  controller: _dayController,
+                  decoration: const InputDecoration(
+                    labelText: 'Day (0-6)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _tempController,
+                  decoration: const InputDecoration(
+                    labelText: 'Current Temp (°C)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  controller: _humidityController,
+                  decoration: const InputDecoration(
+                    labelText: 'Humidity (%)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  controller: _pressureController,
+                  decoration: const InputDecoration(
+                    labelText: 'Pressure (hPa)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          
+          // Test buttons
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _testModel,
+                  child: _isLoading 
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Test Model'),
+                ),
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: _setCurrentTime,
+                child: const Text('Use Current Time'),
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: _runMultipleTests,
+                child: const Text('Run Multiple Tests'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          
+          // Results
+          if (_testResult != null) ...[
+            const Text(
+              'Test Results:',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: _testResult!['success'] == true 
+                    ? Colors.green.withValues(alpha: 0.1)
+                    : Colors.red.withValues(alpha: 0.1),
+                border: Border.all(
+                  color: _testResult!['success'] == true 
+                      ? Colors.green
+                      : Colors.red,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (_testResult!['success'] == true) ...[
+                    Text(
+                      'Predicted Temperature: ${_testResult!['convertedTemperature'].toStringAsFixed(2)}°C',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text('Raw Model Output: ${_testResult!['rawOutput'].toStringAsFixed(4)}'),
+                    Text('Output Scale: ${_testResult!['outputScale'].toStringAsFixed(3)}'),
+                    Text('Output Offset: ${_testResult!['outputOffset'].toStringAsFixed(3)}'),
+                    const SizedBox(height: 8),
+                    Text('Raw Input: ${_testResult!['rawInput']}'),
+                    Text('Scaled Input: ${(_testResult!['scaledInput'] as List).map((e) => e.toStringAsFixed(3)).join(', ')}'),
+                  ] else ...[
+                    Text(
+                      'Error: ${_testResult!['error']}',
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+  
+  void _setCurrentTime() {
+    final now = DateTime.now();
+    setState(() {
+      _hourController.text = now.hour.toString();
+      _minuteController.text = now.minute.toString();
+      _dayController.text = (now.weekday - 1).toString();
+    });
+  }
+  
+  Future<void> _testModel() async {
+    setState(() {
+      _isLoading = true;
+    });
+    
+    try {
+      final service = ref.read(mlPredictionServiceProvider.notifier);
+      final result = await service.testModelWithValues(
+        hour: double.parse(_hourController.text),
+        minute: double.parse(_minuteController.text),
+        dayOfWeek: double.parse(_dayController.text),
+        currentTemp: double.parse(_tempController.text),
+        humidity: double.parse(_humidityController.text),
+        pressure: double.parse(_pressureController.text),
+      );
+      
+      setState(() {
+        _testResult = result;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _testResult = {
+          'success': false,
+          'error': e.toString(),
+        };
+        _isLoading = false;
+      });
+    }
+  }
+  
+  Future<void> _runMultipleTests() async {
+    final testCases = [
+      {'hour': 8, 'minute': 0, 'day': 0, 'temp': 18, 'humidity': 40, 'pressure': 1010, 'label': 'Monday Morning (Cool)'},
+      {'hour': 14, 'minute': 30, 'day': 2, 'temp': 24, 'humidity': 55, 'pressure': 1013, 'label': 'Wednesday Afternoon (Warm)'},
+      {'hour': 20, 'minute': 0, 'day': 4, 'temp': 21, 'humidity': 60, 'pressure': 1015, 'label': 'Friday Evening (Moderate)'},
+      {'hour': 2, 'minute': 0, 'day': 6, 'temp': 16, 'humidity': 70, 'pressure': 1005, 'label': 'Sunday Night (Cold)'},
+    ];
+    
+    String results = 'Multiple Test Results:\n\n';
+    
+    for (var testCase in testCases) {
+      try {
+        final service = ref.read(mlPredictionServiceProvider.notifier);
+        final result = await service.testModelWithValues(
+          hour: (testCase['hour'] as int).toDouble(),
+          minute: (testCase['minute'] as int).toDouble(),
+          dayOfWeek: (testCase['day'] as int).toDouble(),
+          currentTemp: (testCase['temp'] as int).toDouble(),
+          humidity: (testCase['humidity'] as int).toDouble(),
+          pressure: (testCase['pressure'] as int).toDouble(),
+        );
+        
+        if (result['success'] == true) {
+          results += '${testCase['label']}:\n';
+          results += '  Input: ${testCase['temp']}°C -> Predicted: ${result['convertedTemperature'].toStringAsFixed(2)}°C\n';
+          results += '  Raw output: ${result['rawOutput'].toStringAsFixed(4)}\n\n';
+        } else {
+          results += '${testCase['label']}: ERROR - ${result['error']}\n\n';
+        }
+      } catch (e) {
+        results += '${testCase['label']}: EXCEPTION - $e\n\n';
+      }
+    }
+    
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Multiple Test Results'),
+          content: SingleChildScrollView(
+            child: Text(results),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+  
+  @override
+  void dispose() {
+    _hourController.dispose();
+    _minuteController.dispose();
+    _dayController.dispose();
+    _tempController.dispose();
+    _humidityController.dispose();
+    _pressureController.dispose();
+    super.dispose();
   }
 }

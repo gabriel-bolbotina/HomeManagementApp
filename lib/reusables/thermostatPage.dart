@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:homeapp/Pages/flutter_flow/HomeAppTheme.dart';
-import 'package:homeapp/services/authentication.dart';
+import 'package:homeapp/Services/authentication.dart';
+import 'package:homeapp/Services/ml_prediction_service.dart';
 import 'dart:math' as math;
 import 'package:weather/weather.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class ThermostatWidget extends StatefulWidget {
-  const ThermostatWidget({Key? key}) : super(key: key);
+class ThermostatWidget extends ConsumerStatefulWidget {
+  final String? roomName;
+  const ThermostatWidget({Key? key, this.roomName}) : super(key: key);
 
   @override
-  _ThermostatWidgetState createState() => _ThermostatWidgetState();
+  ConsumerState<ThermostatWidget> createState() => _ThermostatWidgetState();
 }
 
-class _ThermostatWidgetState extends State<ThermostatWidget>
+class _ThermostatWidgetState extends ConsumerState<ThermostatWidget>
     with SingleTickerProviderStateMixin {
   double _currentTemperature = 22.0;
   double _targetTemperature = 22.0;
@@ -392,6 +395,11 @@ class _ThermostatWidgetState extends State<ThermostatWidget>
                           ),
                         ],
                       ),
+                      // ML Prediction Section for Auto Mode
+                      if (_isAuto) ...[
+                        const SizedBox(height: 16),
+                        _buildMlPredictionSection(),
+                      ],
                       const SizedBox(height: 16),
                       // Current temperature display
                       Container(
@@ -521,6 +529,216 @@ class _ThermostatWidgetState extends State<ThermostatWidget>
         ],
       ),
     );
+  }
+
+  Widget _buildMlPredictionSection() {
+    final prediction = ref.watch(currentThermostatPredictionProvider);
+    
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.purple.withValues(alpha: 0.1),
+            Colors.blue.withValues(alpha: 0.1),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.purple.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.psychology, color: Colors.purple, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'ML Temperature Prediction',
+                style: HomeAppTheme.of(context).subtitle2.override(
+                  fontFamily: 'Poppins',
+                  color: Colors.purple,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          if (prediction == null) ...[
+            Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    children: [
+                      const Icon(Icons.auto_awesome, size: 32, color: Colors.purple),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Auto Mode Active',
+                        style: HomeAppTheme.of(context).subtitle2.override(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Temperature will be predicted using ML model',
+                        textAlign: TextAlign.center,
+                        style: HomeAppTheme.of(context).bodyText2.override(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      await ref.read(mlPredictionServiceProvider.notifier).predictOptimalTemperature(
+                        roomName: widget.roomName ?? 'Room',
+                        currentTemperature: _currentTemperature,
+                        outsideTemperature: _weather?.temperature?.celsius,
+                        humidity: _weather?.humidity?.toDouble(),
+                        pressure: _weather?.pressure?.toDouble(),
+                      );
+                    },
+                    icon: const Icon(Icons.psychology, size: 16),
+                    label: const Text('Get ML Prediction'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ] else ...[
+            Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.8),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Predicted Temperature',
+                        style: HomeAppTheme.of(context).bodyText2.override(
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
+                          color: Colors.purple,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${prediction.predictedTemperature.toStringAsFixed(1)}°C',
+                        style: HomeAppTheme.of(context).subtitle1.override(
+                          fontFamily: 'Poppins',
+                          fontSize: 24,
+                          color: Colors.purple,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: _getConfidenceColor(prediction.confidence),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          'Confidence: ${(prediction.confidence * 100).toStringAsFixed(0)}%',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    'This temperature is predicted using a ML model based on time patterns, weather conditions, and usage history.',
+                    textAlign: TextAlign.center,
+                    style: HomeAppTheme.of(context).bodyText2.override(
+                      fontFamily: 'Poppins',
+                      fontSize: 10,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            _targetTemperature = prediction.predictedTemperature;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                        ),
+                        child: const Text('Apply', style: TextStyle(fontSize: 12)),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await ref.read(mlPredictionServiceProvider.notifier).predictOptimalTemperature(
+                            roomName: widget.roomName ?? 'Room',
+                            currentTemperature: _currentTemperature,
+                            outsideTemperature: _weather?.temperature?.celsius,
+                            humidity: _weather?.humidity?.toDouble(),
+                            pressure: _weather?.pressure?.toDouble(),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                        ),
+                        child: const Text('Refresh', style: TextStyle(fontSize: 12)),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Color _getConfidenceColor(double confidence) {
+    if (confidence > 0.8) return Colors.green;
+    if (confidence > 0.6) return Colors.orange;
+    return Colors.red;
   }
 
   IconData _getWeatherIcon(String? weatherMain) {
