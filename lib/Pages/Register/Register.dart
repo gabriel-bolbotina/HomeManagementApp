@@ -882,9 +882,15 @@ class _RegisterPageWidgetState extends State<RegisterPageWidget> {
   }
 
   void addUser() {
-    _user.firstName = firstNameController.text.trim();
-    _user.lastName = lastNameController.text.trim();
-    _user.age = int.parse(ageController.text);
+    if (emailConfirmed() &&
+        confirmedPassword() &&
+        firstNameConfirmed() &&
+        lastNameConfirmed() &&
+        ageConfirmed()) {
+      _user.firstName = firstNameController.text.trim();
+      _user.lastName = lastNameController.text.trim();
+      _user.age = int.parse(ageController.text);
+    }
   }
 }
 
